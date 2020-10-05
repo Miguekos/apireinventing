@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 // Rutas
 require('./api/routes/auth')(app)
 require('./api/routes/users')(app)
+require('./api/routes/vehiculos')(app)
 
 
 // Registro de puerto y servidor.
