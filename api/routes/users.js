@@ -51,7 +51,7 @@ module.exports = async (app) => {
 
     })
 
-    // para borrar DELETE
+    // para borrar DELETE asdasdasdfasdf
     app.delete("/api/users", async (req, res, next) => {
         try {
             const idUsuer = req.body.id;
