@@ -9,7 +9,7 @@ module.exports = async (app) => {
         try {
             const email = req.body.email;
             const password = req.body.password;
-            const query = `SELECT * from fwconacc.tbusuari`;
+            const query = `SELECT * from fwconacc.tbusuari limit 1`;
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
             // con esto muestro msj
@@ -23,9 +23,26 @@ module.exports = async (app) => {
     // para agregar un usuario
     app.post("/api/users", async (req, res, next) => {
         try {
-            const idUsuer = req.body.id;
-            const noUsuer = req.body.name;
-            const query = `SELECT * from fwconacc.tbusuari where co_usuari = ${idUsuer} and no_usuari = '${noUsuer}'`;
+            const codigo = req.body.codigo;
+            const id = req.body.id;
+            var password = req.body.password;
+            var doc_ide = req.body.doc_ide;
+            var ape_pat = req.body.ape_pat;
+            var ape_mat = req.body.ape_mat;
+            var nombres = req.body.nombres;
+            const swt_emp = req.body.swt_emp;
+            const swt_act = req.body.swt_act;
+            const query = `select fwconacc.sp_manten_usuari(
+                cast (${codigo} as integer),
+                '${id}',
+                '${password}',
+                '${doc_ide}',
+                '${ape_pat}',
+                '${ape_mat}',
+                '${nombres}',
+                ${swt_emp},
+                ${swt_act}
+            )`;
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
             // con esto muestro msj
