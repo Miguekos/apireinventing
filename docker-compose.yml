@@ -1,17 +1,17 @@
 version: "3"
-services: 
-    app:
-        image: ms-template-js:1.0
-        # build: 
-        #     dockerfile: ./buildDocker/local.DockerFile
-        #     context: .
-        ports:
-            -   5011:5011
-        hostname: ms-template-js
-        restart: always
-        volumes: 
-            # -   ./:/usr/local/nodeapps/
-            -   /usr/local/volumes/robotgps:/root/.pm2/logs
+services:
+  app:
+    # image: ms-apprein-js:1.0
+    build:
+      #     dockerfile: ./buildDocker/local.DockerFile
+      context: .
+    ports:
+      - 5001:5001
+    hostname: ms-apprein-js
+    restart: always
+    volumes:
+      # -   ./:/usr/local/nodeapps/
+      - /usr/local/volumes/apprein:/root/.pm2/logs
 
-        # command: pm2-runtime server.config.js --env development
-        command: pm2-runtime server.config.js --env production
+    # command: pm2-runtime server.config.js --env development
+    command: pm2-runtime server.config.js --env production
