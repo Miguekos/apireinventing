@@ -2,13 +2,14 @@ var bcrypt = require('bcrypt');
 const BD = require("../database/pg/postgres");
 
 module.exports = async (app) => {
-    app.post("/api/login", async (req, res, next) => {
+    app.post("/api/v1.0/login", async (req, res, next) => {
 
         const username = req.body.username;
         const password = req.body.password;
 
         const query = `SELECT * from fwconacc.tbusuari where no_usuari = '${username}'`;
-        const user = await BD.storePostgresql(query);
+        const getuser = await BD.storePostgresql(query);
+        const user = getuser[0]
         if (!user) {
             res.json({ res: "ko", message: "El usuario no se ha identificado" }).status(404)
         } else {
@@ -35,11 +36,11 @@ module.exports = async (app) => {
         }
     })
 
-    app.post('/api/register', async (req, res) => {
+    app.post('/api/v1.0/register', async (req, res) => {
 
     })
 
-    app.post("/api/logout", async (req, res) => {
+    app.post("/api/v1.0/logout", async (req, res) => {
 
         req.session.userID = null
         req.session.username = null
