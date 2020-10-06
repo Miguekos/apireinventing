@@ -8,7 +8,8 @@ module.exports = async (app) => {
         const password = req.body.password;
 
         const query = `SELECT * from fwconacc.tbusuari where no_usuari = '${username}'`;
-        const user = await BD.storePostgresql(query);
+        const getuser = await BD.storePostgresql(query);
+        const user = getuser[0]
         if (!user) {
             res.json({ res: "ko", message: "El usuario no se ha identificado" }).status(404)
         } else {
