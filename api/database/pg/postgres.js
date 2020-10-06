@@ -14,9 +14,9 @@ const storePostgresql = async (query) => {
     client.connect();
     return client.query(query)
         .then(response => {
-            // console.log(response.rows)
+            console.log(response.rows)
             client.end()
-            return response.rows[0]
+            return response.rows
         })
         .catch(err => {
             console.log(err);

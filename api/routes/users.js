@@ -5,11 +5,11 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // para traer todos los usuarios
-    app.get("/api/users", async (req, res, next) => {
+    app.get("/api/v1.0/users", async (req, res, next) => {
         try {
-            const email = req.body.email;
-            const password = req.body.password;
-            const query = `SELECT * from fwconacc.tbusuari limit 1`;
+            // const email = req.body.email;
+            // const password = req.body.password;
+            const query = `SELECT * from fwconacc.tbusuari`;
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
             // con esto muestro msj
@@ -21,7 +21,7 @@ module.exports = async (app) => {
     })
 
     // para agregar un usuario
-    app.post("/api/users", async (req, res, next) => {
+    app.post("/api/v1.0/users", async (req, res, next) => {
         try {
             const codigo = req.body.codigo;
             const id = req.body.id;
@@ -54,7 +54,7 @@ module.exports = async (app) => {
     })
 
     // para actualizar usuarios
-    app.put("/api/users", async (req, res, next) => {
+    app.put("/api/v1.0/users", async (req, res, next) => {
         try {
             const idUsuer = req.body.id;
             const query = `select * from fwconacc.tbusuari(${idUsuer})`;
@@ -69,7 +69,7 @@ module.exports = async (app) => {
     })
 
     // para borrar DELETE asdasdasdfasdf
-    app.delete("/api/users", async (req, res, next) => {
+    app.delete("/api/v1.0/users", async (req, res, next) => {
         try {
             const idUsuer = req.body.id;
             const noUsuer = req.body.name;
