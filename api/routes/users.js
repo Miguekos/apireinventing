@@ -23,7 +23,7 @@ module.exports = async (app) => {
     // para agregar un usuario
     app.post("/api/users", async (req, res, next) => {
         try {
-            const codigo = req.body.codigo;
+            //const codigo = req.body.codigo;
             const id = req.body.id;
             var password = req.body.password;
             var doc_ide = req.body.doc_ide;
@@ -33,7 +33,7 @@ module.exports = async (app) => {
             const swt_emp = req.body.swt_emp;
             const swt_act = req.body.swt_act;
             const query = `select fwconacc.sp_manten_usuari(
-                cast (${codigo} as integer),
+                cast (null as integer),
                 '${id}',
                 '${password}',
                 '${doc_ide}',
@@ -56,8 +56,30 @@ module.exports = async (app) => {
     // para actualizar usuarios
     app.put("/api/users", async (req, res, next) => {
         try {
-            const idUsuer = req.body.id;
-            const query = `select * from fwconacc.tbusuari(${idUsuer})`;
+            const codigo = req.body.codigo;
+            const id = req.body.id;
+            //var password = req.body.password;
+            var doc_ide = req.body.doc_ide;
+            var ape_pat = req.body.ape_pat;
+            var ape_mat = req.body.ape_mat;
+            var nombres = req.body.nombres;
+            const swt_emp = req.body.swt_emp;
+            const swt_act = req.body.swt_act;
+            if (codigo == 'undefined'){
+                miExcepcionUsuario = new ExceptionUsuario("Falta definir código de usuario.");
+                throw miExcepcionUsuario;
+            }
+            const query = `select fwconacc.sp_manten_usuari(
+                cast (${codigo} as integer),
+                '${id}',
+                'y',
+                '${doc_ide}',
+                '${ape_pat}',
+                '${ape_mat}',
+                '${nombres}',
+                ${swt_emp},
+                ${swt_act}
+            )`;
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
             // con esto muestro msj
