@@ -24,14 +24,19 @@ module.exports = async (app) => {
         try {
             const tipo = req.params
             console.log(tipo);
-            console.log(req.body);
+            console.log(req.body)
+            res.json({
+                "codRes": "00",
+                "message": "Test Correcto"
+            })
+            // console.log(req.body);
             // const email = req.body.email;
             // const password = req.body.password;
             // const query = `SELECT * from fwconacc.tbusuari`;
             // bitacora.control(query, req.url)
             // const user = await BD.storePostgresql(query);
             // con esto muestro msj
-            res.json({ res: 'ok', message: "Session cerrada correctamente" }).status(200)
+            // respuesta.json({ res: 'ok', message: "Session cerrada correctamente" }).status(200)
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
