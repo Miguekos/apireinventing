@@ -4,7 +4,7 @@ const bitacora = require("../../utils/bitacora")
 // ``
 
 module.exports = async (app) => {
-    // para traer todos los vehiculos
+    // TRAER VEHICULOS
     app.get("/api/vehiculos/:plaveh", async (req, res, next) => {
         try {
             let query;
@@ -15,13 +15,13 @@ module.exports = async (app) => {
                 query = `select * from wfvehicu.sp_mostrar_vehicu('')`;
             }
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const vehiculos = await BD.storePostgresql(query);
             // con esto muestro msj
-            if (user.codRes != 99) {
+            if (vehiculos.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
+                res.json({ res: 'ok', message: "Success", vehiculos }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", vehiculos }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -29,7 +29,7 @@ module.exports = async (app) => {
 
     })
 
-    // para agregar un vehiculo
+    // AGREGAR VEHICULOS
     app.post("/api/vehiculos", async (req, res, next) => {
         try {
             const co_plaveh = req.body.co_plaveh;
@@ -50,12 +50,12 @@ module.exports = async (app) => {
             )`;
             // console.log(query);
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
-            if (user.codRes != 99) {
+            const vehiculos = await BD.storePostgresql(query);
+            if (vehiculos.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
+                res.json({ res: 'ok', message: "Success", vehiculos }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", vehiculos }).status(500)
             }
             
         } catch (error) {
@@ -63,10 +63,38 @@ module.exports = async (app) => {
         }
     })
 
-    // para actualizar usuarios
+    // ACTUALIZAR VEHICULOS
     app.put("/api/vehiculos", async (req, res, next) => {
         try {
+            const co_vehicu = req.body.co_vehicu;
+            const co_plaveh = req.body.co_plaveh;
+            var co_modveh = req.body.co_modveh;
+            var nu_anofab = req.body.nu_anofab;
+            var nu_serveh = req.body.nu_serveh;
+            var nu_motveh = req.body.nu_motveh;
+            var no_colveh = req.body.no_colveh;
 
+            if (co_vehicu == 'undefined') {
+                miExcepcionVehiculo = new miExcepcionVehiculo("Falta definir código de vehiculo.");
+                throw miExcepcionVehiculo;
+            }
+            const query = `select wfvehicu.sp_manten_vehicu(
+                cast (${co_vehicu} as integer),
+                '${co_plaveh}',
+                '${co_modveh}',
+                '${nu_anofab}',
+                '${nu_serveh}',
+                '${nu_motveh}',
+                '${no_colveh}'
+            )`;
+            bitacora.control(query, req.url)
+            const vehiculos = await BD.storePostgresql(query);
+            if (vehiculos.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", vehiculos }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", vehiculos }).status(500)
+            }
         } catch (error) {
 
         }
@@ -74,14 +102,11 @@ module.exports = async (app) => {
     })
 
     // para borrar DELETE asdasdasdfasdf
-    app.delete("/api/vehiculos", async (req, res, next) => {
-        try {
-
-        } catch (error) {
-
-        }
-
-    })
+    //app.delete("/api/vehiculos", async (req, res, next) => {
+    //    try {
+       //    } catch (error) {
+    //    }
+    //})
 
 
 
