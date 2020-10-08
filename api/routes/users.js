@@ -20,6 +20,24 @@ module.exports = async (app) => {
 
     })
 
+    app.post("/api/v1.0/usuario/:tipo", async (req, res, next) => {
+        try {
+            const tipo = req.params
+            console.log(tipo);
+            console.log(req.body);
+            // const email = req.body.email;
+            // const password = req.body.password;
+            // const query = `SELECT * from fwconacc.tbusuari`;
+            // bitacora.control(query, req.url)
+            // const user = await BD.storePostgresql(query);
+            // con esto muestro msj
+            res.json({ res: 'ok', message: "Session cerrada correctamente" }).status(200)
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
     // para agregar un usuario
     app.post("/api/v1.0/users", async (req, res, next) => {
         try {
@@ -65,7 +83,7 @@ module.exports = async (app) => {
             var nombres = req.body.nombres;
             const swt_emp = req.body.swt_emp;
             const swt_act = req.body.swt_act;
-            if (codigo == 'undefined'){
+            if (codigo == 'undefined') {
                 miExcepcionUsuario = new ExceptionUsuario("Falta definir código de usuario.");
                 throw miExcepcionUsuario;
             }
