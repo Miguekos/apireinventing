@@ -6,11 +6,15 @@ const saltRounds = 10
 
 module.exports = async (app) => {
     // para traer todos los usuarios
-    app.get("/api/v1.0/users", async (req, res, next) => {
+    app.get("/api/v1.0/users/:docide", async (req, res, next) => {
         try {
-            // const email = req.body.email;
-            // const password = req.body.password;
-            const query = `SELECT * from fwconacc.tbusuari`;
+            let query;
+            const doc_ide = req.params.docide;
+            if (doc_ide) {
+                query = `select * from fwconacc.sp_mostrar_usuari('${doc_ide}')`;
+            } else {
+                query = `select * from fwconacc.sp_mostrar_usuari('')`;
+            }
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
             // con esto muestro msj
@@ -130,23 +134,5 @@ module.exports = async (app) => {
         }
 
     })
-
-    // para borrar DELETE asdasdasdfasdf
-    app.delete("/api/v1.0/users", async (req, res, next) => {
-        try {
-            const idUsuer = req.body.id;
-            const noUsuer = req.body.name;
-            const query = `SELECT * from fwconacc.tbusuari where co_usuari = ${idUsuer} and no_usuari = '${noUsuer}'`;
-            bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
-            // con esto muestro msj
-            res.json({ res: 'ok', message: "Session cerrada correctamente", user }).status(200)
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
-
-    })
-
-
 
 }
