@@ -5,14 +5,14 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // para traer todos los vehiculos
-    app.get("/api/vehiculos", async (req, res, next) => {
+    app.get("/api/vehiculos/:plaveh", async (req, res, next) => {
         try {
             let query;
-            const pla_veh = req.params.plaveh;
-            if (pla_veh) {
-                query = `select * from fwconacc.sp_mostrar_vehicu('${pla_veh}')`;
+            const co_plaveh = req.params.plaveh;
+            if (co_plaveh) {
+                query = `select * from wfvehicu.sp_mostrar_vehicu('${co_plaveh}')`;
             } else {
-                query = `select * from fwconacc.sp_mostrar_vehicu('')`;
+                query = `select * from wfvehicu.sp_mostrar_vehicu('')`;
             }
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
@@ -29,10 +29,35 @@ module.exports = async (app) => {
 
     })
 
-    // para agregar un usuario
+    // para agregar un vehiculo
     app.post("/api/vehiculos", async (req, res, next) => {
         try {
-            res.json({ res: 'ok', message: "Esto mismo" }).status(200)
+            const co_plaveh = req.body.co_plaveh;
+            var co_modveh = req.body.co_modveh;
+            var nu_anofab = req.body.nu_anofab;
+            var nu_serveh = req.body.nu_serveh;
+            var nu_motveh = req.body.nu_motveh;
+            var no_colveh = req.body.no_colveh;
+
+            const query = `select wfvehicu.sp_manten_vehicu(
+                cast (null as integer),
+                '${co_plaveh}',
+                '${co_modveh}',
+                '${nu_anofab}',
+                '${nu_serveh}',
+                '${nu_motveh}',
+                '${no_colveh}'
+            )`;
+            // console.log(query);
+            bitacora.control(query, req.url)
+            const user = await BD.storePostgresql(query);
+            if (user.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", user }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+            }
+            
         } catch (error) {
 
         }
