@@ -9,10 +9,11 @@ module.exports = async (app) => {
         try {
             let query;
             const co_plaveh = req.params.plaveh;
-            if (co_plaveh) {
-                query = `select * from wfvehicu.sp_mostrar_vehicu('${co_plaveh}')`;
-            } else {
+            console.log(co_plaveh);
+            if (co_plaveh == 'all') {
                 query = `select * from wfvehicu.sp_mostrar_vehicu('')`;
+            } else {
+                query = `select * from wfvehicu.sp_mostrar_vehicu('${co_plaveh}')`;
             }
             bitacora.control(query, req.url)
             const vehiculos = await BD.storePostgresql(query);
