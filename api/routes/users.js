@@ -1,6 +1,7 @@
 const BD = require("../database/pg/postgres");
 const bitacora = require("../../utils/bitacora")
-
+const bcrypt = require('bcrypt');
+const saltRounds = 10
 // ``
 
 module.exports = async (app) => {
@@ -51,9 +52,12 @@ module.exports = async (app) => {
     // para agregar un usuario
     app.post("/api/v1.0/users", async (req, res, next) => {
         try {
+            const hash = await bcrypt.hash(req.body.password, saltRounds);
+            console.log(hash);
             //const codigo = req.body.codigo;
             const id = req.body.id;
-            var password = req.body.password;
+            // var password = hash;
+            var password = hash;
             var doc_ide = req.body.doc_ide;
             var ape_pat = req.body.ape_pat;
             var ape_mat = req.body.ape_mat;
