@@ -19,9 +19,12 @@ const storePostgresql = async (query) => {
             return response.rows
         })
         .catch(err => {
-            console.log(err);
+            console.error("err", err);
             client.end()
-            return err;
+            return {
+                ...err,
+                codRes: 99
+            };
         })
 }
 

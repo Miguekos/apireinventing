@@ -13,7 +13,12 @@ module.exports = async (app) => {
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
             // con esto muestro msj
-            res.json({ res: 'ok', message: "Session cerrada correctamente", user }).status(200)
+            if (user.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", user }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+            }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
@@ -66,10 +71,15 @@ module.exports = async (app) => {
                 ${swt_emp},
                 ${swt_act}
             )`;
+            // console.log(query);
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
-            // con esto muestro msj
-            res.json({ res: 'ok', message: "Session cerrada correctamente", user }).status(200)
+            if (user.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", user }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+            }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
@@ -105,8 +115,12 @@ module.exports = async (app) => {
             )`;
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
-            // con esto muestro msj
-            res.json({ res: 'ok', message: "Session cerrada correctamente", user }).status(200)
+            if (user.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", user }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+            }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
