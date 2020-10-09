@@ -5,15 +5,15 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // TRAER modelos
-    app.get("/api/v1.0/modelos/:plaveh", async (req, res, next) => {
+    app.get("/api/v1.0/modelos/:modveh", async (req, res, next) => {
         try {
             let query;
-            const co_plaveh = req.params.plaveh;
-            console.log(co_plaveh);
-            if (co_plaveh == 'all') {
-                query = `select * from wfvehicu.sp_mostrar_vehicu('')`;
+            const no_modveh = req.params.modveh;
+            console.log(no_modveh);
+            if (no_modveh == 'all') {
+                query = `select * from wfvehicu.sp_mostrar_modveh('')`;
             } else {
-                query = `select * from wfvehicu.sp_mostrar_vehicu('${co_plaveh}')`;
+                query = `select * from wfvehicu.sp_mostrar_modveh('${no_modveh}')`;
             }
             bitacora.control(query, req.url)
             const modelos = await BD.storePostgresql(query);
@@ -30,24 +30,17 @@ module.exports = async (app) => {
 
     })
 
-    // AGREGAR modelos
+    // AGREGAR MODELOS
     app.post("/api/v1.0/modelos", async (req, res, next) => {
         try {
-            const co_plaveh = req.body.co_plaveh;
-            var co_modveh = req.body.co_modveh;
-            var nu_anofab = req.body.nu_anofab;
-            var nu_serveh = req.body.nu_serveh;
-            var nu_motveh = req.body.nu_motveh;
-            var no_colveh = req.body.no_colveh;
+            const co_modveh = req.body.co_modveh;
+            var no_modveh = req.body.no_modveh;
+            var co_marveh = req.body.co_marveh;
 
-            const query = `select wfvehicu.sp_manten_vehicu(
+            const query = `select wfvehicu.sp_manten_modveh(
                 cast (null as integer),
-                '${co_plaveh}',
-                '${co_modveh}',
-                '${nu_anofab}',
-                '${nu_serveh}',
-                '${nu_motveh}',
-                '${no_colveh}'
+                '${no_modveh}',
+                '${co_marveh}'
             )`;
             // console.log(query);
             bitacora.control(query, req.url)
@@ -60,33 +53,25 @@ module.exports = async (app) => {
             }
             
         } catch (error) {
-
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)    
         }
     })
 
-    // ACTUALIZAR modelos
+    // ACTUALIZAR MODELO
     app.put("/api/v1.0/modelos", async (req, res, next) => {
         try {
-            const co_vehicu = req.body.co_vehicu;
-            const co_plaveh = req.body.co_plaveh;
-            var co_modveh = req.body.co_modveh;
-            var nu_anofab = req.body.nu_anofab;
-            var nu_serveh = req.body.nu_serveh;
-            var nu_motveh = req.body.nu_motveh;
-            var no_colveh = req.body.no_colveh;
+            const co_modveh = req.body.co_modveh;
+            const no_modveh = req.body.no_modveh;
+            var co_marveh = req.body.co_marveh;
 
-            if (co_vehicu == 'undefined') {
-                miExcepcionVehiculo = new miExcepcionVehiculo("Falta definir código de vehiculo.");
-                throw miExcepcionVehiculo;
+            if (co_modveh == 'undefined') {
+                miExcepcionModelo = new miExcepcionModelo("Falta definir código de Modelo.");
+                throw miExcepcionModelo;
             }
-            const query = `select wfvehicu.sp_manten_vehicu(
-                cast (${co_vehicu} as integer),
-                '${co_plaveh}',
-                '${co_modveh}',
-                '${nu_anofab}',
-                '${nu_serveh}',
-                '${nu_motveh}',
-                '${no_colveh}'
+            const query = `select wfvehicu.sp_manten_modveh(
+                cast (${co_modveh} as integer),
+                '${no_modveh}',
+                '${co_marveh}'
             )`;
             bitacora.control(query, req.url)
             const modelos = await BD.storePostgresql(query);
@@ -97,7 +82,7 @@ module.exports = async (app) => {
                 res.json({ res: 'ko', message: "Error en la query", modelos }).status(500)
             }
         } catch (error) {
-
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)     
         }
 
     })
