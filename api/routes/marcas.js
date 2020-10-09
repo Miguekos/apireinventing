@@ -4,16 +4,16 @@ const bitacora = require("../../utils/bitacora")
 // ``
 
 module.exports = async (app) => {
-    // TRAER marcas
-    app.get("/api/v1.0/marcas/:plaveh", async (req, res, next) => {
+    // LISTA DE MARCAS
+    app.get("/api/v1.0/marcas/:marveh", async (req, res, next) => {
         try {
             let query;
-            const co_plaveh = req.params.plaveh;
-            console.log(co_plaveh);
-            if (co_plaveh == 'all') {
-                query = `select * from wfvehicu.sp_mostrar_vehicu('')`;
+            const co_marveh = req.params.marveh;
+            console.log(co_marveh);
+            if (co_marveh == 'all') {
+                query = `select * from wfvehicu.sp_mostrar_marca('')`;
             } else {
-                query = `select * from wfvehicu.sp_mostrar_vehicu('${co_plaveh}')`;
+                query = `select * from wfvehicu.sp_mostrar_marca('${co_marveh}')`;
             }
             bitacora.control(query, req.url)
             const marcas = await BD.storePostgresql(query);
@@ -30,24 +30,14 @@ module.exports = async (app) => {
 
     })
 
-    // AGREGAR marcas
+    // AGREGAR MARCA
     app.post("/api/v1.0/marcas", async (req, res, next) => {
         try {
-            const co_plaveh = req.body.co_plaveh;
-            var co_modveh = req.body.co_modveh;
-            var nu_anofab = req.body.nu_anofab;
-            var nu_serveh = req.body.nu_serveh;
-            var nu_motveh = req.body.nu_motveh;
-            var no_colveh = req.body.no_colveh;
+            const no_marveh = req.body.no_marveh;
 
-            const query = `select wfvehicu.sp_manten_vehicu(
+            const query = `select wfvehicu.sp_manten_marveh(
                 cast (null as integer),
-                '${co_plaveh}',
-                '${co_modveh}',
-                '${nu_anofab}',
-                '${nu_serveh}',
-                '${nu_motveh}',
-                '${no_colveh}'
+                '${no_marveh}'
             )`;
             // console.log(query);
             bitacora.control(query, req.url)
@@ -58,36 +48,26 @@ module.exports = async (app) => {
             } else {
                 res.json({ res: 'ko', message: "Error en la query", marcas }).status(500)
             }
-            
         } catch (error) {
-
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)    
         }
     })
 
-    // ACTUALIZAR marcas
+    // ACTUALIZAR MARCA
     app.put("/api/v1.0/marcas", async (req, res, next) => {
         try {
-            const co_vehicu = req.body.co_vehicu;
-            const co_plaveh = req.body.co_plaveh;
-            var co_modveh = req.body.co_modveh;
-            var nu_anofab = req.body.nu_anofab;
-            var nu_serveh = req.body.nu_serveh;
-            var nu_motveh = req.body.nu_motveh;
-            var no_colveh = req.body.no_colveh;
-
-            if (co_vehicu == 'undefined') {
-                miExcepcionVehiculo = new miExcepcionVehiculo("Falta definir código de vehiculo.");
-                throw miExcepcionVehiculo;
+            const co_marveh = req.body.co_marveh;
+            const no_marveh = req.body.no_marveh;
+            
+            if (co_marveh == 'undefined') {
+                miExcepcionMarca = new miExcepcionMarca("Falta definir código de Marca.");
+                throw miExcepcionMarca;
             }
-            const query = `select wfvehicu.sp_manten_vehicu(
-                cast (${co_vehicu} as integer),
-                '${co_plaveh}',
-                '${co_modveh}',
-                '${nu_anofab}',
-                '${nu_serveh}',
-                '${nu_motveh}',
-                '${no_colveh}'
+            const query = `select wfvehicu.sp_manten_marveh(
+                cast (${co_marveh} as integer),
+                '${no_marveh}'
             )`;
+
             bitacora.control(query, req.url)
             const marcas = await BD.storePostgresql(query);
             if (marcas.codRes != 99) {
@@ -97,17 +77,11 @@ module.exports = async (app) => {
                 res.json({ res: 'ko', message: "Error en la query", marcas }).status(500)
             }
         } catch (error) {
-
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)        
         }
 
     })
 
-    // para borrar DELETE asdasdasdfasdf
-    //app.delete("/api/marcas", async (req, res, next) => {
-    //    try {
-       //    } catch (error) {
-    //    }
-    //})
 
 
 
