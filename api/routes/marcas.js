@@ -11,9 +11,9 @@ module.exports = async (app) => {
             const no_marveh = req.params.marveh;
             console.log(no_marveh);
             if (no_marveh == 'all') {
-                query = `select * from wfvehicu.sp_manten_marveh('')`;
+                query = `select * from wfvehicu.sp_mostrar_marveh('')`;
             } else {
-                query = `select * from wfvehicu.sp_manten_marveh('${no_marveh}')`;
+                query = `select * from wfvehicu.sp_mostrar_marveh('${no_marveh}')`;
             }
             bitacora.control(query, req.url)
             const marcas = await BD.storePostgresql(query);
