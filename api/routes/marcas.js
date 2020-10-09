@@ -9,7 +9,7 @@ module.exports = async (app) => {
         try {
             let query;
             const no_marveh = req.params.marveh;
-            console.log(co_marveh);
+            console.log(no_marveh);
             if (no_marveh == 'all') {
                 query = `select * from wfvehicu.sp_manten_marveh('')`;
             } else {
