@@ -10,10 +10,10 @@ module.exports = async (app) => {
         try {
             let query;
             const doc_ide = req.params.docide;
-            if (doc_ide) {
-                query = `select * from fwconacc.sp_mostrar_usuari('${doc_ide}')`;
-            } else {
+            if (doc_ide == "all") {
                 query = `select * from fwconacc.sp_mostrar_usuari('')`;
+            } else {
+                query = `select * from fwconacc.sp_mostrar_usuari('${doc_ide}')`;
             }
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
