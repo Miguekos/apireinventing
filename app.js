@@ -28,6 +28,7 @@ require('./api/routes/users')(app)
 require('./api/routes/vehiculos')(app)
 require('./api/routes/marcas')(app)
 require('./api/routes/modelos')(app)
+require('./api/routes/personas')(app)
 
 
 // Registro de puerto y servidor.
