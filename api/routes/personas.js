@@ -49,7 +49,7 @@ module.exports = async (app) => {
             );`;
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
-            //console.log("chamex: " + user[0].f_co_pernat);
+            //obtengo el codigo de persona generado para enlazar telefono
             cod_per = user[0].f_co_pernat;
             if (user.codRes == 99) {
                 // con esto muestro msj
