@@ -4,7 +4,7 @@ const bitacora = require("../../utils/bitacora")
 // ``
 
 module.exports = async (app) => {
-    // TRAER modelos
+    // TRAER MODELOS
     app.get("/api/v1.0/modelos/:modveh", async (req, res, next) => {
         try {
             let query;
@@ -23,6 +23,30 @@ module.exports = async (app) => {
                 res.json({ res: 'ok', message: "Success", modelos }).status(200)
             } else {
                 res.json({ res: 'ko', message: "Error en la query", modelos }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+    
+    //TRAER MODELOS POR MARCA
+    app.get("/api/v1.0/modelos/:modmar", async (req, res, next) => {
+        try {
+            let query;
+            const co_marveh = req.params.modmar;
+            console.log(co_marveh);
+            
+            query = `select * from wfvehicu.sp_mostrar_modmar('${co_marveh}')`;
+            
+            bitacora.control(query, req.url)
+            const modmar = await BD.storePostgresql(query);
+            // con esto muestro msj
+            if (modmar.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", modmar }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", modmar }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
