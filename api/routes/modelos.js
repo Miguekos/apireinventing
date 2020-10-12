@@ -31,7 +31,7 @@ module.exports = async (app) => {
     })
     
     //TRAER MODELOS POR MARCA
-    app.get("/api/v1.0/modelos/:modmar", async (req, res, next) => {
+    app.get("/api/v1.0/modelos/marcas/:modmar", async (req, res, next) => {
         try {
             let query;
             const co_marveh = req.params.modmar;
