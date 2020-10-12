@@ -6,7 +6,7 @@ const saltRounds = 10
 
 module.exports = async (app) => {
     // para traer todos los usuarios
-    app.get("/api/v1.0/personas/natural", async (req, res, next) => {
+    app.get("/api/v1.0/personas/natural/:docide", async (req, res, next) => {
         try {
             let query;
             const doc_ide = req.params.docide;
