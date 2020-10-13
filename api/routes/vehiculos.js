@@ -60,7 +60,7 @@ module.exports = async (app) => {
             }
             
         } catch (error) {
-
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
     })
 
@@ -97,7 +97,7 @@ module.exports = async (app) => {
                 res.json({ res: 'ko', message: "Error en la query", vehiculos }).status(500)
             }
         } catch (error) {
-
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
 
     })
