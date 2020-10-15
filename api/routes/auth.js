@@ -13,26 +13,27 @@ module.exports = async (app) => {
         if (!user) {
             res.json({ res: "ko", message: "El usuario no se ha identificado" }).status(404)
         } else {
-            if (password == user.pw_usuari) {
-                // req.session.userID = user.id
-                // req.session.username = user.username
-                // req.session.logged = true
-                delete user.pw_usuari
-                res.json({ res: 'ok', message: "Wellcome", user }).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Password Incorrecto" }).status(400)
-            }
-            // bcrypt.compare(password, user.password, (err, result) => {
-            //     if (result == true) {
-            //         req.session.userID = user.id
-            //         req.session.username = user.username
-            //         req.session.logged = true
-            //         delete user.password
-            //         res.json({ res: 'ok', message: "Wellcome", user }).status(200)
-            //     } else {
-            //         res.json({ res: 'ko', message: "Password Incorrecto", user, result, err }).status(400)
-            //     }
-            // })
+            // if (password == user.pw_usuari) {
+            //     // req.session.userID = user.id
+            //     // req.session.username = user.username
+            //     // req.session.logged = true
+            //     delete user.pw_usuari
+            //     res.json({ res: 'ok', message: "Wellcome", user }).status(200)
+            // } else {
+            //     res.json({ res: 'ko', message: "Password Incorrecto" }).status(400)
+            // }
+            console.log(user.pw_usuari);
+            bcrypt.compare(password, user.pw_usuari, (err, result) => {
+                if (result == true) {
+                    // req.session.userID = user.id
+                    // req.session.username = user.username
+                    // req.session.logged = true
+                    delete user.pw_usuari
+                    res.json({ res: 'ok', message: "Wellcome", user }).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Password Incorrecto", result, err }).status(400)
+                }
+            })
         }
     })
 
