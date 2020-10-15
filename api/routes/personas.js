@@ -16,14 +16,14 @@ module.exports = async (app) => {
                 query = `select * from pbperson.sp_mostrar_pernat('${doc_ide}');`;
             }
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
-            //console.log("chamex: " + user.length);
+            const personas = await BD.storePostgresql(query);
+            //console.log("chamex: " + personas.length);
             // con esto muestro msj
-            if (user.codRes != 99) {
+            if (personas.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user}).status(200)
+                res.json({ res: 'ok', message: "Success", personas}).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", personas }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -48,12 +48,12 @@ module.exports = async (app) => {
                 '${nombres}'
             );`;
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const personas = await BD.storePostgresql(query);
             //obtengo el codigo de persona generado para enlazar telefono
-            cod_per = user[0].f_co_pernat;
-            if (user.codRes == 99) {
+            cod_per = personas[0].f_co_pernat;
+            if (personas.codRes == 99) {
                 // con esto muestro msj
-                res.json({ res: 'ko', message: "Error al insertar Persona.", user }).status(200)
+                res.json({ res: 'ko', message: "Error al insertar Persona.", personas }).status(200)
             }
             const query2 = `select pbperson.pbpertel(
                 cast( ${cod_per} as integer), 
@@ -93,12 +93,12 @@ module.exports = async (app) => {
                 '${nom_com}'
             );`;
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const personas = await BD.storePostgresql(query);
             //obtengo el codigo de persona generado para enlazar telefono
-            cod_per = user[0].f_co_perjur;
-            if (user.codRes == 99) {
+            cod_per = personas[0].f_co_perjur;
+            if (personas.codRes == 99) {
                 // con esto muestro msj
-                res.json({ res: 'ko', message: "Error al insertar Persona.", user }).status(200)
+                res.json({ res: 'ko', message: "Error al insertar Persona.", personas }).status(200)
             }
             if (swt_pro == 1 || swt_pro == 0) {
                 const query2 = `select reordcom.insert_provee(
