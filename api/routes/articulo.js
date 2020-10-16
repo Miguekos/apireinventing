@@ -5,19 +5,21 @@ const saltRounds = 10
 // ``
 
 module.exports = async (app) => {
-    // para traer todos los usuarios
+    // para traer todos los articulos
     app.get("/api/v1.0/articulo/:nombre/:barras", async (req, res, next) => {
         try {
             let query;
-            const nom_art;
-            const cod_bar;
-            nom_art = req.params.nombre = 'all' ? '' :  req.params.nombre;
-            cod_bar = req.params.barras = 'all' ? '' :  req.params.barras;
+            var nom_art = req.params.nombre;
+            var cod_bar = req.params.barras;
+
+            nom_art = nom_art.toUpperCase() == 'ALL' ? '' : nom_art;
+            cod_bar = cod_bar.toUpperCase() == 'ALL' ? '' : cod_bar;
 
             query = `select * from wfarticu.fb_mostrar_articu(
-                '${doc_ide}',
+                '${nom_art}',
                 '${cod_bar}'
             )`;
+            console.log(req.params.nombre);
             bitacora.control(query, req.url)
             const user = await BD.storePostgresql(query);
             // con esto muestro msj
@@ -32,110 +34,41 @@ module.exports = async (app) => {
         }
 
     })
-/*
-    app.post("/api/v1.0/usuario/:tipo", async (req, res, next) => {
-        try {
-            const tipo = req.params
-            console.log(tipo);
-            console.log(req.body)
-            res.json({
-                "codRes": "00",
-                "message": "Test Correcto"
-            })
-            // console.log(req.body);
-            // const email = req.body.email;
-            // const password = req.body.password;
-            // const query = `SELECT * from fwconacc.tbusuari`;
-            // bitacora.control(query, req.url)
-            // const user = await BD.storePostgresql(query);
-            // con esto muestro msj
-            // respuesta.json({ res: 'ok', message: "Session cerrada correctamente" }).status(200)
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
 
-    })
 
-    // para agregar un usuario
-    app.post("/api/v1.0/users", async (req, res, next) => {
+    // Para insertar o modificar ARTICULOS
+    app.post("/api/v1.0/articulo", async (req, res, next) => {
         try {
-            const hash = await bcrypt.hash(req.body.password, saltRounds);
-            console.log(hash);
-            //const codigo = req.body.codigo;
-            const id = req.body.id;
-            // var password = hash;
-            var password = hash;
-            var doc_ide = req.body.doc_ide;
-            var ape_pat = req.body.ape_pat;
-            var ape_mat = req.body.ape_mat;
-            var nombres = req.body.nombres;
-            const swt_emp = req.body.swt_emp;
-            const swt_act = req.body.swt_act;
-            const query = `select fwconacc.sp_manten_usuari(
-                cast (null as integer),
-                '${id}',
-                '${password}',
-                '${doc_ide}',
-                '${ape_pat}',
-                '${ape_mat}',
-                '${nombres}',
-                ${swt_emp},
-                ${swt_act}
-            )`;
-            // console.log(query);
+            let query;
+            var cod_art = req.body.cod_art;
+            var nom_art = req.body.nom_art;
+            var cod_bar = req.body.cod_bar;
+
+            if (cod_art == null) { // para insertar 
+                query = `select wfarticu.fbinserta_articu(
+                    '${nom_art}'
+                )`;
+            } else { // para modificar
+                query = `select wfarticu.pbarticu(
+                    '${nom_art}',
+                    '${cod_bar}',
+                    cast (${cod_art} as integer)
+                 )`;           
+            }
+            
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
-            if (user.codRes != 99) {
+            const articulo = await BD.storePostgresql(query);
+            //obtengo el codigo de persona generado para enlazar telefono
+            if (articulo.codRes == 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error al insertar o actualizar Articulo.", articulo }).status(200)
             }
+
+            res.json({ res: 'ok', message: "Se registró datos correctamente" }).status(500)
+            
         } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+            res.json({ res: 'ko', message: "Error controlado...", error }).status(500)
         }
 
     })
-
-    // para actualizar usuarios
-    app.put("/api/v1.0/users", async (req, res, next) => {
-        try {
-            const codigo = req.body.codigo;
-            const id = req.body.id;
-            //var password = req.body.password;
-            var doc_ide = req.body.doc_ide;
-            var ape_pat = req.body.ape_pat;
-            var ape_mat = req.body.ape_mat;
-            var nombres = req.body.nombres;
-            const swt_emp = req.body.swt_emp;
-            const swt_act = req.body.swt_act;
-            if (codigo == 'undefined') {
-                miExcepcionUsuario = new ExceptionUsuario("Falta definir código de usuario.");
-                throw miExcepcionUsuario;
-            }
-            const query = `select fwconacc.sp_manten_usuari(
-                cast (${codigo} as integer),
-                '${id}',
-                'y',
-                '${doc_ide}',
-                '${ape_pat}',
-                '${ape_mat}',
-                '${nombres}',
-                ${swt_emp},
-                ${swt_act}
-            )`;
-            bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
-            if (user.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
-
-    })
-*/
 }
