@@ -25,11 +25,11 @@ module.exports = async (app) => {
     })
 
 
-    app.post("/api/v1.0/citas/:no_busque", async (req, res, next) => {
+    app.get("/api/v1.0/citas/:no_busque/:ti_busque", async (req, res, next) => {
         try {
             let query;
             const no_busque = req.params.no_busque;
-            const ti_busque = req.body.ti_busque;
+            const ti_busque = req.params.ti_busque;
 
             console.log(no_busque);
             console.log(ti_busque);
