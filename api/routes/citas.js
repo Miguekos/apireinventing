@@ -5,20 +5,36 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // LISTA DE CITAS
-    app.get("/api/v1.0/citas/:citope", async (req, res, next) => {
+    app.get("/api/v1.0/citas", async (req, res, next) => {
         try {
             let query;
-            const no_busque = req.params.nombus;
-            const ti_busque = req.params.tipbus;
+            query = `select * from recitope.sp_mostrar_citas('', '')`;
+            bitacora.control(query, req.url)
+            const citas = await BD.storePostgresql(query);
+            // con esto muestro msj
+            if (citas.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", citas }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", citas }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+
+    app.post("/api/v1.0/citas/:no_busque", async (req, res, next) => {
+        try {
+            let query;
+            const no_busque = req.params.no_busque;
+            const ti_busque = req.body.ti_busque;
 
             console.log(no_busque);
             console.log(ti_busque);
 
-            if (no_busque == 'all') {
-                query = `select * from recitope.sp_mostrar_citas('', '')`;
-            } else {
-                query = `select * from recitope.sp_mostrar_citas('${no_busque}', '${ti_busque}')`;
-            }
+            query = `select * from recitope.sp_mostrar_citas('${no_busque}', '${ti_busque}')`;
             bitacora.control(query, req.url)
             const citas = await BD.storePostgresql(query);
             // con esto muestro msj
@@ -69,7 +85,7 @@ module.exports = async (app) => {
                 res.json({ res: 'ko', message: "Error en la query", marcas }).status(500)
             }
         } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)    
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
     })
 
@@ -86,7 +102,7 @@ module.exports = async (app) => {
             var no_colveh = req.body.no_colveh;
             var fe_progra = req.body.fe_progra;
             var co_tipope = req.body.co_tipope;
-            
+
             if (co_citope == 'undefined') {
                 miExcepcionMarca = new miExcepcionMarca("Falta definir código de la cita.");
                 throw miExcepcionMarca;
@@ -113,7 +129,7 @@ module.exports = async (app) => {
                 res.json({ res: 'ko', message: "Error en la query", citas }).status(500)
             }
         } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)        
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
 
     })
