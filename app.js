@@ -30,6 +30,7 @@ require('./api/routes/marcas')(app)
 require('./api/routes/modelos')(app)
 require('./api/routes/personas')(app)
 require('./api/routes/articulo')(app)
+require('./api/routes/citas')(app)
 
 
 // Registro de puerto y servidor.
