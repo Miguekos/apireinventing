@@ -79,7 +79,6 @@ module.exports = async (app) => {
             
             bitacora.control(query, req.url)
             const articulo = await BD.storePostgresql(query);
-            //obtengo el codigo de persona generado para enlazar telefono
             if (articulo.codRes == 99) {
                 // con esto muestro msj
                 res.json({ res: 'ko', message: "Error al insertar o actualizar Articulo.", articulo }).status(200)
