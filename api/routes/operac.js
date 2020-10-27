@@ -266,5 +266,27 @@ module.exports = async (app) => {
 
     })
 
+    // ELIMINAR 
+    app.delete("/api/v1.0/operac/tctiptra", async (req, res, next) => {
+        try {
+            let query;
+            var tip_tra = req.body.tip_tra;
+
+            query = `delete from reoperac.tctiptra where ti_tratal = ${tip_tra}`;
+            bitacora.control(query, req.url)
+            const operac = await BD.storePostgresql(query);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Se eliminó el dato."} ).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
 
 }
