@@ -63,7 +63,7 @@ module.exports = async (app) => {
             var fe_progra = req.body.fe_progra;
             var co_tipope = req.body.co_tipope;
 
-            const query = `select recitope.sp_manten_citope(
+            const query = `select * from recitope.sp_manten_citope(
                 cast (null as integer),
                 '${co_usuari}',
                 '${co_docide}',
@@ -107,7 +107,7 @@ module.exports = async (app) => {
                 miExcepcionMarca = new miExcepcionMarca("Falta definir código de la cita.");
                 throw miExcepcionMarca;
             }
-            const query = `select recitope.sp_manten_citope(
+            const query = `select * from recitope.sp_manten_citope(
                 cast (${co_citope} as integer),
                 '${co_usuari}',
                 '${co_docide}',
