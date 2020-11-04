@@ -96,6 +96,7 @@ module.exports = async (app) => {
                 '${ape_pat}',
                 '${ape_mat}',
                 '${nombres}',
+                null,
                 ${swt_emp},
                 ${swt_act}
             )`;
@@ -124,6 +125,7 @@ module.exports = async (app) => {
             var ape_pat = req.body.ape_pat;
             var ape_mat = req.body.ape_mat;
             var nombres = req.body.nombres;
+            var fot_per = req.body.fot_per;
             const swt_emp = req.body.swt_emp;
             const swt_act = req.body.swt_act;
             if (codigo == 'undefined') {
@@ -138,6 +140,7 @@ module.exports = async (app) => {
                 '${ape_pat}',
                 '${ape_mat}',
                 '${nombres}',
+                '${fot_per}',
                 ${swt_emp},
                 ${swt_act}
             )`;
