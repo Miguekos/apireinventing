@@ -80,9 +80,9 @@ module.exports = async (app) => {
             const citas = await BD.storePostgresql(query);
             if (citas.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", marcas }).status(200)
+                res.json({ res: 'ok', message: "Success", citas }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", marcas }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", citas }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
