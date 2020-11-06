@@ -158,4 +158,62 @@ module.exports = async (app) => {
 
     })
 
+        // para actualizar SOLO CONTRASENA
+    app.post("/api/v1.0/users/cambio_contra", async (req, res, next) => {
+        try {
+            var cod_usu = req.body.id;
+            var con_ant = req.body.password;
+            var con_act = req.body.newpassword;
+
+            if (cod_usu == 'undefined') {
+                miExcepcionUsuario = new ExceptionUsuario("Falta definir código de usuario.");
+                throw miExcepcionUsuario;
+            }
+            const query = `select * from fwconacc.sp_cambio_contra(
+                cast(${cod_usu} as integer), 
+                '${con_ant}', 
+                '${con_act}'
+            )`;
+            bitacora.control(query, req.url)
+            const user = await BD.storePostgresql(query);
+            if (user.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", user }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+    // para actualizar SOLO FOTO DE USUARIO
+    app.post("/api/v1.0/users/cambio_fotper", async (req, res, next) => {
+        try {
+            var cod_usu = req.body.id;
+            var fot_per = req.body.fot_per;
+
+            if (cod_usu == 'undefined') {
+                miExcepcionUsuario = new ExceptionUsuario("Falta definir código de usuario.");
+                throw miExcepcionUsuario;
+            }
+            const query = `update fwconacc.tbusuari set
+                co_fotper = '${fot_per}'
+                where co_usuari = cast(${cod_usu} as integer)
+            `;
+            bitacora.control(query, req.url)
+            const user = await BD.storePostgresql(query);
+            if (user.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", user }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
 }
