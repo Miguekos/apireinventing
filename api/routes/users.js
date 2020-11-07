@@ -30,7 +30,7 @@ module.exports = async (app) => {
 
     })
 
-    app.get("/api/v1.0/users/:cousuari", async (req, res, next) => {
+    app.get("/api/v1.0/users/id/:cousuari", async (req, res, next) => {
         try {
             let query;
             const doc_ide = req.params.cousuari;
