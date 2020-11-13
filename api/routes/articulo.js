@@ -35,6 +35,31 @@ module.exports = async (app) => {
 
     })
 
+    // para traer articulo por codigo
+    app.get("/api/v1.0/articulo_codigo/:cod_art", async (req, res, next) => {
+        try {
+            let query;
+            var cod_art = req.params.cod_art;
+
+            query = `select * from wfarticu.fb_mostrar_articu(
+                cast('${cod_art}' as integer)
+            )`;
+            console.log(req.params.nombre);
+            bitacora.control(query, req.url)
+            const user = await BD.storePostgresql(query);
+            // con esto muestro msj
+            if (user.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", user }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
     // Para Traer MOSTRAR Empresas
     app.get("/api/v1.0/articulo/empresas", async (req, res, next) => {
         try {
@@ -57,34 +82,83 @@ module.exports = async (app) => {
 
     })
 
+    // Para Traer TODAS LAS CATEGORIAS (COMBO)
+    app.get("/api/v1.0/articulo_categorias/:cod_emp", async (req, res, next) => {
+        try {
+            let query;
+            var cod_emp = req.params.cod_emp;
+
+            query = `select 
+                co_catego, (select wfarticu.f_no_hiscat (co_catego)) no_catego 
+                from wfarticu.tbcatego
+                where co_empres = cast('${cod_emp}' as integer)
+                order by co_catego desc, no_catego
+            `;
+            bitacora.control(query, req.url)
+            const user = await BD.storePostgresql(query);
+            // con esto muestro msj
+            if (user.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", user }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
     // Para insertar o modificar ARTICULOS
     app.post("/api/v1.0/articulo", async (req, res, next) => {
         try {
             let query;
             var cod_art = req.body.cod_art;
+
             var nom_art = req.body.nom_art;
             var cod_bar = req.body.cod_bar;
+            var cod_emp = req.body.cod_emp;
+            var cod_cat = req.body.cod_cat;
+
+            if (nom_art == null || nom_art.trim() == ''){
+                res.json({ res: 'ko', message: "Nombre del artículo NO esta definido."}).status(500)
+            }
+            if (cod_emp == null || cod_emp.trim() == ''){
+                res.json({ res: 'ko', message: "Código de empresa NO esta definido."}).status(500)
+            }
+            if (cod_cat == null || cod_cat.trim() == ''){
+                res.json({ res: 'ko', message: "Código de categoría NO esta definido."}).status(500)
+            }
 
             if (cod_art == null) { // para insertar 
-                query = `select wfarticu.fbinserta_articu(
-                    '${nom_art}'
+                query = `select * from wfarticu.fbinserta_articu(
+                    '${nom_art}',
+                    cast (${cod_emp} as integer),
+                    cast (${cod_cat} as integer)
                 )`;
             } else { // para modificar
-                query = `select wfarticu.pbarticu(
+                if (cod_bar == null || cod_bar.trim() == ''){
+                    res.json({ res: 'ko', message: "Código de barras NO esta definido."}).status(500)
+                }
+                query = `select * from wfarticu.pbarticu(
                     '${nom_art}',
                     '${cod_bar}',
-                    cast (${cod_art} as integer)
+                    cast (${cod_art} as integer),
+                    cast (${cod_emp} as integer),
+                    cast (${cod_cat} as integer)
                  )`;           
             }
             
             bitacora.control(query, req.url)
             const articulo = await BD.storePostgresql(query);
-            if (articulo.codRes == 99) {
-                // con esto muestro msj
-                res.json({ res: 'ko', message: "Error al insertar o actualizar Articulo.", articulo }).status(200)
+            if (articulo.codRes != 99) {
+                if (articulo[0].co_respue == '-1') {
+                    res.json({ res: 'ko', message: articulo[0].no_respue }).status(500)
+                }else{
+                    res.json({ res: 'ok', message: articulo[0].no_respue }).status(200)
+                }
             }
-
-            res.json({ res: 'ok', message: "Se registró datos correctamente" }).status(500)
+            res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
             
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado...", error }).status(500)
