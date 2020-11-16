@@ -21,13 +21,13 @@ module.exports = async (app) => {
             )`;
             console.log(req.params.nombre);
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const articulo = await BD.storePostgresql(query);
             // con esto muestro msj
-            if (user.codRes != 99) {
+            if (articulo.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
+                res.json({ res: 'ok', message: "Success", articulo }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -46,13 +46,13 @@ module.exports = async (app) => {
             )`;
             console.log(req.params.nombre);
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const articulo = await BD.storePostgresql(query);
             // con esto muestro msj
-            if (user.codRes != 99) {
+            if (articulo.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
+                res.json({ res: 'ok', message: "Success", articulo }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -68,13 +68,13 @@ module.exports = async (app) => {
             query = `select co_empres, pbperson.f_no_person(co_empres) no_empres 
                 from wfpublic.tcempres em;`;
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const articulo = await BD.storePostgresql(query);
             // con esto muestro msj
-            if (user.codRes != 99) {
+            if (articulo.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
+                res.json({ res: 'ok', message: "Success", articulo }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -95,13 +95,13 @@ module.exports = async (app) => {
                 order by co_catego desc, no_catego
             `;
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const articulo = await BD.storePostgresql(query);
             // con esto muestro msj
-            if (user.codRes != 99) {
+            if (articulo.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
+                res.json({ res: 'ok', message: "Success", articulo }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -112,9 +112,9 @@ module.exports = async (app) => {
     // Para insertar o modificar ARTICULOS
     app.post("/api/v1.0/articulo", async (req, res, next) => {
         try {
+            console.log(req.body);
             let query;
             var cod_art = req.body.cod_art;
-
             var nom_art = req.body.nom_art;
             var cod_bar = req.body.cod_bar;
             var cod_emp = req.body.cod_emp;
@@ -123,12 +123,14 @@ module.exports = async (app) => {
             if (nom_art == null || nom_art.trim() == ''){
                 res.json({ res: 'ko', message: "Nombre del artículo NO esta definido."}).status(500)
             }
-            if (cod_emp == null || cod_emp.trim() == ''){
+            if (cod_emp == null){
                 res.json({ res: 'ko', message: "Código de empresa NO esta definido."}).status(500)
             }
-            if (cod_cat == null || cod_cat.trim() == ''){
+            if (cod_cat == null){
                 res.json({ res: 'ko', message: "Código de categoría NO esta definido."}).status(500)
             }
+
+            console.log("cod_art", cod_art);
 
             if (cod_art == null) { // para insertar 
                 query = `select * from wfarticu.fbinserta_articu(
@@ -190,13 +192,13 @@ module.exports = async (app) => {
                 )`;
             };
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const articulo = await BD.storePostgresql(query);
             // con esto muestro msj
-            if (user.codRes != 99) {
+            if (articulo.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", user }).status(200)
+                res.json({ res: 'ok', message: "Success", articulo }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -240,16 +242,16 @@ module.exports = async (app) => {
                 );`;
             };
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
+            const articulo = await BD.storePostgresql(query);
             // con esto muestro msj
-            if (user.codRes != 99) {
+            if (articulo.codRes != 99) {
                 // con esto muestro msj
-                if (user[0].co_respue == '-1'){
-                    res.json({ res: 'ko', message: user[0].no_respue }).status(500)
+                if (articulo[0].co_respue == '-1'){
+                    res.json({ res: 'ko', message: articulo[0].no_respue }).status(500)
                 }
-                res.json({ res: 'ok', message: user[0].no_respue }).status(200)
+                res.json({ res: 'ok', message: articulo[0].no_respue }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -273,15 +275,15 @@ module.exports = async (app) => {
                 )`;
             }
             bitacora.control(query, req.url)
-            const user = await BD.storePostgresql(query);
-            if (user.codRes != 99) {
+            const articulo = await BD.storePostgresql(query);
+            if (articulo.codRes != 99) {
                 // con esto muestro msj
-                if (user[0].co_respue == '-1'){
-                    res.json({ res: 'ko', message: user[0].no_respue }).status(500)
+                if (articulo[0].co_respue == '-1'){
+                    res.json({ res: 'ko', message: articulo[0].no_respue }).status(500)
                 }
-                res.json({ res: 'ok', message: user[0].no_respue }).status(200)
+                res.json({ res: 'ok', message: articulo[0].no_respue }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", user }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
