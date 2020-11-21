@@ -34,6 +34,7 @@ require('./api/routes/citas')(app)
 require('./api/routes/operac')(app)
 require('./api/routes/ordcom')(app)
 require('./api/routes/tipocita')(app)
+require('./api/routes/operacflujo')(app)
 
 // Registro de puerto y servidor.
 app.disable("x-powered-by");
