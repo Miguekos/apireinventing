@@ -105,6 +105,17 @@ module.exports = async (app) => {
             }
             bitacora.control(query, req.url)
             const operac = await BD.storePostgresql(query);
+            //para agregar una fila al array y/o una columna al estilo BENN
+            /*
+            const benja = [];
+            for(var i=0; i<operac.length; i++) {
+                benja.push({
+                    ti_servic: operac[i].ti_servic, 
+                    no_tipser: operac[i].no_tipser,
+                    no_agrega: 'placa_vehiculo'
+                });
+            }
+            */
             // con esto muestro msj
             if (operac.codRes != 99) {
                 // con esto muestro msj

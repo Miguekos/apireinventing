@@ -227,5 +227,301 @@ module.exports = async (app) => {
 
     })
     
+//////////////////////MODULO: SERVICIOS Y MATERIALES (MOSTRAR)
+    app.post("/api/v1.0/operacflujo/serv_mater_mostrar_buscar", async (req, res, next) => {
+        try {
+            var cod_ope = req.body.cod_ope;
+            var tip_fil = req.body.tip_fil;
+            var descrip = req.body.descrip;
+            const lis_bus_ser = [];
+            const lis_bus_mat = [];
+
+            if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "El código de operacion NO esta definido."}).status(500)
+            }
+            if (tip_fil == null || tip_fil.trim() == ''){
+                res.json({ res: 'ko', message: "Tipo de filtro NO esta definido."}).status(500)
+            }
+            if (tip_fil.toUpperCase() != 'S' & tip_fil.toUpperCase() != 'M'){
+                res.json({ res: 'ko', message: "Tipo de filtro debe ser solo S o M."}).status(500)
+            }
+            let q_vehope = `
+                select ov.co_opeveh, ve.co_vehicu, ve.co_plaveh 
+                from reoperac.tbopeveh ov, 
+                wfvehicu.tbvehicu ve
+                where ov.co_vehicu = ve.co_vehicu
+                and ov.co_operac = cast ('${cod_ope}' as integer)
+                limit 1;      
+            `;
+            bitacora.control(q_vehope, req.url);
+            const vehope = await BD.storePostgresql(q_vehope);
+            if (vehope.codRes == 99) {
+                res.json({ res: 'ko', message: "Error en la query q_vehope!", vehope }).status(500)
+            };
+
+            // parte para lista de la bpusqueda
+            if (tip_fil.toUpperCase() == 'S') { // SERVICIO
+                let q_lisser = `
+                    select
+                        sv.co_servic, st.ti_servic, ts.no_tipser,
+                        st.ti_tratal, tt.no_tiptra, sv.no_servic,
+                        um.no_unimed, st.im_preuni
+                    from reoperac.tcservic sv, 
+                        reoperac.trsertra st, 
+                        reoperac.tctipser ts, 
+                        reoperac.tctiptra tt, 
+                        wfpublic.tcunimed um
+                    where sv.co_servic = st.co_servic
+                    and st.ti_servic = ts.ti_servic
+                    and st.ti_tratal = tt.ti_tratal
+                    and tt.co_unimed = um.co_unimed
+                    and sv.no_servic ilike '%'|| '${descrip}' ||'%'
+                    and (sv.co_servic, st.ti_servic, st.ti_tratal) not in (
+                        select co_servic, ti_servic, ti_tratal
+                        from reoperac.tbopeser
+                        where co_operac = cast ('${cod_ope}' as integer)
+                    );
+                `;
+                bitacora.control(q_lisser, req.url);
+                const lisser = await BD.storePostgresql(q_lisser);
+                if (lisser.codRes == 99) {
+                    res.json({ res: 'ko', message: "Error en la query q_lisser", lisser }).status(500)
+                };                
+                for(var i=0; i<lisser.length; i++) {
+                    lis_bus_ser.push({
+                        co_operac: cod_ope, 
+                        co_servic: lisser[i].co_servic,
+                        ti_servic: lisser[i].ti_servic,
+                        no_tipser: lisser[i].no_tipser,
+                        ti_tratal: lisser[i].ti_tratal,
+                        no_tiptra: lisser[i].no_tiptra,
+                        no_servic: lisser[i].no_servic,
+                        no_unimed: lisser[i].no_unimed,
+                        im_preuni: lisser[i].im_preuni,
+                        co_opeveh: vehope[0].co_opeveh,
+                        co_plaveh: vehope[0].co_plaveh
+                    });
+                }
+            }
+            if (tip_fil.toUpperCase() == 'M') { // MATERIAL
+                let q_lismat = `
+                    select
+                        ar.co_articu, ar.co_barras,
+                        wfarticu.f_no_catart(ar.co_articu) as no_catpad,
+                        ar.no_articu
+                    from wfarticu.tbarticu ar
+                    where ar.no_articu ilike '%'|| '${descrip}' ||'%'
+                `;
+                bitacora.control(q_lismat, req.url);
+                const lismat = await BD.storePostgresql(q_lismat);
+                if (lismat.codRes == 99) {
+                    res.json({ res: 'ko', message: "Error en la query q_lismat!", lismat }).status(500)
+                };
+                for(var i=0; i<lismat.length; i++) {
+                    lis_bus_mat.push({
+                        co_operac: cod_ope, 
+                        co_articu: lismat[i].co_articu,
+                        co_barras: lismat[i].co_barras,
+                        no_catpad: lismat[i].no_catpad,
+                        no_articu: lismat[i].no_articu,
+                        co_vehicu: vehope[0].co_vehicu,
+                        co_plaveh: vehope[0].co_plaveh
+                    });
+                } 
+            }
+            // lista de Servicios agregados a la operacion
+            let q_lisseradd = `
+                select
+                    co_operac, co_vehicu, co_plaveh, co_opeser, no_tiptra, no_servic,
+                    no_unimed, no_tipser, ca_uniori, im_preori, va_totori, ca_uniaju, 
+                    im_preaju, va_totaju, co_estado, no_estado
+                from reoperac.fbmostrar_servicios_operac(cast ('${cod_ope}' as integer));
+            `;
+            bitacora.control(q_lisseradd, req.url);
+            const lisseradd = await BD.storePostgresql(q_lisseradd);
+            if (lisseradd.codRes == 99) {
+                res.json({ res: 'ko', message: "Error en la query q_lisseradd", lisseradd }).status(500)
+            };
+
+            // lista de Materiales agregados a la operación
+            let q_lismatadd = `
+                select 
+                    co_operac, co_vehicu, co_plaveh, co_opemat, no_articu,
+                    co_materi, no_materi, ca_uniori, im_preori, im_totori,
+                    ca_uniaju, im_preaju, im_totaju, no_estmat, il_costos
+                from reoperac.fbmostrar_materiales_operac(cast ('${cod_ope}' as integer));
+            `;
+            bitacora.control(q_lismatadd, req.url);
+            const lismatadd = await BD.storePostgresql(q_lismatadd);
+            if (lismatadd.codRes == 99) {
+                res.json({ res: 'ko', message: "Error en la query q_lisseradd", lismatadd }).status(500)
+            };
+            // resultado
+            res.json({ res: 'ok', message: "Success", lis_bus_ser, lis_bus_mat, lisseradd, lismatadd}).status(200)
+            
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+    ///////////////////// Agregar servicio a la operación
+    app.post("/api/v1.0/operacflujo/add_servic_opera", async (req, res, next) => {
+        try {
+            let query1;
+            var ope_veh = req.body.ope_veh;
+            var cod_ope = req.body.cod_ope;
+            var tip_tra = req.body.tip_tra;
+            var cod_ser = req.body.cod_ser;
+            var imp_uni = req.body.imp_uni;
+            var tip_ser = req.body.tip_ser;
+
+            if (ope_veh == null || ope_veh.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion-vehiculo NO esta definido."}).status(500)
+            }
+            if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+            if (tip_tra == null || tip_tra.trim() == ''){
+                res.json({ res: 'ko', message: "Tipo de trabajo NO esta definido."}).status(500)
+            }
+            if (cod_ser == null || cod_ser.trim() == ''){
+                res.json({ res: 'ko', message: "El codigo de servicio NO esta definido."}).status(500)
+            }
+            if (imp_uni == null || imp_uni.trim() == ''){
+                res.json({ res: 'ko', message: "Importe por unidad NO esta definido."}).status(500)
+            }
+            if (tip_ser == null || tip_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Tipo de servicio NO esta definido."}).status(500)
+            }
+    
+            query1 = `
+                insert into reoperac.tbopeser (
+                    co_opeveh, co_operac, 
+                    ti_tratal, co_servic,
+                    ca_uniori, im_preori, 
+                    ca_uniaju, im_preaju,
+                    co_moneda, ti_servic
+                ) values (
+                    cast('${ope_veh}' as integer), cast('${cod_ope}' as integer), 
+                    cast('${tip_tra}' as smallint), cast('${cod_ser}' as smallint),
+                    1, cast('${imp_uni}' as numeric(12,2)), 
+                    1, cast('${imp_uni}' as numeric(12,2)),
+                    28, cast('${tip_ser}' as smallint)
+                );
+            `;
+
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Servicio Agregado."}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    
+    })
+
+    /////////////// agregando materiales a la operacion 
+    app.post("/api/v1.0/operacflujo/add_materi_opera", async (req, res, next) => {
+        try {
+
+            let query0;
+            let query1;
+            let query2;
+            var cod_ope = req.body.cod_ope;
+            var cod_mat = req.body.cod_mat;
+            var cantida = req.body.cantida;
+            var imp_uni = req.body.imp_uni;
+            var cos_ven = req.body.cos_ven;
+            var ope_veh;
+            cod_ven = cos_ven.toUpperCase();
+
+            if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+            if (cod_mat == null || cod_mat.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo de material NO esta definido."}).status(500)
+            }
+            if (cantida == null || cantida.trim() == ''){
+                res.json({ res: 'ko', message: "Cantidad NO esta definido."}).status(500)
+            }
+            if (cos_ven == null || cos_ven.trim() == ''){
+                res.json({ res: 'ko', message: "Switch Costo/Venta NO esta definido."}).status(500)
+            }
+            if (cos_ven != 'C' & cos_ven != 'V'){
+                res.json({ res: 'ko', message: "Switch Costo venta solo debe tener V O C."}).status(500)
+            }
+            if (cos_ven == 'V' & (imp_uni == null || imp_uni <= 0)){
+                res.json({ res: 'ko', message: "Por favor ingrese importe precio de Venta."}).status(500)
+            }
+            if (cos_ven == 'C'){
+                imp_uni = 0.00;
+            }
+            query0 = `
+                select ov.co_opeveh
+                from reoperac.tbopeveh ov
+                where ov.co_operac = cast('${cod_ope}' as integer);     
+            `;
+            bitacora.control(query0, req.url)
+            const result_0 = await BD.storePostgresql(query0);
+            if (result_0.codRes == 99) {
+                res.json({ res: 'ko', message: "Error en la query ope_veh", result_0 }).status(500)
+            };
+            ope_veh = result_0[0].co_opeveh;
+            //validar si existe material en la op.
+            query2 =`
+                select 1 cod_res from reoperac.tbopemat
+                where co_operac = cast('${cod_ope}' as integer)
+                and co_materi = cast('${cod_mat}' as integer);
+            `;
+            bitacora.control(query2, req.url)
+            const result_2 = await BD.storePostgresql(query2);
+            if (result_2.codRes == 99) {
+                res.json({ res: 'ko', message: "Error en la query ope_mat", result_2 }).status(500)
+            };
+            if (result_2[0] == null){
+                var v_opemat = 0;
+            }else{
+                var v_opemat = 1;
+            };
+            if (v_opemat == 1){
+                res.json({ res: 'ko', message: "El material seleccionado ya se encuntra agregado a la operacion."}).status(500)
+            }
+            
+            query1 = `
+                insert into reoperac.tbopemat (
+                    co_opeveh, co_operac, 
+                    co_materi, ca_uniori, 
+                    im_preori, ca_uniaju, 
+                    im_preaju, co_moneda,  
+                    il_costos
+                ) values (
+                    cast('${ope_veh}' as integer), cast('${cod_ope}' as integer), 
+                    cast('${cod_mat}' as integer), cast('${cantida}' as numeric),
+                    cast('${imp_uni}' as numeric(12,2)), cast('${cantida}' as numeric),
+                    cast('${imp_uni}' as numeric(12,2)), 28, 
+                    (case when '${imp_uni}' = 'C' then true else false end)
+                );
+            `;
+
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Material Agregado a la operacion."}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    
+    })
 
 }
