@@ -491,22 +491,69 @@ module.exports = async (app) => {
             };
             if (v_opemat == 1){
                 res.json({ res: 'ko', message: "El material seleccionado ya se encuntra agregado a la operacion."}).status(500)
+            }else{            
+                query1 = `
+                    insert into reoperac.tbopemat (
+                        co_opeveh, co_operac, 
+                        co_materi, ca_uniori, 
+                        im_preori, ca_uniaju, 
+                        im_preaju, co_moneda,  
+                        il_costos
+                    ) values (
+                        cast('${ope_veh}' as integer), cast('${cod_ope}' as integer), 
+                        cast('${cod_mat}' as integer), cast('${cantida}' as numeric),
+                        cast('${imp_uni}' as numeric(12,2)), cast('${cantida}' as numeric),
+                        cast('${imp_uni}' as numeric(12,2)), 28, 
+                        (case when '${imp_uni}' = 'C' then true else false end)
+                    );
+                `;
+
+                bitacora.control(query1, req.url)
+                const result = await BD.storePostgresql(query1);
+                // con esto muestro msj
+                if (result.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Material Agregado a la operacion."}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+                }
             }
-            
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    
+    })
+
+/////////////////// Actualiza servicio enlazado a operacion
+    app.post("/api/v1.0/operacflujo/servic_opera", async (req, res, next) => {
+        try {
+            let query1;
+            var ope_ser = req.body.ope_ser;
+            var cod_ope = req.body.cod_ope;
+            var cantida = req.body.cantida;
+            var imp_uni = req.body.imp_uni;
+
+            if (ope_ser == null || ope_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo servicio NO esta definido."}).status(500)
+            }
+            if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+            if (cantida == null || cantida.trim() == ''){
+                res.json({ res: 'ko', message: "Cantidad NO esta definido."}).status(500)
+            }
+            if (imp_uni == null || imp_uni.trim() == ''){
+                res.json({ res: 'ko', message: "Importe por unidad NO esta definido."}).status(500)
+            }
+    
             query1 = `
-                insert into reoperac.tbopemat (
-                    co_opeveh, co_operac, 
-                    co_materi, ca_uniori, 
-                    im_preori, ca_uniaju, 
-                    im_preaju, co_moneda,  
-                    il_costos
-                ) values (
-                    cast('${ope_veh}' as integer), cast('${cod_ope}' as integer), 
-                    cast('${cod_mat}' as integer), cast('${cantida}' as numeric),
-                    cast('${imp_uni}' as numeric(12,2)), cast('${cantida}' as numeric),
-                    cast('${imp_uni}' as numeric(12,2)), 28, 
-                    (case when '${imp_uni}' = 'C' then true else false end)
-                );
+                update reoperac.tbopeser set 
+                    ca_uniori = cast('${cantida}' as numeric),
+                    im_preori = cast('${imp_uni}' as numeric),
+                    ca_uniaju = cast('${cantida}' as numeric),
+                    im_preaju = cast('${imp_uni}' as numeric)
+                where co_operac = cast('${cod_ope}' as integer)
+                and co_opeser = cast('${ope_ser}' as integer);
             `;
 
             bitacora.control(query1, req.url)
@@ -514,7 +561,7 @@ module.exports = async (app) => {
             // con esto muestro msj
             if (result.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Material Agregado a la operacion."}).status(200)
+                res.json({ res: 'ok', message: "Servicio Actualizado."}).status(200)
             } else {
                 res.json({ res: 'ko', message: "Error en la query", result }).status(500)
             }
@@ -522,6 +569,123 @@ module.exports = async (app) => {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
     
+    })
+
+////////////////////eliminar servicio enlazado a operacion
+    app.delete("/api/v1.0/operacflujo/servic_opera", async (req, res, next) => {
+        try {
+            let query1;
+            var ope_ser = req.body.ope_ser;
+            var cod_ope = req.body.cod_ope;
+
+            if (ope_ser == null || ope_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo servicio NO esta definido."}).status(500)
+            }
+            if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+
+            query1 = `
+                delete from reoperac.tbopeser 
+                where co_operac = cast('${cod_ope}' as integer)
+                and co_opeser = cast('${ope_ser}' as integer);
+            `;
+
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Servicio Eliminado."}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+/////////////////// Actualiza materiales enlazado a operacion
+    app.post("/api/v1.0/operacflujo/materi_opera", async (req, res, next) => {
+        try {
+            let query1;
+            var ope_mat = req.body.ope_mat;
+            var cod_ope = req.body.cod_ope;
+            var cantida = req.body.cantida;
+            var imp_uni = req.body.imp_uni;
+
+            if (ope_mat == null || ope_mat.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo Material NO esta definido."}).status(500)
+            }
+            if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+            if (cantida == null || cantida.trim() == ''){
+                res.json({ res: 'ko', message: "Cantidad NO esta definido."}).status(500)
+            }
+            if (imp_uni == null || imp_uni.trim() == ''){
+                res.json({ res: 'ko', message: "Importe por unidad NO esta definido."}).status(500)
+            }
+
+            query1 = `
+                update reoperac.tbopemat set 
+                    ca_uniori = cast('${cantida}' as numeric),
+                    im_preori = cast('${imp_uni}' as numeric),
+                    ca_uniaju = cast('${cantida}' as numeric),
+                    im_preaju = cast('${imp_uni}' as numeric)
+                where co_operac = cast('${cod_ope}' as integer)
+                and co_opemat = cast('${ope_mat}' as integer);
+            `;
+
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Material Actualizado."}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+    ////////////////////eliminar material enlazado a operacion
+    app.delete("/api/v1.0/operacflujo/materi_opera", async (req, res, next) => {
+        try {
+            let query1;
+            var ope_mat = req.body.ope_mat;
+            var cod_ope = req.body.cod_ope;
+
+            if (ope_mat == null || ope_mat.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo material NO esta definido."}).status(500)
+            }
+            if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+
+            query1 = `
+                delete from reoperac.tbopemat
+                where co_operac = cast('${cod_ope}' as integer)
+                and co_opemat = cast('${ope_mat}' as integer);
+            `;
+
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Material Eliminado."}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
     })
 
 }
