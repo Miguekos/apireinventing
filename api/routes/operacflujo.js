@@ -688,4 +688,30 @@ module.exports = async (app) => {
 
     })
 
+/////////////////////////////////// EVALUAR OPERACION
+// mostrar servicio-material de operacion a evaluar
+    app.get("/api/v1.0/operacflujo/lista_sermat_evalua/:cod_ope", async (req, res, next) => {
+        try {
+            var cod_ope = req.params.cod_ope;
+            let query1 = `
+                select co_operac, co_vehicu, co_plaveh, co_opeser,
+                    no_servic, no_tipser, ca_uniori, im_preori, va_totori,
+                    ca_uniaju, im_preaju, va_totaju, no_estado, no_tiptra
+                from reoperac.fbmostrar_sermat_operac_evaluar(cast ('${cod_ope}' as integer));
+            `;
+            bitacora.control(query1, req.url)
+            const sermat = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (sermat.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", sermat}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", sermat }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
 }
