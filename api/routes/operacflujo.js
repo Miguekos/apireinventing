@@ -145,7 +145,7 @@ module.exports = async (app) => {
                 if (operac[0].co_respue == '-1'){
                     res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
                 }
-                res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
+                res.json({ res: 'ok', message: operac[0].co_respue }).status(200)
             } else {
                 res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
             }
@@ -696,7 +696,7 @@ module.exports = async (app) => {
             let query1 = `
                 select co_operac, co_vehicu, co_plaveh, co_opeser,
                     no_servic, no_tipser, ca_uniori, im_preori, va_totori,
-                    ca_uniaju, im_preaju, va_totaju, no_estado, no_tiptra
+                    ca_uniaju, im_preaju, va_totaju, no_estado, no_tiptra, ti_servic
                 from reoperac.fbmostrar_sermat_operac_evaluar(cast ('${cod_ope}' as integer));
             `;
             bitacora.control(query1, req.url)
@@ -714,4 +714,62 @@ module.exports = async (app) => {
 
     })
 
+// recalcular servicio-material de operación a evaluar
+    app.post("/api/v1.0/operacflujo/recalcula_sermat", async (req, res, next) => {
+        try {
+            let query1;
+            var ser_mat = req.body.ser_mat;
+            var cod_ope = req.body.cod_ope;
+            var tip_ser = req.body.tip_ser;
+            var cantida = req.body.cantida;
+            var imp_uni = req.body.imp_uni;
+
+            if (ser_mat == null || ser_mat.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo Servicio-Material NO esta definido."}).status(500)
+            }
+            else if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+            else if (tip_ser == null || tip_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Tipo de servicio NO esta definido."}).status(500)
+            }
+            else if (cantida == null || cantida.trim() == ''){
+                res.json({ res: 'ko', message: "Cantidad NO esta definido."}).status(500)
+            }
+            else if (imp_uni == null || imp_uni.trim() == ''){
+                res.json({ res: 'ko', message: "Importe por unidad NO esta definido."}).status(500)
+            }else {
+                if (tip_ser.toUpperCase() == '0'){ //materiales
+                    query1 = `
+                        update reoperac.tbopemat set
+                            ca_uniaju = cast('${cantida}' as numeric),
+                            im_preaju = cast('${imp_uni}' as numeric)
+                        where co_opemat = cast('${ser_mat}' as integer)
+                        and co_operac = cast('${cod_ope}' as integer);
+                    `;
+                }else{ // servicio
+                    query1 = `
+                        update reoperac.tbopeser set
+                            ca_uniaju = cast('${cantida}' as numeric),
+                            im_preaju = cast('${imp_uni}' as numeric)
+                        where co_opeser = cast('${ser_mat}' as integer)
+                        and co_operac = cast('${cod_ope}' as integer);
+                    `;
+                }
+
+                bitacora.control(query1, req.url)
+                const result = await BD.storePostgresql(query1);
+                // con esto muestro msj
+                if (result.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Item Recalculado."}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+                }
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
 }
