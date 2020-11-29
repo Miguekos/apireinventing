@@ -772,4 +772,89 @@ module.exports = async (app) => {
         }
 
     })
+
+
+// evaluar cada item de la operacion (servicios y materiales)
+    app.post("/api/v1.0/operacflujo/evalua_item_sermat", async (req, res, next) => {
+        try {
+            let query1;
+            var ser_mat = req.body.ser_mat;
+            var cod_ope = req.body.cod_ope;
+            var tip_ser = req.body.tip_ser;
+            var tip_opc = req.body.tip_opc;
+            var cod_per = req.body.cod_per;
+
+            if (ser_mat == null || ser_mat.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo Servicio-Material NO esta definido."}).status(500)
+            }
+            else if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+            else if (tip_ser == null || tip_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Tipo de servicio NO esta definido."}).status(500)
+            }
+            else if (tip_opc == null || tip_opc.trim() == ''){
+                res.json({ res: 'ko', message: "Tipo de opcion (accion) NO esta definido."}).status(500)
+            }
+            else if (cod_per == null || cod_per.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo del personal NO esta definido."}).status(500)
+            }else {
+                if (tip_ser.toUpperCase() == '0'){ //materiales
+                    if (tip_opc.toUpperCase() == 'A'){
+                        query1 = `
+                            update reoperac.tbopemat set
+                                co_evaope = cast('${cod_per}' as integer),
+                                il_aprser = TRUE,
+                                fe_aprmat = current_timestamp
+                            where co_opemat = cast('${ser_mat}' as integer)
+                            and co_operac = cast('${cod_ope}' as integer);
+                        `;
+                    } else if (tip_opc.toUpperCase() == 'R'){
+                        query = `
+                            update reoperac.tbopemat set
+                                co_evaope = cast('${cod_per}' as integer),
+                                il_aprser = FALSE,
+                                fe_aprmat = current_timestamp
+                            where co_opemat = cast('${ser_mat}' as integer)
+                            and co_operac = cast('${cod_ope}' as integer);  
+                        `;
+                    };                    
+                }else{ // servicio
+                    if (tip_opc.toUpperCase() == 'A'){
+                        query1 = `
+                            update reoperac.tbopeser set
+                                co_evaope = cast('${cod_per}' as integer),
+                                il_aprser = TRUE,
+                                fe_aprser = current_timestamp
+                            where co_opeser = cast('${ser_mat}' as integer)
+                            and co_operac = cast('${cod_ope}' as integer); 
+                        `;
+                    } else if (tip_opc.toUpperCase() == 'R'){
+                        query1 = `
+                            update reoperac.tbopeser set
+                                co_evaope = cast('${cod_per}' as integer),
+                                il_aprser = FALSE,
+                                fe_aprser = current_timestamp
+                            where co_opeser = cast('${ser_mat}' as integer)
+                            and co_operac = cast('${cod_ope}' as integer); 
+                        `;          
+                    }
+                }
+
+                bitacora.control(query1, req.url)
+                const result = await BD.storePostgresql(query1);
+                // con esto muestro msj
+                if (result.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Item evaluado."}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+                }
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
+
 }
