@@ -688,7 +688,41 @@ module.exports = async (app) => {
 
     })
 
-/////////////////////////////////// EVALUAR OPERACION
+/////////////////////////////////// EVALUAR OPERACION OPCION 3
+// mostrar lista de operaciones para evaluar
+    app.post("/api/v1.0/operacflujo/lista_operaci_evalua", async (req, res, next) => {
+        try {
+            let query1;
+            var nom_cli = req.body.nom_cli;
+            var pla_veh = req.body.pla_veh;
+ 
+            if (nom_cli == null || nom_cli.trim() == ''){
+                nom_cli = '';
+            }
+            if (pla_veh == null || pla_veh.trim() == ''){
+                pla_veh = '';
+            }            
+            query1 = `
+                select * from readuana.fbmostrar_operaci_estados(
+                    '${nom_cli}',
+                    '${pla_veh}',
+                    '1'
+                );
+            `;
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", result}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }            
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
 // mostrar servicio-material de operacion a evaluar
     app.get("/api/v1.0/operacflujo/lista_sermat_evalua/:cod_ope", async (req, res, next) => {
         try {
@@ -773,7 +807,6 @@ module.exports = async (app) => {
 
     })
 
-
 // evaluar cada item de la operacion (servicios y materiales)
     app.post("/api/v1.0/operacflujo/evalua_item_sermat", async (req, res, next) => {
         try {
@@ -856,5 +889,91 @@ module.exports = async (app) => {
         }
     })
 
+////////////////////////////////// ASIGNACIÓN DE SERVICIO OPCION 4
+// mostrar lista de operaciones pendientes a asignar tecnico a sus servicios
+    app.post("/api/v1.0/operacflujo/lista_operaci_asignar", async (req, res, next) => {
+        try {
+            let query1;
+            var nom_cli = req.body.nom_cli;
+            var pla_veh = req.body.pla_veh;
+
+            if (nom_cli == null || nom_cli.trim() == ''){
+                nom_cli = '';
+            }
+            if (pla_veh == null || pla_veh.trim() == ''){
+                pla_veh = '';
+            }            
+            query1 = `
+                select * from readuana.fbmostrar_operaci_estados(
+                    '${nom_cli}',
+                    '${pla_veh}',
+                    '2'
+                );
+            `;
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", result}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }            
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
+// mostrar servicios para asignar persona que ejecutará
+    app.get("/api/v1.0/operacflujo/lista_sermat_asignar/:cod_ope", async (req, res, next) => {
+        try {
+            var cod_ope = req.params.cod_ope;
+            let query1 = `
+                select co_operac, co_vehicu, co_plaveh, co_opeser, no_servic, no_unimed,
+                    no_tipser, ca_uniori, im_preori, va_totori, ca_uniaju, im_preaju, va_totaju,
+                    co_estado, no_estado, ti_servic
+                from reoperac.fbmostrar_servicios_operac_asignar(cast ('${cod_ope}' as integer));
+            `;
+            bitacora.control(query1, req.url)
+            const servic = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (servic.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", servic}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", servic }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+// para combo de tecnicos a asignar
+    app.get("/api/v1.0/operacflujo/combo_tecnico", async (req, res, next) => {
+        try {
+            let query1 = `
+                select  0 as co_tecaut, '[Ninguno]' no_person union
+                select
+                ta.co_tecaut,
+                pbperson.f_no_person(pe.co_person) as no_person
+                from pbperson.tbperson pe, reoperac.tctecaut ta
+                where pe.co_person = ta.co_pernat
+                order by 1, 2
+            `;
+            bitacora.control(query1, req.url)
+            const tecnico = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (tecnico.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", tecnico}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", tecnico }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
 
 }
