@@ -59,7 +59,7 @@ const storePostgresql = async (queryCustom) => {
         // var time = await pool.query('SELECT NOW()')
         var name = await pool.query(queryCustom)
         // console.log(time.rows)
-        console.log(name.rows)
+        // console.log(name.rows)
         return name.rows
     } catch (error) {
         console.log("error", error);
