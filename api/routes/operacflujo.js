@@ -976,4 +976,153 @@ module.exports = async (app) => {
 
     })
 
+// asignar tecnico a cada Item servicio de operacion
+    app.post("/api/v1.0/operacflujo/asigna_tecnico_servicio", async (req, res, next) => {
+        try {
+            let query1;
+            var cod_ope = req.body.cod_ope;
+            var ope_ser = req.body.ope_ser;
+            var tec_aut = req.body.tec_aut;
+            
+            if (ope_ser == null || ope_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo servicio NO esta definido."}).status(500)
+            }
+            else if (cod_ope == null || cod_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            }
+            else if (tec_aut == null || tec_aut.trim() == '' || tec_aut.trim() == '0'){
+                res.json({ res: 'ko', message: "Tecnico NO esta definido."}).status(500)
+            }else {
+                query1 = `
+                    select * from reoperac.pbasigna_tecnico(
+                        cast('${cod_ope}' as bigint),
+                        cast('${ope_ser}' as bigint),
+                        cast('${tec_aut}' as integer)
+                    );
+                `;
+
+                bitacora.control(query1, req.url)
+                const result = await BD.storePostgresql(query1);
+                // con esto muestro msj
+                if (result.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: result[0].no_respue}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+                }
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+/////////////////////////////////// INICIAL ITEM (SERVICIO) DE OPERACION OPCION 5
+// mostrar lista de servicio-ordeservicio pendientes para dar inicio y o fin
+    app.post("/api/v1.0/operacflujo/lista_opeser_ini_fin", async (req, res, next) => {
+        try {
+            let query1;
+            var cod_ope = req.body.cod_ope;
+            var pla_veh = req.body.pla_veh;
+            var tec_aut = req.body.tec_aut;
+
+            if (cod_ope == null || cod_ope.trim() == ''){
+                cod_ope = '';
+            }
+            if (pla_veh == null || pla_veh.trim() == ''){
+                pla_veh = '';
+            }      
+            if (tec_aut == null || tec_aut.trim() == ''){
+                tec_aut = '';
+            }       
+            query1 = `
+                select * from reoperac.fbmostrar_opeser_inicio_fin(
+                    '${cod_ope}',
+                    '${pla_veh}',
+                    '${tec_aut}'
+                );
+            `;
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", result}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }            
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
+// Dar INICIO al servicio de una orden de servico
+    app.post("/api/v1.0/operacflujo/iniciar_servicio_ordser", async (req, res, next) => {
+        try {
+            let query1;
+            var ord_ser = req.body.ord_ser;
+            var ope_ser = req.body.ope_ser;
+
+            if (ord_ser == null || ord_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Definir orden de servicio ord_ser" }).status(500);
+            }else if (ope_ser == null || ope_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Definir servicio de operacion ope_ser ord_ser" }).status(500);
+            } else {           
+                query1 = `
+                    select * from reoperac.pbinicia_finaliza_servicio(
+                        cast('${ord_ser}' as bigint),
+                        cast('${ope_ser}' as bigint),
+                        'I'
+                    )
+                `;
+                bitacora.control(query1, req.url)
+                const resulta = await BD.storePostgresql(query1);
+                // con esto muestro msj
+                if (resulta.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Success", resulta}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", resulta }).status(500)
+                }    
+            }        
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
+// Dar INICIO al servicio de una orden de servico
+    app.post("/api/v1.0/operacflujo/finalizar_servicio_ordser", async (req, res, next) => {
+        try {
+            let query1;
+            var ord_ser = req.body.ord_ser;
+            var ope_ser = req.body.ope_ser;
+
+            if (ord_ser == null || ord_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Definir orden de servicio ord_ser" }).status(500);
+            }else if (ope_ser == null || ope_ser.trim() == ''){
+                res.json({ res: 'ko', message: "Definir servicio de operacion ope_ser ord_ser" }).status(500);
+            } else {           
+                query1 = `
+                    select * from reoperac.pbinicia_finaliza_servicio(
+                        cast('${ord_ser}' as bigint),
+                        cast('${ope_ser}' as bigint),
+                        'F'
+                    )
+                `;
+                bitacora.control(query1, req.url)
+                const resulta = await BD.storePostgresql(query1);
+                // con esto muestro msj
+                if (resulta.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Success", resulta}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", resulta }).status(500)
+                }    
+            }        
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
+
 }
