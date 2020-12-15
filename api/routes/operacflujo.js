@@ -1125,4 +1125,81 @@ module.exports = async (app) => {
     })
 
 
+/////////////////////////////////// INGRESO VEHICULAR
+    app.post("/api/v1.0/operacflujo/ingreso_vehicular", async (req, res, next) => {
+        try {
+            let query1;
+            var per_reg = req.body.per_reg;
+            var cod_veh = req.body.cod_veh;
+            var val_kil = req.body.val_kil;
+            var doc_ide = req.body.doc_ide;
+            var ape_pat = req.body.ape_pat;
+            var ape_mat = req.body.ape_mat;
+            var nom_cli = req.body.nom_cli;
+            var cen_ope = req.body.cen_ope;
+            var direcci = req.body.direcci;
+            var det_ing = req.body.det_ing;
+            var swt_sal = req.body.swt_sal;
+            var fec_sal = req.body.fec_sal;
+
+            if (per_reg == null || per_reg.trim() == ''){
+                res.json({ res: 'ko', message: "Definir Persona que regista salida." }).status(500);
+            }else if (cod_veh == null || cod_veh.trim() == ''){
+                res.json({ res: 'ko', message: "Definir código del vehículo." }).status(500);
+            }else if (val_kil == null || val_kil.trim() == ''){
+                res.json({ res: 'ko', message: "Definir el kilometraje del vehículo." }).status(500);
+            }else if (doc_ide == null || doc_ide.trim() == ''){
+                res.json({ res: 'ko', message: "Definir documento de identidad del cliente." }).status(500);
+            }else if (ape_pat == null || ape_pat.trim() == ''){
+                res.json({ res: 'ko', message: "Definir apellido paterno del cliente." }).status(500);
+            }else if (ape_mat == null || ape_mat.trim() == ''){
+                res.json({ res: 'ko', message: "Definir apellido materno del cliente." }).status(500);
+            }else if (nom_cli == null || nom_cli.trim() == ''){
+                res.json({ res: 'ko', message: "Definir nombre del cliente." }).status(500);
+            }else if (cen_ope == null || cen_ope.trim() == ''){
+                res.json({ res: 'ko', message: "Definir centro de operaciones." }).status(500);
+            }else if (direcci == null || direcci.trim() == ''){
+                res.json({ res: 'ko', message: "Definir dirección del cliente." }).status(500);
+            }else if (det_ing == null || det_ing.trim() == ''){
+                res.json({ res: 'ko', message: "Definir detalle de ingreso." }).status(500);
+            }else if (swt_sal == null || swt_sal.trim() == ''){
+                res.json({ res: 'ko', message: "Definir switch de pronto ingreso" }).status(500);
+            }else if (swt_sal == '1' && (fec_sal == null || fec_sal.trim() == '')){
+                res.json({ res: 'ko', message: "Definir fecha-hora de próxima salida." }).status(500);
+            } else {           
+                query1 = `
+                    select * from readuana.fb_ingreso_vehicular(
+                        cast('${per_reg}' as integer),
+                        cast('${cod_veh }' as integer),
+                        cast('${val_kil }' as integer),
+                        '${doc_ide}',
+                        '${ape_pat}',
+                        '${ape_mat}',
+                        '${nom_cli}',
+                        cast('${cen_ope}' as integer),
+                        '${direcci}',
+                        '${det_ing}',
+                        '${swt_sal}',
+                        '${fec_sal}'
+                    );
+                `;
+                bitacora.control(query1, req.url)
+                const resulta = await BD.storePostgresql(query1);
+                // con esto muestro msj
+                if (resulta.codRes != 99) {
+                    // con esto muestro msj
+                    if (resulta[0].co_respue == '-1'){
+                        res.json({ res: 'ko', message: resulta[0].no_respue }).status(500)
+                    }else{
+                        res.json({ res: 'ok', message: resulta[0].no_respue}).status(200)
+                    }
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", resulta }).status(500)
+                }    
+            }        
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
 }
