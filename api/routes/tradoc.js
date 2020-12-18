@@ -96,7 +96,7 @@ module.exports = async (app) => {
     
     })
 
-    /// ELIMINAR ORDEN DE COMPRA
+    /// ELIMINAR TRÁMITE DOCUMENTARIO
     app.post("/api/v1.0/tradoc/delete_tradoc", async (req, res, next) => {
         try {
             let query1;
@@ -108,7 +108,7 @@ module.exports = async (app) => {
             if (co_tradoc == null || co_tradoc.trim() == ''){res.json({ res: 'ko', message: "Código de TD NO está definido."}).status(500)}
             if (co_person == null || co_person.trim() == ''){res.json({ res: 'ko', message: "Código de persona NO está definido."}).status(500)}
             
-            query1 = `select * from reordcom.fb_delete_tradoc(
+            query1 = `select * from retradoc.fb_delete_tradoc(
                 cast (${co_tradoc} as integer),
                 cast (${co_person} as integer)
              )`;
