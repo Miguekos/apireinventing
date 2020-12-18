@@ -1202,4 +1202,48 @@ module.exports = async (app) => {
         }
     })
 
+///// BUSCAR OPERACION
+    app.post("/api/v1.0/operacflujo/buscar_operacion", async (req, res, next) => {
+        try {
+            let query1;
+            var cod_ope = req.body.cod_ope;
+            var pla_veh = req.body.pla_veh;
+            var fec_ini = req.body.fec_ini;
+            var fec_fin = req.body.fec_fin;
+
+            if (cod_ope == null || cod_ope.trim() == ''){
+                cod_ope = '';
+            }
+            if (pla_veh == null || pla_veh.trim() == ''){
+                pla_veh = '';
+            }      
+            if (fec_ini == null || fec_ini.trim() == ''){
+                fec_ini = '';
+            }       
+            if (fec_fin == null || fec_fin.trim() == ''){
+                fec_fin = '';
+            }
+            query1 = `
+                select * from reoperac.fbmostrar_lista_operaciones(
+                    '${cod_ope}',
+                    '${pla_veh}',
+                    '${fec_ini}',
+                    '${fec_fin}'
+                );
+            `;
+            bitacora.control(query1, req.url)
+            const result = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (result.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", result}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", result }).status(500)
+            }            
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
+
 }
