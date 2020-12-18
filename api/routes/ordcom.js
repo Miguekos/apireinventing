@@ -125,7 +125,7 @@ module.exports = async (app) => {
             if (co_person == null || co_person.trim() == ''){res.json({ res: 'ko', message: "Código de persona NO está definido."}).status(500)}
             
             query1 = `select * from reordcom.fb_delete_ordcom(
-                cast (${pn_regist} as integer),
+                cast (${nu_ordcom} as integer),
                 cast (${co_person} as integer)
              )`;
 
