@@ -22,32 +22,33 @@ module.exports = async (app) => {
             
 
             if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
-            if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
-        
-            query1 = `select * from retradoc.fb_insert_tradoc(
-                cast (${pn_regist} as integer),
-                cast (${pn_solici} as integer),
-                cast (${co_perjur} as integer),
-                cast (${co_moneda} as integer),
-                '${de_mottra}',
-                '${fe_tradoc}',
-                cast (${il_conigv} as integer),
-                cast (${ti_docume} as integer),
-                cast (${co_arcadj} as integer)
-             )`;
+            else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
+            else {
+                query1 = `select * from retradoc.fb_insert_tradoc(
+                    cast (${pn_regist} as integer),
+                    cast (${pn_solici} as integer),
+                    cast (${co_perjur} as integer),
+                    cast (${co_moneda} as integer),
+                    '${de_mottra}',
+                    '${fe_tradoc}',
+                    cast (${il_conigv} as integer),
+                    cast (${ti_docume} as integer),
+                    cast (${co_arcadj} as integer)
+                )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
+                bitacora.control(query1, req.url)
+                const operac = await BD.storePostgresql(query1);
                 // con esto muestro msj
-                if (operac[0].co_respue == '-1'){
-                    res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
+                if (operac.codRes != 99) {
+                    // con esto muestro msj
+                    if (operac[0].co_respue == '-1'){
+                        res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
+                    }
+                    res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
                 }
-                res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
+            }   
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
@@ -172,13 +173,109 @@ module.exports = async (app) => {
 
     })
 
+    /// LISTAR PENDIENTE DE VISADO TRÁMITE DOCUMENTARIO ///
+    app.post("/api/v1.0/tradoc/listar_pendie_visado", async (req, res, next) => {
+        try {
+            let query1;
+            var co_tradoc = req.params.co_tradoc;
+            var co_tipvis = req.params.co_tipvis;
+            
+            query1 = `select * from retradoc.fb_listar_pendie_visado(
+                '${co_tradoc}',
+                '${co_tipvis}'
+            )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+
     /// DETALLE DE CADA TRAMITE DOCUMENTARIO ///
-    app.get("/api/v1.0/tradoc/listar_detall_tradoc/:co_tradoc", async (req, res, next) => {
+    app.get("/api/v1.0/tradoc/listar_detall_tradoc", async (req, res, next) => {
         try {
             let query1;
             var co_tradoc = req.params.co_tradoc;
 
             query1 = `select * from retradoc.fb_listar_detall_tradoc( '${co_tradoc}' )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+    
+    /// LISTAR PRODUCTOS ENCOTRADOS TRAMITE DOCUMENTARIO ///
+    app.post("/api/v1.0/tradoc/listar_produc_encont", async (req, res, next) => {
+        try {
+            let query1;
+
+            var co_tradoc = req.params.co_tradoc;
+            var co_catego = req.params.co_catego;
+            var co_subcat = req.params.co_subcat;
+            var no_produc = req.params.no_produc;
+            
+            query1 = `select * from retradoc.fb_listar_produc_encont(
+                cast (${co_tradoc} as integer),
+                cast (${co_catego} as integer),
+                cast (${co_subcat} as integer),
+                '${no_produc}'
+            )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+    /// MANTENIMIENTO DE PRODUCTOS TRAMITE DOCUMENTARIO ///
+    app.post("/api/v1.0/tradoc/manten_produc_tradoc", async (req, res, next) => {
+        try {
+            let query1;
+            
+            var co_tradoc = req.params.co_tradoc;
+            var co_articu = req.params.co_articu;
+            var ca_articu = req.params.ca_articu;
+            var co_moneda = req.params.co_moneda;
+            var im_preuni = req.params.im_preuni;
+            var ti_accion = req.params.ti_accion;
+            
+            query1 = `select * from retradoc.fb_manten_produc_tradoc(
+                cast (${co_tradoc} as integer),
+                cast (${co_articu} as integer),
+                cast (${ca_articu} as numeric),
+                cast (${co_moneda} as integer),
+                cast (${im_preuni} as numeric),
+                '${ti_accion}'
+            )`;
 
             bitacora.control(query1, req.url)
             const operac = await BD.storePostgresql(query1);
