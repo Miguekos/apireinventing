@@ -197,7 +197,9 @@ module.exports = async (app) => {
             let query1;
             var co_ordcom = req.params.co_ordcom;
 
-            query1 = `select * from reordcom.fb_listar_detall_ordcom( '${co_ordcom}' )`;
+            query1 = `select * from reordcom.fb_listar_detall_ordcom( 
+                cast (${co_ordcom} as integer)
+            )`;
 
             bitacora.control(query1, req.url)
             const operac = await BD.storePostgresql(query1);
@@ -223,7 +225,7 @@ module.exports = async (app) => {
             var co_tipvis = req.params.co_tipvis;
             
             query1 = `select * from reordcom.fb_listar_pendie_visado(
-                '${co_ordcom}', 
+                cast (${co_ordcom} as integer),
                 '${co_tipvis}'
             )`;
 
@@ -241,6 +243,108 @@ module.exports = async (app) => {
         }
 
     })
+
+    /// LISTAR PRODUCTOS ENCOTRADOS ORDEN DE COMPRA ///
+    app.post("/api/v1.0/ordcom/listar_produc_encont", async (req, res, next) => {
+        try {
+            let query1;
+
+            var co_ordcom = req.params.co_ordcom;
+            var co_catego = req.params.co_catego;
+            var co_subcat = req.params.co_subcat;
+            var no_produc = req.params.no_produc;
+            
+            query1 = `select * from reordcom.fb_listar_produc_encont(
+                cast (${co_ordcom} as integer),
+                cast (${co_catego} as integer),
+                cast (${co_subcat} as integer),
+                '${no_produc}'
+            )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+    /// MANTENIMIENTO DE PRODUCTOS ORDEN DE COMPRA ///
+    app.post("/api/v1.0/ordcom/manten_produc_ordcom", async (req, res, next) => {
+        try {
+            let query1;
+            
+            var co_ordcom = req.params.co_ordcom;
+            var co_articu = req.params.co_articu;
+            var ca_articu = req.params.ca_articu;
+            var co_moneda = req.params.co_moneda;
+            var im_preuni = req.params.im_preuni;
+            var ti_accion = req.params.ti_accion;
+            
+            query1 = `select * from reordcom.fb_manten_produc_ordcom(
+                cast (${co_ordcom} as integer),
+                cast (${co_articu} as integer),
+                cast (${ca_articu} as numeric),
+                cast (${co_moneda} as integer),
+                cast (${im_preuni} as numeric),
+                '${ti_accion}'
+            )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+    /// VISADO O RECHAZO DE ORDEN DE COMPRA ///
+    app.post("/api/v1.0/ordcom/visrec_ordcom", async (req, res, next) => {
+        try {
+            let query1;
+            
+            var co_ordcom = req.params.co_ordcom;
+            var co_person = req.params.co_person;
+            var ti_person = req.params.ti_person;
+            var ti_visado = req.params.ti_visado;
+            
+            query1 = `select * from reordcom.fb_visrec_ordcom(
+                cast (${co_ordcom} as integer),
+                cast (${co_person} as integer),
+                '${ti_person}',
+                '${ti_visado}'
+            )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
+    /******************************************** CATALOGOS ************************************/
 
     /// CATALOGO PROVEEDOR ///
     app.get("/api/v1.0/ordcom/catalogo/tcprovee", async (req, res, next) => {
