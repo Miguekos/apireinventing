@@ -132,30 +132,28 @@ module.exports = async (app) => {
     })
 
 
-    /// LISTA DE ORDENES DE COMPRA ///
-    app.post("/api/v1.0/ordcom/listar_ordcom", async (req, res, next) => {
+    /// LISTA DE TRÁMITE DOCUMENTARIO ///
+    app.post("/api/v1.0/tradoc/listar_tradoc", async (req, res, next) => {
         try {
             let query1;
             var fe_emides = req.body.fe_emides;
             var fe_emihas = req.body.fe_emihas;
             var no_provee = req.body.no_provee;
-            var nu_ordcom = req.body.nu_ordcom;
-            var ti_estado = req.body.ti_estado;
+            var nu_tramit = req.body.nu_tramit;
             var co_barras = req.body.co_barras;
 
             if(fe_emides == null || fe_emides.trim() == ''){fe_emides = '';}
             if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
             if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
-            if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
+            if(nu_tramit == null || nu_tramit.trim() == ''){nu_tramit = '';}
             if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
             if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
 
-            query1 = `select * from reordcom.fb_listar_ordcom(
+            query1 = `select * from retradoc.fb_listar_tradoc(
                 '${fe_emides}', 
                 '${fe_emihas}',
                 '${no_provee}', 
-                '${nu_ordcom}', 
-                '${ti_estado}', 
+                '${nu_tramit}', 
                 '${co_barras}'
             )`;
             
@@ -174,13 +172,13 @@ module.exports = async (app) => {
 
     })
 
-    /// DETALLE DE CADA ORDEN DE COMPRA ///
-    app.get("/api/v1.0/ordcom/listar_detall_ordcom/:co_ordcom", async (req, res, next) => {
+    /// DETALLE DE CADA TRAMITE DOCUMENTARIO ///
+    app.get("/api/v1.0/tradoc/listar_detall_tradoc/:co_tradoc", async (req, res, next) => {
         try {
             let query1;
-            var co_ordcom = req.params.co_ordcom;
+            var co_tradoc = req.params.co_tradoc;
 
-            query1 = `select * from reordcom.fb_listar_detall_ordcom( '${co_ordcom}' )`;
+            query1 = `select * from retradoc.fb_listar_detall_tradoc( '${co_tradoc}' )`;
 
             bitacora.control(query1, req.url)
             const operac = await BD.storePostgresql(query1);
@@ -248,34 +246,6 @@ module.exports = async (app) => {
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
-    })
-
-    /// TIPO DE COMPRA ///
-    app.get("/api/v1.0/ordcom/tcservic/:ti_compra", async (req, res, next) => {
-        try {
-            let query;
-            
-            query = `
-                select ti_compra, no_tipcom
-                from (
-                    select 1 as ti_compra, 'Materiales' as no_tipcom
-                    select 2 , 'Servicios'
-                    select 3 , 'Activo Fijo'
-                ) as tx`;
-            bitacora.control(query, req.url)
-            const operac = await BD.storePostgresql(query);
-            console.log('chamex:' + operac[0]);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
-
     })
 
 }

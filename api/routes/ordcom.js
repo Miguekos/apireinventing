@@ -22,38 +22,39 @@ module.exports = async (app) => {
             
 
             if (pn_regist == null || pn_regist.trim() == ''){res.json({ res: 'ko', message: "Código de persona NO está definido."}).status(500)}
-            if (pj_provee == null || pj_provee.trim() == ''){res.json({ res: 'ko', message: "Código de proveedor NO está definido."}).status(500)}
-            if (co_moneda == null || co_moneda.trim() == ''){res.json({ res: 'ko', message: "Tipo de moneda NO está definido."}).status(500)}
-            if (ti_compra == null || ti_compra.trim() == ''){res.json({ res: 'ko', message: "Tipo de pago NO esta definido."}).status(500)}
-            if (de_motcom == null || de_motcom.trim() == ''){res.json({ res: 'ko', message: "Motivo de O/C NO definido."}).status(500)}
-            if (fe_ordcom == null || fe_ordcom.trim() == ''){res.json({ res: 'ko', message: "Fecha de Emisión NO está definido."}).status(500)}
-            if (pn_solici == null || pn_solici.trim() == ''){res.json({ res: 'ko', message: "Persona Solicitante NO está definido."}).status(500)}
-            if (il_conigv == null || il_conigv.trim() == ''){res.json({ res: 'ko', message: "Con/Sin IGV NO esta definido."}).status(500)}
-            if (co_tippro == null || co_tippro.trim() == ''){res.json({ res: 'ko', message: "Tipo de Producto NO definido."}).status(500)}
-           
-            query1 = `select * from reordcom.fb_insert_ordcom(
-                cast (${pn_regist} as integer),
-                cast (${pj_provee} as integer),
-                cast (${co_moneda} as integer),
-                '${de_motcom}',
-                cast (${ti_compra} as integer),
-                '${fe_ordcom}',
-                cast (${pn_solici} as integer),
-                cast (${il_conigv} as integer),
-                cast (${co_tippro} as integer)
-             )`;
+            else if (pj_provee == null || pj_provee.trim() == ''){res.json({ res: 'ko', message: "Código de proveedor NO está definido."}).status(500)}
+            else if (co_moneda == null || co_moneda.trim() == ''){res.json({ res: 'ko', message: "Tipo de moneda NO está definido."}).status(500)}
+            else if (ti_compra == null || ti_compra.trim() == ''){res.json({ res: 'ko', message: "Tipo de pago NO esta definido."}).status(500)}
+            else if (de_motcom == null || de_motcom.trim() == ''){res.json({ res: 'ko', message: "Motivo de O/C NO definido."}).status(500)}
+            else if (fe_ordcom == null || fe_ordcom.trim() == ''){res.json({ res: 'ko', message: "Fecha de Emisión NO está definido."}).status(500)}
+            else if (pn_solici == null || pn_solici.trim() == ''){res.json({ res: 'ko', message: "Persona Solicitante NO está definido."}).status(500)}
+            else if (il_conigv == null || il_conigv.trim() == ''){res.json({ res: 'ko', message: "Con/Sin IGV NO esta definido."}).status(500)}
+            else if (co_tippro == null || co_tippro.trim() == ''){res.json({ res: 'ko', message: "Tipo de Producto NO definido."}).status(500)}
+            else {
+                query1 = `select * from reordcom.fb_insert_ordcom(
+                    cast (${pn_regist} as integer),
+                    cast (${pj_provee} as integer),
+                    cast (${co_moneda} as integer),
+                    '${de_motcom}',
+                    cast (${ti_compra} as integer),
+                    '${fe_ordcom}',
+                    cast (${pn_solici} as integer),
+                    cast (${il_conigv} as integer),
+                    cast (${co_tippro} as integer)
+                )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
+                bitacora.control(query1, req.url)
+                const operac = await BD.storePostgresql(query1);
                 // con esto muestro msj
-                if (operac[0].co_respue == '-1'){
-                    res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
+                if (operac.codRes != 99) {
+                    // con esto muestro msj
+                    if (operac[0].co_respue == '-1'){
+                        res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
+                    }
+                    res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
                 }
-                res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -74,37 +75,37 @@ module.exports = async (app) => {
             var no_motcom = req.body.no_motcom;
             var co_conigv = req.body.co_conigv;
             
-
             if (nu_ordcom == null || nu_ordcom.trim() == ''){res.json({ res: 'ko', message: "Código de OC NO está definido."}).status(500)}
-            if (co_provee == null || co_provee.trim() == ''){res.json({ res: 'ko', message: "Código de proveedor NO está definido."}).status(500)}
-            if (co_tippro == null || co_tippro.trim() == ''){res.json({ res: 'ko', message: "Tipo de Producto NO está definido."}).status(500)}
-            if (co_moneda == null || co_moneda.trim() == ''){res.json({ res: 'ko', message: "Moneda NO esta definido."}).status(500)}
-            if (ti_compra == null || ti_compra.trim() == ''){res.json({ res: 'ko', message: "Tipo de compra NO está definido."}).status(500)}
-            if (no_motcom == null || no_motcom.trim() == ''){res.json({ res: 'ko', message: "Motivo de compra NO está definido."}).status(500)}
-            if (co_conigv == null || co_conigv.trim() == ''){res.json({ res: 'ko', message: "Con IGV NO está definido."}).status(500)}
-            
-            query1 = `select * from reordcom.fb_update_ordcom(
-                cast (${nu_ordcom} as integer),
-                cast (${co_provee} as integer),
-                cast (${co_tippro} as integer),
-                cast (${co_moneda} as integer),
-                '${ti_compra}',
-                '${no_motcom}',
-                cast (${co_conigv} as integer)
-                
-            )`;
+            else if (co_provee == null || co_provee.trim() == ''){res.json({ res: 'ko', message: "Código de proveedor NO está definido."}).status(500)}
+            else if (co_tippro == null || co_tippro.trim() == ''){res.json({ res: 'ko', message: "Tipo de Producto NO está definido."}).status(500)}
+            else if (co_moneda == null || co_moneda.trim() == ''){res.json({ res: 'ko', message: "Moneda NO esta definido."}).status(500)}
+            else if (ti_compra == null || ti_compra.trim() == ''){res.json({ res: 'ko', message: "Tipo de compra NO está definido."}).status(500)}
+            else if (no_motcom == null || no_motcom.trim() == ''){res.json({ res: 'ko', message: "Motivo de compra NO está definido."}).status(500)}
+            else if (co_conigv == null || co_conigv.trim() == ''){res.json({ res: 'ko', message: "Con IGV NO está definido."}).status(500)}
+            else {
+                query1 = `select * from reordcom.fb_update_ordcom(
+                    cast (${nu_ordcom} as integer),
+                    cast (${co_provee} as integer),
+                    cast (${co_tippro} as integer),
+                    cast (${co_moneda} as integer),
+                    '${ti_compra}',
+                    '${no_motcom}',
+                    cast (${co_conigv} as integer)
+                    
+                )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
+                bitacora.control(query1, req.url)
+                const operac = await BD.storePostgresql(query1);
                 // con esto muestro msj
-                if (operac[0].co_respue == '-1'){
-                    res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
+                if (operac.codRes != 99) {
+                    // con esto muestro msj
+                    if (operac[0].co_respue == '-1'){
+                        res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
+                    }
+                    res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
                 }
-                res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
@@ -191,12 +192,40 @@ module.exports = async (app) => {
     })
 
     /// DETALLE DE CADA ORDEN DE COMPRA ///
-    app.get("/api/v1.0/ordcom/listar_detall_ordcom/:co_ordcom", async (req, res, next) => {
+    app.post("/api/v1.0/ordcom/listar_detall_ordcom", async (req, res, next) => {
         try {
             let query1;
             var co_ordcom = req.params.co_ordcom;
 
             query1 = `select * from reordcom.fb_listar_detall_ordcom( '${co_ordcom}' )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+    
+    
+    /// LISTAR PENDIENTE DE VISADO ORDEN DE COMPRA ///
+     app.post("/api/v1.0/ordcom/listar_pendie_visado", async (req, res, next) => {
+        try {
+            let query1;
+            var co_ordcom = req.params.co_ordcom;
+            var co_tipvis = req.params.co_tipvis;
+            
+            query1 = `select * from reordcom.fb_listar_pendie_visado(
+                '${co_ordcom}', 
+                '${co_tipvis}'
+            )`;
 
             bitacora.control(query1, req.url)
             const operac = await BD.storePostgresql(query1);
@@ -267,7 +296,7 @@ module.exports = async (app) => {
     })
 
     /// TIPO DE COMPRA ///
-    app.get("/api/v1.0/ordcom/tcservic/:ti_compra", async (req, res, next) => {
+    app.get("/api/v1.0/ordcom/tcservic", async (req, res, next) => {
         try {
             let query;
             
