@@ -161,29 +161,30 @@ module.exports = async (app) => {
             var co_barras = req.body.co_barras;
 
             if(fe_emides == null || fe_emides.trim() == ''){fe_emides = '';}
-            if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
-            if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
-            if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
-            if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
-            if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
-
-            query1 = `select * from reordcom.fb_listar_ordcom(
-                '${fe_emides}', 
-                '${fe_emihas}',
-                '${no_provee}', 
-                '${nu_ordcom}', 
-                '${ti_estado}', 
-                '${co_barras}'
-            )`;
-            
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
+            else if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
+            else if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
+            else if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
+            else if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
+            else if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
+            else {
+                query1 = `select * from reordcom.fb_listar_ordcom(
+                    '${fe_emides}', 
+                    '${fe_emihas}',
+                    '${no_provee}', 
+                    '${nu_ordcom}', 
+                    '${ti_estado}', 
+                    '${co_barras}'
+                )`;
+                
+                bitacora.control(query1, req.url)
+                const operac = await BD.storePostgresql(query1);
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+                if (operac.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Success", operac}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+                }
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
