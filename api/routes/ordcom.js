@@ -112,7 +112,45 @@ module.exports = async (app) => {
         }
     
     })
+    
+    /// ADJUNTAR DOCUMENTO DE ORDEN DE COMPRA
+    app.post("/api/v1.0/ordcom/insert_arcadj", async (req, res, next) => {
+        try {
+            let query1;
+            
+            var nu_ordcom = req.body.nu_ordcom;
+            var co_arcadj = req.body.co_arcadj;
+            var ti_accion = req.body.ti_accion;
+            
 
+            if (nu_ordcom == null || nu_ordcom.trim() == ''){res.json({ res: 'ko', message: "Código de OC NO está definido."}).status(500)}
+            else if (co_arcadj == null || co_arcadj.trim() == ''){res.json({ res: 'ko', message: "Código de Archivo NO está definido."}).status(500)}
+            else if (ti_accion == null || ti_accion.trim() == ''){res.json({ res: 'ko', message: "La acción NO está definido."}).status(500)}
+            else {
+                query1 = `select * from reordcom.fb_insert_arcadj(
+                    cast (${nu_ordcom} as integer),
+                    '${co_arcadj}',
+                    '${ti_accion}'
+                )`;
+
+                bitacora.control(query1, req.url)
+                const operac = await BD.storePostgresql(query1);
+                // con esto muestro msj
+                if (operac.codRes != 99) {
+                    // con esto muestro msj
+                    if (operac[0].co_respue == '-1'){
+                        res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
+                    }
+                    res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+                }
+            }
+            } catch (error) {
+                res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+            }
+    
+    })
     /// ELIMINAR ORDEN DE COMPRA
     app.post("/api/v1.0/ordcom/delete_ordcom", async (req, res, next) => {
         try {
@@ -185,6 +223,30 @@ module.exports = async (app) => {
                 } else {
                     res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
                 }
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+    /// INFORMACIÓN DE ORDEN DE COMPRA SELECCIONADA
+    app.post("/api/v1.0/ordcom/inform_ordcom", async (req, res, next) => {
+        try {
+            let query1;
+            var co_ordcom = req.params.co_ordcom;
+
+            query1 = `select * from reordcom.fb_inform_ordcom( 
+                cast (${co_ordcom} as integer)
+            )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
