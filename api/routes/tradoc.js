@@ -173,6 +173,31 @@ module.exports = async (app) => {
 
     })
 
+    /// INFORMACIÓN DE TRAMITE DOCUMENTARIO SELECCIONADO
+    app.post("/api/v1.0/tradoc/inform_tradoc", async (req, res, next) => {
+        try {
+            let query1;
+            var co_tradoc = req.params.co_tradoc;
+
+            query1 = `select * from reordcom.fb_inform_tradoc( 
+                cast (${co_tradoc} as integer)
+            )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
     /// LISTAR PENDIENTE DE VISADO TRÁMITE DOCUMENTARIO ///
     app.post("/api/v1.0/tradoc/listar_pendie_visado", async (req, res, next) => {
         try {
@@ -293,7 +318,7 @@ module.exports = async (app) => {
     })
 
     /// CATALOGO PROVEEDOR ///
-    app.get("/api/v1.0/ordcom/catalogo/tcprovee", async (req, res, next) => {
+    app.get("/api/v1.0/tradoc/catalogo/tcprovee", async (req, res, next) => {
         try {
             let query1;
             
@@ -320,7 +345,7 @@ module.exports = async (app) => {
     })
 
    /// TIPO DE MONEDA
-   app.get("/api/v1.0/ordcom/catalogo/tcmoneda", async (req, res, next) => {
+   app.get("/api/v1.0/tradoc/catalogo/tcmoneda", async (req, res, next) => {
         try {
             let query1;
             //var cod_ord = req.params.cod_ord;
@@ -330,6 +355,57 @@ module.exports = async (app) => {
                 from wfpublic.tcmoneda mo
                 where mo.co_moneda in (15, 28)
                 order by mo.co_moneda desc
+            `;
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
+    /// TIPO DOCUMENTO
+   app.get("/api/v1.0/tradoc/catalogo/tctipdoc", async (req, res, next) => {
+        try {
+            let query1;
+            //var cod_ord = req.params.cod_ord;
+
+            query1 = `
+                select 0 ti_docume, '[Ninguno]' no_docume, 1 union
+                select ti_docume, no_docume, 2
+                from wfpublic.tcdocume
+                where ti_docume in (11, 4, 10, 13)
+                order by 3 
+            `;
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
+    /// CON IGV
+   app.get("/api/v1.0/tradoc/catalogo/tcconigv", async (req, res, next) => {
+        try {
+            let query1;
+            //var cod_ord = req.params.cod_ord;
+
+            query1 = `
+                select 1 co_conigv, 'SI' no_conigv union
+                select 2 co_docume, 'NO'
             `;
             bitacora.control(query1, req.url)
             const operac = await BD.storePostgresql(query1);
