@@ -549,8 +549,8 @@ module.exports = async app => {
                 select ti_compra, no_tipcom
                 from (
                     select 1 as ti_compra, 'Materiales' as no_tipcom
-                    select 2 , 'Servicios'
-                    select 3 , 'Activo Fijo'
+                    union select 2 , 'Servicios'
+                    union select 3 , 'Activo Fijo'
                 ) as tx`;
       bitacora.control(query, req.url);
       const operac = await BD.storePostgresql(query);
