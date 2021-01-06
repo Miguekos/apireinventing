@@ -234,7 +234,7 @@ module.exports = async (app) => {
     app.post("/api/v1.0/ordcom/inform_ordcom", async (req, res, next) => {
         try {
             let query1;
-            var co_ordcom = req.params.co_ordcom;
+            var co_ordcom = req.body.co_ordcom;
 
             query1 = `select * from reordcom.fb_inform_ordcom( 
                 cast (${co_ordcom} as integer)
@@ -259,7 +259,7 @@ module.exports = async (app) => {
     app.post("/api/v1.0/ordcom/listar_detall_ordcom", async (req, res, next) => {
         try {
             let query1;
-            var co_ordcom = req.params.co_ordcom;
+            var co_ordcom = req.body.co_ordcom;
 
             query1 = `select * from reordcom.fb_listar_detall_ordcom( 
                 cast (${co_ordcom} as integer)
@@ -312,16 +312,20 @@ module.exports = async (app) => {
     app.post("/api/v1.0/ordcom/listar_produc_encont", async (req, res, next) => {
         try {
             let query1;
+            var co_ordcom = req.body.co_ordcom ? parseInt(req.body.co_ordcom) : null;
+            var co_catego = req.body.co_catego ? req.body.co_catego : null;
+            var co_subcat = req.body.co_subcat ? req.body.co_subcat : null;
+            var no_produc = req.body.no_produc ? req.body.no_produc : "";
 
-            var co_ordcom = req.params.co_ordcom;
-            var co_catego = req.params.co_catego;
-            var co_subcat = req.params.co_subcat;
-            var no_produc = req.params.no_produc;
+            console.log(typeof(co_ordcom));
+            console.log(typeof(co_catego));
+            console.log(typeof(co_subcat));
+            console.log(typeof(no_produc));
             
             query1 = `select * from reordcom.fb_listar_produc_encont(
-                cast (${co_ordcom} as integer),
-                cast (${co_catego} as integer),
-                cast (${co_subcat} as integer),
+                ${co_ordcom},
+                ${co_catego},
+                ${co_subcat},
                 '${no_produc}'
             )`;
 
@@ -381,10 +385,10 @@ module.exports = async (app) => {
         try {
             let query1;
             
-            var co_ordcom = req.params.co_ordcom;
-            var co_person = req.params.co_person;
-            var ti_person = req.params.ti_person;
-            var ti_visado = req.params.ti_visado;
+            var co_ordcom = req.body.co_ordcom;
+            var co_person = req.body.co_person;
+            var ti_person = req.body.ti_person;
+            var ti_visado = req.body.ti_visado;
             
             query1 = `select * from reordcom.fb_visrec_ordcom(
                 cast (${co_ordcom} as integer),
