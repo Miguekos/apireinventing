@@ -490,4 +490,28 @@ module.exports = async (app) => {
 
     })
 
+    /// CON IGV
+    app.get("/api/v1.0/ordcom/catalogo/tcconigv", async (req, res, next) => {
+        try {
+            let query1;
+            //var cod_ord = req.params.cod_ord;
+
+            query1 = `
+                select 1 co_conigv, 'SI' no_conigv union
+                select 2 co_docume, 'NO'
+            `;
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+    })
+
 }

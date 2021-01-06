@@ -225,6 +225,37 @@ module.exports = async (app) => {
 
     })
 
+    /// VISADO O RECHAZO DE TRÁMITE DOCUMENTARIO ///
+    app.post("/api/v1.0/tradoc/visrec_tradoc", async (req, res, next) => {
+        try {
+            let query1;
+            
+            var co_tradoc = req.params.co_tradoc;
+            var co_person = req.params.co_person;
+            var ti_person = req.params.ti_person;
+            var ti_visado = req.params.ti_visado;
+            
+            query1 = `select * from retradoc.fb_visrec_tradoc(
+                cast (${co_tradoc} as integer),
+                cast (${co_person} as integer),
+                '${ti_person}',
+                '${ti_visado}'
+            )`;
+
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
 
     /// DETALLE DE CADA TRAMITE DOCUMENTARIO ///
     app.get("/api/v1.0/tradoc/listar_detall_tradoc", async (req, res, next) => {
@@ -398,7 +429,7 @@ module.exports = async (app) => {
     })
 
     /// CON IGV
-   app.get("/api/v1.0/tradoc/catalogo/tcconigv", async (req, res, next) => {
+    app.get("/api/v1.0/tradoc/catalogo/tcconigv", async (req, res, next) => {
         try {
             let query1;
             //var cod_ord = req.params.cod_ord;
