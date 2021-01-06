@@ -190,6 +190,7 @@ module.exports = async (app) => {
     /// LISTA DE ORDENES DE COMPRA ///
     app.post("/api/v1.0/ordcom/listar_ordcom", async (req, res, next) => {
         try {
+            console.log("1");
             let query1;
             var fe_emides = req.body.fe_emides;
             var fe_emihas = req.body.fe_emihas;
@@ -197,14 +198,13 @@ module.exports = async (app) => {
             var nu_ordcom = req.body.nu_ordcom;
             var ti_estado = req.body.ti_estado;
             var co_barras = req.body.co_barras;
-
-            if(fe_emides == null || fe_emides.trim() == ''){fe_emides = '';}
-            else if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
-            else if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
-            else if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
-            else if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
-            else if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
-            else {
+            // if(fe_emides == null || fe_emides.trim() == ''){fe_emides = '';}
+            // else if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
+            // else if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
+            // else if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
+            // else if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
+            // else if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
+            // else {
                 query1 = `select * from reordcom.fb_listar_ordcom(
                     '${fe_emides}', 
                     '${fe_emihas}',
@@ -223,7 +223,8 @@ module.exports = async (app) => {
                 } else {
                     res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
                 }
-            }
+            // }
+            console.log("3");
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
@@ -288,7 +289,7 @@ module.exports = async (app) => {
             var co_tipvis = req.params.co_tipvis;
             
             query1 = `select * from reordcom.fb_listar_pendie_visado(
-                cast (${co_ordcom} as integer),
+                '${co_ordcom}',
                 '${co_tipvis}'
             )`;
 
@@ -488,6 +489,30 @@ module.exports = async (app) => {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
 
+    })
+
+    /// CON IGV
+    app.get("/api/v1.0/ordcom/catalogo/tcconigv", async (req, res, next) => {
+        try {
+            let query1;
+            //var cod_ord = req.params.cod_ord;
+
+            query1 = `
+                select 1 co_conigv, 'SI' no_conigv union
+                select 2 co_docume, 'NO'
+            `;
+            bitacora.control(query1, req.url)
+            const operac = await BD.storePostgresql(query1);
+            // con esto muestro msj
+            if (operac.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", operac}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
     })
 
 }
