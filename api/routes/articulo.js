@@ -68,13 +68,13 @@ module.exports = async (app) => {
             query = `select co_empres, pbperson.f_no_person(co_empres) no_empres 
                 from wfpublic.tcempres em;`;
             bitacora.control(query, req.url)
-            const articulo = await BD.storePostgresql(query);
+            const empresa = await BD.storePostgresql(query);
             // con esto muestro msj
-            if (articulo.codRes != 99) {
+            if (empresa.codRes != 99) {
                 // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", articulo }).status(200)
+                res.json({ res: 'ok', message: "Success", empresa }).status(200)
             } else {
-                res.json({ res: 'ko', message: "Error en la query", articulo }).status(500)
+                res.json({ res: 'ko', message: "Error en la query", empresa }).status(500)
             }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)

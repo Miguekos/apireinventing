@@ -1202,7 +1202,7 @@ module.exports = async (app) => {
         }
     })
 
-///// BUSCAR OPERACION
+///// BUSCAR OPERACION para chamexx
     app.post("/api/v1.0/operacflujo/buscar_operacion", async (req, res, next) => {
         try {
             let query1;
