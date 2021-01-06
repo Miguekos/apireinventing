@@ -1,37 +1,62 @@
 const BD = require("../database/pg/postgres");
-const bitacora = require("../../utils/bitacora")
-const bcrypt = require('bcrypt');
-const saltRounds = 10
+const bitacora = require("../../utils/bitacora");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
-module.exports = async (app) => {
-    
-    /// INSERTAR ORDEN DE COMPRA
-    app.post("/api/v1.0/ordcom/insert_ordcom", async (req, res, next) => {
-        try {
-            let query1;
-            
-            var pn_regist = req.body.pn_regist;
-            var pj_provee = req.body.pj_provee;
-            var co_moneda = req.body.co_moneda;
-            var ti_compra = req.body.ti_compra;
-            var de_motcom = req.body.de_motcom;
-            var fe_ordcom = req.body.fe_ordcom;
-            var pn_solici = req.body.pn_solici;
-            var il_conigv = req.body.il_conigv;
-            var co_tippro = req.body.co_tippro;
-            
+module.exports = async app => {
+  /// INSERTAR ORDEN DE COMPRA
+  app.post("/api/v1.0/ordcom/insert_ordcom", async (req, res, next) => {
+    try {
+      let query1;
 
-            if (pn_regist == null || pn_regist.trim() == ''){res.json({ res: 'ko', message: "Código de persona NO está definido."}).status(500)}
-            else if (pj_provee == null || pj_provee.trim() == ''){res.json({ res: 'ko', message: "Código de proveedor NO está definido."}).status(500)}
-            else if (co_moneda == null || co_moneda.trim() == ''){res.json({ res: 'ko', message: "Tipo de moneda NO está definido."}).status(500)}
-            else if (ti_compra == null || ti_compra.trim() == ''){res.json({ res: 'ko', message: "Tipo de pago NO esta definido."}).status(500)}
-            else if (de_motcom == null || de_motcom.trim() == ''){res.json({ res: 'ko', message: "Motivo de O/C NO definido."}).status(500)}
-            else if (fe_ordcom == null || fe_ordcom.trim() == ''){res.json({ res: 'ko', message: "Fecha de Emisión NO está definido."}).status(500)}
-            else if (pn_solici == null || pn_solici.trim() == ''){res.json({ res: 'ko', message: "Persona Solicitante NO está definido."}).status(500)}
-            else if (il_conigv == null || il_conigv.trim() == ''){res.json({ res: 'ko', message: "Con/Sin IGV NO esta definido."}).status(500)}
-            else if (co_tippro == null || co_tippro.trim() == ''){res.json({ res: 'ko', message: "Tipo de Producto NO definido."}).status(500)}
-            else {
-                query1 = `select * from reordcom.fb_insert_ordcom(
+      var pn_regist = req.body.pn_regist;
+      var pj_provee = req.body.pj_provee;
+      var co_moneda = req.body.co_moneda;
+      var ti_compra = req.body.ti_compra;
+      var de_motcom = req.body.de_motcom;
+      var fe_ordcom = req.body.fe_ordcom;
+      var pn_solici = req.body.pn_solici;
+      var il_conigv = req.body.il_conigv;
+      var co_tippro = req.body.co_tippro;
+
+      if (pn_regist == null || pn_regist.trim() == "") {
+        res
+          .json({ res: "ko", message: "Código de persona NO está definido." })
+          .status(500);
+      } else if (pj_provee == null || pj_provee.trim() == "") {
+        res
+          .json({ res: "ko", message: "Código de proveedor NO está definido." })
+          .status(500);
+      } else if (co_moneda == null || co_moneda.trim() == "") {
+        res
+          .json({ res: "ko", message: "Tipo de moneda NO está definido." })
+          .status(500);
+      } else if (ti_compra == null || ti_compra.trim() == "") {
+        res
+          .json({ res: "ko", message: "Tipo de pago NO esta definido." })
+          .status(500);
+      } else if (de_motcom == null || de_motcom.trim() == "") {
+        res
+          .json({ res: "ko", message: "Motivo de O/C NO definido." })
+          .status(500);
+      } else if (fe_ordcom == null || fe_ordcom.trim() == "") {
+        res
+          .json({ res: "ko", message: "Fecha de Emisión NO está definido." })
+          .status(500);
+      } else if (pn_solici == null || pn_solici.trim() == "") {
+        res
+          .json({ res: "ko", message: "Persona Solicitante NO está definido." })
+          .status(500);
+      } else if (il_conigv == null || il_conigv.trim() == "") {
+        res
+          .json({ res: "ko", message: "Con/Sin IGV NO esta definido." })
+          .status(500);
+      } else if (co_tippro == null || co_tippro.trim() == "") {
+        res
+          .json({ res: "ko", message: "Tipo de Producto NO definido." })
+          .status(500);
+      } else {
+        query1 = `select * from reordcom.fb_insert_ordcom(
                     cast (${pn_regist} as integer),
                     cast (${pj_provee} as integer),
                     cast (${co_moneda} as integer),
@@ -43,47 +68,69 @@ module.exports = async (app) => {
                     cast (${co_tippro} as integer)
                 )`;
 
-                bitacora.control(query1, req.url)
-                const operac = await BD.storePostgresql(query1);
-                // con esto muestro msj
-                if (operac.codRes != 99) {
-                    // con esto muestro msj
-                    if (operac[0].co_respue == '-1'){
-                        res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
-                    }
-                    res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
-                } else {
-                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-                }
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        bitacora.control(query1, req.url);
+        const operac = await BD.storePostgresql(query1);
+        // con esto muestro msj
+        if (operac.codRes != 99) {
+          // con esto muestro msj
+          if (operac[0].co_respue == "-1") {
+            res.json({ res: "ko", message: operac[0].no_respue }).status(500);
+          }
+          res.json({ res: "ok", message: operac[0].no_respue }).status(200);
+        } else {
+          res
+            .json({ res: "ko", message: "Error en la query", operac })
+            .status(500);
         }
-    
-    })
-    
-    /// ACTUALIZAR ORDEN DE COMPRA
-    app.post("/api/v1.0/ordcom/update_ordcom", async (req, res, next) => {
-        try {
-            let query1;
-            
-            var nu_ordcom = req.body.nu_ordcom;
-            var co_provee = req.body.co_provee;
-            var co_tippro = req.body.co_tippro;
-            var co_moneda = req.body.co_moneda;
-            var ti_compra = req.body.ti_compra;
-            var no_motcom = req.body.no_motcom;
-            var co_conigv = req.body.co_conigv;
-            
-            if (nu_ordcom == null || nu_ordcom.trim() == ''){res.json({ res: 'ko', message: "Código de OC NO está definido."}).status(500)}
-            else if (co_provee == null || co_provee.trim() == ''){res.json({ res: 'ko', message: "Código de proveedor NO está definido."}).status(500)}
-            else if (co_tippro == null || co_tippro.trim() == ''){res.json({ res: 'ko', message: "Tipo de Producto NO está definido."}).status(500)}
-            else if (co_moneda == null || co_moneda.trim() == ''){res.json({ res: 'ko', message: "Moneda NO esta definido."}).status(500)}
-            else if (ti_compra == null || ti_compra.trim() == ''){res.json({ res: 'ko', message: "Tipo de compra NO está definido."}).status(500)}
-            else if (no_motcom == null || no_motcom.trim() == ''){res.json({ res: 'ko', message: "Motivo de compra NO está definido."}).status(500)}
-            else if (co_conigv == null || co_conigv.trim() == ''){res.json({ res: 'ko', message: "Con IGV NO está definido."}).status(500)}
-            else {
-                query1 = `select * from reordcom.fb_update_ordcom(
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+
+  /// ACTUALIZAR ORDEN DE COMPRA
+  app.post("/api/v1.0/ordcom/update_ordcom", async (req, res, next) => {
+    try {
+      let query1;
+
+      var nu_ordcom = req.body.nu_ordcom;
+      var co_provee = req.body.co_provee;
+      var co_tippro = req.body.co_tippro;
+      var co_moneda = req.body.co_moneda;
+      var ti_compra = req.body.ti_compra;
+      var no_motcom = req.body.no_motcom;
+      var co_conigv = req.body.co_conigv;
+
+      if (nu_ordcom == null || nu_ordcom.trim() == "") {
+        res
+          .json({ res: "ko", message: "Código de OC NO está definido." })
+          .status(500);
+      } else if (co_provee == null || co_provee.trim() == "") {
+        res
+          .json({ res: "ko", message: "Código de proveedor NO está definido." })
+          .status(500);
+      } else if (co_tippro == null || co_tippro.trim() == "") {
+        res
+          .json({ res: "ko", message: "Tipo de Producto NO está definido." })
+          .status(500);
+      } else if (co_moneda == null || co_moneda.trim() == "") {
+        res
+          .json({ res: "ko", message: "Moneda NO esta definido." })
+          .status(500);
+      } else if (ti_compra == null || ti_compra.trim() == "") {
+        res
+          .json({ res: "ko", message: "Tipo de compra NO está definido." })
+          .status(500);
+      } else if (no_motcom == null || no_motcom.trim() == "") {
+        res
+          .json({ res: "ko", message: "Motivo de compra NO está definido." })
+          .status(500);
+      } else if (co_conigv == null || co_conigv.trim() == "") {
+        res
+          .json({ res: "ko", message: "Con IGV NO está definido." })
+          .status(500);
+      } else {
+        query1 = `select * from reordcom.fb_update_ordcom(
                     cast (${nu_ordcom} as integer),
                     cast (${co_provee} as integer),
                     cast (${co_tippro} as integer),
@@ -94,118 +141,135 @@ module.exports = async (app) => {
                     
                 )`;
 
-                bitacora.control(query1, req.url)
-                const operac = await BD.storePostgresql(query1);
-                // con esto muestro msj
-                if (operac.codRes != 99) {
-                    // con esto muestro msj
-                    if (operac[0].co_respue == '-1'){
-                        res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
-                    }
-                    res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
-                } else {
-                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-                }
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        bitacora.control(query1, req.url);
+        const operac = await BD.storePostgresql(query1);
+        // con esto muestro msj
+        if (operac.codRes != 99) {
+          // con esto muestro msj
+          if (operac[0].co_respue == "-1") {
+            res.json({ res: "ko", message: operac[0].no_respue }).status(500);
+          }
+          res.json({ res: "ok", message: operac[0].no_respue }).status(200);
+        } else {
+          res
+            .json({ res: "ko", message: "Error en la query", operac })
+            .status(500);
         }
-    
-    })
-    
-    /// ADJUNTAR DOCUMENTO DE ORDEN DE COMPRA
-    app.post("/api/v1.0/ordcom/insert_arcadj", async (req, res, next) => {
-        try {
-            let query1;
-            
-            var nu_ordcom = req.body.nu_ordcom;
-            var co_arcadj = req.body.co_arcadj;
-            var ti_accion = req.body.ti_accion;
-            
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-            if (nu_ordcom == null || nu_ordcom.trim() == ''){res.json({ res: 'ko', message: "Código de OC NO está definido."}).status(500)}
-            else if (co_arcadj == null || co_arcadj.trim() == ''){res.json({ res: 'ko', message: "Código de Archivo NO está definido."}).status(500)}
-            else if (ti_accion == null || ti_accion.trim() == ''){res.json({ res: 'ko', message: "La acción NO está definido."}).status(500)}
-            else {
-                query1 = `select * from reordcom.fb_insert_arcadj(
+  /// ADJUNTAR DOCUMENTO DE ORDEN DE COMPRA
+  app.post("/api/v1.0/ordcom/insert_arcadj", async (req, res, next) => {
+    try {
+      let query1;
+
+      var nu_ordcom = req.body.nu_ordcom;
+      var co_arcadj = req.body.co_arcadj;
+      var ti_accion = req.body.ti_accion;
+
+      if (nu_ordcom == null || nu_ordcom.trim() == "") {
+        res
+          .json({ res: "ko", message: "Código de OC NO está definido." })
+          .status(500);
+      } else if (co_arcadj == null || co_arcadj.trim() == "") {
+        res
+          .json({ res: "ko", message: "Código de Archivo NO está definido." })
+          .status(500);
+      } else if (ti_accion == null || ti_accion.trim() == "") {
+        res
+          .json({ res: "ko", message: "La acción NO está definido." })
+          .status(500);
+      } else {
+        query1 = `select * from reordcom.fb_insert_arcadj(
                     cast (${nu_ordcom} as integer),
                     '${co_arcadj}',
                     '${ti_accion}'
                 )`;
 
-                bitacora.control(query1, req.url)
-                const operac = await BD.storePostgresql(query1);
-                // con esto muestro msj
-                if (operac.codRes != 99) {
-                    // con esto muestro msj
-                    if (operac[0].co_respue == '-1'){
-                        res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
-                    }
-                    res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
-                } else {
-                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-                }
-            }
-            } catch (error) {
-                res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-            }
-    
-    })
-    /// ELIMINAR ORDEN DE COMPRA
-    app.post("/api/v1.0/ordcom/delete_ordcom", async (req, res, next) => {
-        try {
-            let query1;
-            
-            var nu_ordcom = req.body.nu_ordcom;
-            var co_person = req.body.co_person;
-            
+        bitacora.control(query1, req.url);
+        const operac = await BD.storePostgresql(query1);
+        // con esto muestro msj
+        if (operac.codRes != 99) {
+          // con esto muestro msj
+          if (operac[0].co_respue == "-1") {
+            res.json({ res: "ko", message: operac[0].no_respue }).status(500);
+          }
+          res.json({ res: "ok", message: operac[0].no_respue }).status(200);
+        } else {
+          res
+            .json({ res: "ko", message: "Error en la query", operac })
+            .status(500);
+        }
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+  /// ELIMINAR ORDEN DE COMPRA
+  app.post("/api/v1.0/ordcom/delete_ordcom", async (req, res, next) => {
+    try {
+      let query1;
 
-            if (nu_ordcom == null || nu_ordcom.trim() == ''){res.json({ res: 'ko', message: "Código de OC NO está definido."}).status(500)}
-            if (co_person == null || co_person.trim() == ''){res.json({ res: 'ko', message: "Código de persona NO está definido."}).status(500)}
-            
-            query1 = `select * from reordcom.fb_delete_ordcom(
+      var nu_ordcom = req.body.nu_ordcom;
+      var co_person = req.body.co_person;
+
+      if (nu_ordcom == null || nu_ordcom.trim() == "") {
+        res
+          .json({ res: "ko", message: "Código de OC NO está definido." })
+          .status(500);
+      }
+      if (co_person == null || co_person.trim() == "") {
+        res
+          .json({ res: "ko", message: "Código de persona NO está definido." })
+          .status(500);
+      }
+
+      query1 = `select * from reordcom.fb_delete_ordcom(
                 cast (${nu_ordcom} as integer),
                 cast (${co_person} as integer)
              )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                if (operac[0].co_respue == '-1'){
-                    res.json({ res: 'ko', message: operac[0].no_respue }).status(500)
-                }
-                res.json({ res: 'ok', message: operac[0].no_respue }).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        if (operac[0].co_respue == "-1") {
+          res.json({ res: "ko", message: operac[0].no_respue }).status(500);
         }
-    
-    })
+        res.json({ res: "ok", message: operac[0].no_respue }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-
-    /// LISTA DE ORDENES DE COMPRA ///
-    app.post("/api/v1.0/ordcom/listar_ordcom", async (req, res, next) => {
-        try {
-            console.log("1");
-            let query1;
-            var fe_emides = req.body.fe_emides;
-            var fe_emihas = req.body.fe_emihas;
-            var no_provee = req.body.no_provee;
-            var nu_ordcom = req.body.nu_ordcom;
-            var ti_estado = req.body.ti_estado;
-            var co_barras = req.body.co_barras;
-            // if(fe_emides == null || fe_emides.trim() == ''){fe_emides = '';}
-            // else if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
-            // else if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
-            // else if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
-            // else if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
-            // else if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
-            // else {
-                query1 = `select * from reordcom.fb_listar_ordcom(
+  /// LISTA DE ORDENES DE COMPRA ///
+  app.post("/api/v1.0/ordcom/listar_ordcom", async (req, res, next) => {
+    try {
+      console.log("1");
+      let query1;
+      var fe_emides = req.body.fe_emides;
+      var fe_emihas = req.body.fe_emihas;
+      var no_provee = req.body.no_provee;
+      var nu_ordcom = req.body.nu_ordcom;
+      var ti_estado = req.body.ti_estado;
+      var co_barras = req.body.co_barras;
+      // if(fe_emides == null || fe_emides.trim() == ''){fe_emides = '';}
+      // else if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
+      // else if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
+      // else if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
+      // else if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
+      // else if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
+      // else {
+      query1 = `select * from reordcom.fb_listar_ordcom(
                     '${fe_emides}', 
                     '${fe_emihas}',
                     '${no_provee}', 
@@ -213,150 +277,154 @@ module.exports = async (app) => {
                     '${ti_estado}', 
                     '${co_barras}'
                 )`;
-                
-                bitacora.control(query1, req.url)
-                const operac = await BD.storePostgresql(query1);
-                // con esto muestro msj
-                if (operac.codRes != 99) {
-                    // con esto muestro msj
-                    res.json({ res: 'ok', message: "Success", operac}).status(200)
-                } else {
-                    res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-                }
-            // }
-            console.log("3");
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
 
-    })
-    /// INFORMACIÓN DE ORDEN DE COMPRA SELECCIONADA
-    app.post("/api/v1.0/ordcom/inform_ordcom", async (req, res, next) => {
-        try {
-            let query1;
-            var co_ordcom = req.body.co_ordcom;
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+      // }
+      console.log("3");
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+  /// INFORMACIÓN DE ORDEN DE COMPRA SELECCIONADA
+  app.post("/api/v1.0/ordcom/inform_ordcom", async (req, res, next) => {
+    try {
+      let query1;
+      var co_ordcom = req.body.co_ordcom;
 
-            query1 = `select * from reordcom.fb_inform_ordcom( 
+      query1 = `select * from reordcom.fb_inform_ordcom( 
                 cast (${co_ordcom} as integer)
             )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    })
+  /// DETALLE DE CADA ORDEN DE COMPRA ///
+  app.post("/api/v1.0/ordcom/listar_detall_ordcom", async (req, res, next) => {
+    try {
+      let query1;
+      var co_ordcom = req.body.co_ordcom;
 
-    /// DETALLE DE CADA ORDEN DE COMPRA ///
-    app.post("/api/v1.0/ordcom/listar_detall_ordcom", async (req, res, next) => {
-        try {
-            let query1;
-            var co_ordcom = req.body.co_ordcom;
-
-            query1 = `select * from reordcom.fb_listar_detall_ordcom( 
+      query1 = `select * from reordcom.fb_listar_detall_ordcom( 
                 cast (${co_ordcom} as integer)
             )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    })
-    
-    
-    /// LISTAR PENDIENTE DE VISADO ORDEN DE COMPRA ///
-     app.post("/api/v1.0/ordcom/listar_pendie_visado", async (req, res, next) => {
-        try {
-            let query1;
-            var co_ordcom = req.params.co_ordcom;
-            var co_tipvis = req.params.co_tipvis;
-            
-            query1 = `select * from reordcom.fb_listar_pendie_visado(
+  /// LISTAR PENDIENTE DE VISADO ORDEN DE COMPRA ///
+  app.post("/api/v1.0/ordcom/listar_pendie_visado", async (req, res, next) => {
+    try {
+      let query1;
+      var co_ordcom = req.params.co_ordcom;
+      var co_tipvis = req.params.co_tipvis;
+
+      query1 = `select * from reordcom.fb_listar_pendie_visado(
                 '${co_ordcom}',
                 '${co_tipvis}'
             )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    })
+  /// LISTAR PRODUCTOS ENCOTRADOS ORDEN DE COMPRA ///
+  app.post("/api/v1.0/ordcom/listar_produc_encont", async (req, res, next) => {
+    try {
+      let query1;
+      var co_ordcom = req.body.co_ordcom ? parseInt(req.body.co_ordcom) : null;
+      var co_catego = req.body.co_catego ? req.body.co_catego : null;
+      var co_subcat = req.body.co_subcat ? req.body.co_subcat : null;
+      var no_produc = req.body.no_produc ? req.body.no_produc : "";
 
-    /// LISTAR PRODUCTOS ENCOTRADOS ORDEN DE COMPRA ///
-    app.post("/api/v1.0/ordcom/listar_produc_encont", async (req, res, next) => {
-        try {
-            let query1;
-            var co_ordcom = req.body.co_ordcom ? parseInt(req.body.co_ordcom) : null;
-            var co_catego = req.body.co_catego ? req.body.co_catego : null;
-            var co_subcat = req.body.co_subcat ? req.body.co_subcat : null;
-            var no_produc = req.body.no_produc ? req.body.no_produc : "";
+      console.log(typeof co_ordcom);
+      console.log(typeof co_catego);
+      console.log(typeof co_subcat);
+      console.log(typeof no_produc);
 
-            console.log(typeof(co_ordcom));
-            console.log(typeof(co_catego));
-            console.log(typeof(co_subcat));
-            console.log(typeof(no_produc));
-            
-            query1 = `select * from reordcom.fb_listar_produc_encont(
+      query1 = `select * from reordcom.fb_listar_produc_encont(
                 ${co_ordcom},
                 ${co_catego},
                 ${co_subcat},
                 '${no_produc}'
             )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    })
+  /// MANTENIMIENTO DE PRODUCTOS ORDEN DE COMPRA ///
+  app.post("/api/v1.0/ordcom/manten_produc_ordcom", async (req, res, next) => {
+    try {
+      let query1;
 
-    /// MANTENIMIENTO DE PRODUCTOS ORDEN DE COMPRA ///
-    app.post("/api/v1.0/ordcom/manten_produc_ordcom", async (req, res, next) => {
-        try {
-            let query1;
-            
-            var co_ordcom = req.params.co_ordcom;
-            var co_articu = req.params.co_articu;
-            var ca_articu = req.params.ca_articu;
-            var co_moneda = req.params.co_moneda;
-            var im_preuni = req.params.im_preuni;
-            var ti_accion = req.params.ti_accion;
-            
-            query1 = `select * from reordcom.fb_manten_produc_ordcom(
+      var co_ordcom = req.params.co_ordcom;
+      var co_articu = req.params.co_articu;
+      var ca_articu = req.params.ca_articu;
+      var co_moneda = req.params.co_moneda;
+      var im_preuni = req.params.im_preuni;
+      var ti_accion = req.params.ti_accion;
+
+      query1 = `select * from reordcom.fb_manten_produc_ordcom(
                 cast (${co_ordcom} as integer),
                 cast (${co_articu} as integer),
                 cast (${ca_articu} as numeric),
@@ -365,158 +433,165 @@ module.exports = async (app) => {
                 '${ti_accion}'
             )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    })
+  /// VISADO O RECHAZO DE ORDEN DE COMPRA ///
+  app.post("/api/v1.0/ordcom/visrec_ordcom", async (req, res, next) => {
+    try {
+      let query1;
 
-    /// VISADO O RECHAZO DE ORDEN DE COMPRA ///
-    app.post("/api/v1.0/ordcom/visrec_ordcom", async (req, res, next) => {
-        try {
-            let query1;
-            
-            var co_ordcom = req.body.co_ordcom;
-            var co_person = req.body.co_person;
-            var ti_person = req.body.ti_person;
-            var ti_visado = req.body.ti_visado;
-            
-            query1 = `select * from reordcom.fb_visrec_ordcom(
-                cast (${co_ordcom} as integer),
-                cast (${co_person} as integer),
+      var co_ordcom = req.body.co_ordcom;
+      var co_person = req.body.co_person;
+      var ti_person = req.body.ti_person;
+      var ti_visado = req.body.ti_visado;
+
+      query1 = `select * from reordcom.fb_visrec_ordcom(
+                ${co_ordcom},
+                ${co_person},
                 '${ti_person}',
                 '${ti_visado}'
             )`;
 
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    })
+  /******************************************** CATALOGOS ************************************/
 
-    /******************************************** CATALOGOS ************************************/
+  /// CATALOGO PROVEEDOR ///
+  app.get("/api/v1.0/ordcom/catalogo/tcprovee", async (req, res, next) => {
+    try {
+      let query1;
 
-    /// CATALOGO PROVEEDOR ///
-    app.get("/api/v1.0/ordcom/catalogo/tcprovee", async (req, res, next) => {
-        try {
-            let query1;
-            
-            query1 = `
+      query1 = `
                 select pj.co_perjur, pj.no_razsoc
                 from pbperson.tbperjur pj, reordcom.tbprovee pr
                 where pj.co_perjur = pr.pj_provee
                 and pr.il_activo
                 order by 1 desc
             `;
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    })
+  /// TIPO DE MONEDA
+  app.get("/api/v1.0/ordcom/catalogo/tcmoneda", async (req, res, next) => {
+    try {
+      let query1;
+      //var cod_ord = req.params.cod_ord;
 
-   /// TIPO DE MONEDA
-   app.get("/api/v1.0/ordcom/catalogo/tcmoneda", async (req, res, next) => {
-        try {
-            let query1;
-            //var cod_ord = req.params.cod_ord;
-
-            query1 = `
+      query1 = `
                 select mo.co_moneda, mo.no_moneda
                 from wfpublic.tcmoneda mo
                 where mo.co_moneda in (15, 28)
                 order by mo.co_moneda desc
             `;
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
-    })
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    /// TIPO DE COMPRA ///
-    app.get("/api/v1.0/ordcom/tcservic", async (req, res, next) => {
-        try {
-            let query;
-            
-            query = `
+  /// TIPO DE COMPRA ///
+  app.get("/api/v1.0/ordcom/tcservic", async (req, res, next) => {
+    try {
+      let query;
+
+      query = `
                 select ti_compra, no_tipcom
                 from (
                     select 1 as ti_compra, 'Materiales' as no_tipcom
                     select 2 , 'Servicios'
                     select 3 , 'Activo Fijo'
                 ) as tx`;
-            bitacora.control(query, req.url)
-            const operac = await BD.storePostgresql(query);
-            console.log('chamex:' + operac[0]);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
+      bitacora.control(query, req.url);
+      const operac = await BD.storePostgresql(query);
+      console.log("chamex:" + operac[0]);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
 
-    })
+  /// CON IGV
+  app.get("/api/v1.0/ordcom/catalogo/tcconigv", async (req, res, next) => {
+    try {
+      let query1;
+      //var cod_ord = req.params.cod_ord;
 
-    /// CON IGV
-    app.get("/api/v1.0/ordcom/catalogo/tcconigv", async (req, res, next) => {
-        try {
-            let query1;
-            //var cod_ord = req.params.cod_ord;
-
-            query1 = `
+      query1 = `
                 select 1 co_conigv, 'SI' no_conigv union
                 select 2 co_docume, 'NO'
             `;
-            bitacora.control(query1, req.url)
-            const operac = await BD.storePostgresql(query1);
-            // con esto muestro msj
-            if (operac.codRes != 99) {
-                // con esto muestro msj
-                res.json({ res: 'ok', message: "Success", operac}).status(200)
-            } else {
-                res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
-            }
-        } catch (error) {
-            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
-        }
-    })
-
-}
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+};
