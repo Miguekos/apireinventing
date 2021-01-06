@@ -190,6 +190,7 @@ module.exports = async (app) => {
     /// LISTA DE ORDENES DE COMPRA ///
     app.post("/api/v1.0/ordcom/listar_ordcom", async (req, res, next) => {
         try {
+            console.log("1");
             let query1;
             var fe_emides = req.body.fe_emides;
             var fe_emihas = req.body.fe_emihas;
@@ -197,14 +198,13 @@ module.exports = async (app) => {
             var nu_ordcom = req.body.nu_ordcom;
             var ti_estado = req.body.ti_estado;
             var co_barras = req.body.co_barras;
-
-            if(fe_emides == null || fe_emides.trim() == ''){fe_emides = '';}
-            else if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
-            else if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
-            else if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
-            else if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
-            else if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
-            else {
+            // if(fe_emides == null || fe_emides.trim() == ''){fe_emides = '';}
+            // else if(fe_emihas == null || fe_emihas.trim() == ''){fe_emihas = '';}
+            // else if(no_provee == null || no_provee.trim() == ''){no_provee = '';}
+            // else if(nu_ordcom == null || nu_ordcom.trim() == ''){nu_ordcom = '';}
+            // else if(ti_estado == null || ti_estado.trim() == ''){ti_estado = '';}
+            // else if(co_barras == null || co_barras.trim() == ''){co_barras = '';}
+            // else {
                 query1 = `select * from reordcom.fb_listar_ordcom(
                     '${fe_emides}', 
                     '${fe_emihas}',
@@ -223,7 +223,8 @@ module.exports = async (app) => {
                 } else {
                     res.json({ res: 'ko', message: "Error en la query", operac }).status(500)
                 }
-            }
+            // }
+            console.log("3");
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
