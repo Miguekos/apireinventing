@@ -363,8 +363,8 @@ module.exports = async app => {
   app.post("/api/v1.0/ordcom/listar_pendie_visado", async (req, res, next) => {
     try {
       let query1;
-      var co_ordcom = req.params.co_ordcom;
-      var co_tipvis = req.params.co_tipvis;
+      var co_ordcom = req.body.co_ordcom;
+      var co_tipvis = req.body.co_tipvis;
 
       query1 = `select * from reordcom.fb_listar_pendie_visado(
                 '${co_ordcom}',
@@ -392,8 +392,8 @@ module.exports = async app => {
     try {
       let query1;
       var co_ordcom = req.body.co_ordcom ? parseInt(req.body.co_ordcom) : null;
-      var co_catego = req.body.co_catego ? req.body.co_catego : null;
-      var co_subcat = req.body.co_subcat ? req.body.co_subcat : null;
+      var co_catego = req.body.co_catego ? req.body.co_catego : "";
+      var co_subcat = req.body.co_subcat ? req.body.co_subcat : "";
       var no_produc = req.body.no_produc ? req.body.no_produc : "";
 
       console.log(typeof co_ordcom);
@@ -403,8 +403,8 @@ module.exports = async app => {
 
       query1 = `select * from reordcom.fb_listar_produc_encont(
                 ${co_ordcom},
-                ${co_catego},
-                ${co_subcat},
+                '${co_catego}',
+                '${co_subcat}',
                 '${no_produc}'
             )`;
 
@@ -429,12 +429,12 @@ module.exports = async app => {
     try {
       let query1;
 
-      var co_ordcom = req.params.co_ordcom;
-      var co_articu = req.params.co_articu;
-      var ca_articu = req.params.ca_articu;
-      var co_moneda = req.params.co_moneda;
-      var im_preuni = req.params.im_preuni;
-      var ti_accion = req.params.ti_accion;
+      var co_ordcom = req.body.co_ordcom;
+      var co_articu = req.body.co_articu;
+      var ca_articu = req.body.ca_articu;
+      var co_moneda = req.body.co_moneda;
+      var im_preuni = req.body.im_preuni;
+      var ti_accion = req.body.ti_accion;
 
       query1 = `select * from reordcom.fb_manten_produc_ordcom(
                 cast (${co_ordcom} as integer),
