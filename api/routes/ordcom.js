@@ -289,7 +289,7 @@ module.exports = async (app) => {
             var co_tipvis = req.params.co_tipvis;
             
             query1 = `select * from reordcom.fb_listar_pendie_visado(
-                cast (${co_ordcom} as integer),
+                '${co_ordcom}',
                 '${co_tipvis}'
             )`;
 
