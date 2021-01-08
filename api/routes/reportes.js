@@ -34,13 +34,13 @@ module.exports = async (app) => {
             var nom_art = req.body.nom_art;
             var operaci = req.body.operaci;
 
-            if (fec_des == null || fec_des.trim() == ''){fec_des = '';}
-            if (fec_has == null || fec_has.trim() == ''){fec_has = '';}
-            if (cod_emp == null || cod_emp.trim() == ''){cod_emp = '';}
-            if (cod_alm == null || cod_alm.trim() == ''){cod_alm = '';}
-            if (cod_art == null || cod_art.trim() == ''){cod_art = '';}
-            if (nom_art == null || nom_art.trim() == ''){nom_art = '';}
-            if (operaci == null || ope_mat.trim() == ''){operaci = '';}
+            // if (fec_des == null || fec_des.trim() == ''){fec_des = '';}
+            // if (fec_has == null || fec_has.trim() == ''){fec_has = '';}
+            // if (cod_emp == null || cod_emp.trim() == ''){cod_emp = '';}
+            // if (cod_alm == null || cod_alm.trim() == ''){cod_alm = '';}
+            // if (cod_art == null || cod_art.trim() == ''){cod_art = '';}
+            // if (nom_art == null || nom_art.trim() == ''){nom_art = '';}
+            // if (operaci == null || ope_mat.trim() == ''){operaci = '';}
 
             const query = `select * from wfalmace.fbmostrar_lista_kardex(
                 '${fec_des}',

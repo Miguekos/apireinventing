@@ -191,8 +191,8 @@ module.exports = async app => {
       let query1;
       var co_tradoc = req.body.co_tradoc;
 
-      query1 = `select * from reordcom.fb_inform_tradoc( 
-                ${co_tradoc}
+      query1 = `select * from retradoc.fb_inform_tradoc( 
+               ${co_tradoc}
             )`;
 
       bitacora.control(query1, req.url);
@@ -273,10 +273,10 @@ module.exports = async app => {
   });
 
   /// DETALLE DE CADA TRAMITE DOCUMENTARIO ///
-  app.get("/api/v1.0/tradoc/listar_detall_tradoc", async (req, res, next) => {
+  app.post("/api/v1.0/tradoc/listar_detall_tradoc", async (req, res, next) => {
     try {
       let query1;
-      var co_tradoc = req.params.co_tradoc;
+      var co_tradoc = req.body.co_tradoc;
 
       query1 = `select * from retradoc.fb_listar_detall_tradoc( '${co_tradoc}' )`;
 
@@ -301,15 +301,15 @@ module.exports = async app => {
     try {
       let query1;
 
-      var co_tradoc = req.params.co_tradoc;
-      var co_catego = req.params.co_catego;
-      var co_subcat = req.params.co_subcat;
-      var no_produc = req.params.no_produc;
+      var co_tradoc = req.body.co_tradoc;
+      var co_catego = req.body.co_catego;
+      var co_subcat = req.body.co_subcat;
+      var no_produc = req.body.no_produc;
 
       query1 = `select * from retradoc.fb_listar_produc_encont(
-                cast (${co_tradoc} as integer),
-                cast (${co_catego} as integer),
-                cast (${co_subcat} as integer),
+                '${co_tradoc}',
+                '${co_catego}',
+                '${co_subcat}',
                 '${no_produc}'
             )`;
 
