@@ -394,6 +394,33 @@ module.exports = async app => {
     }
   });
 
+  /// SOLICITANTE ///
+  app.get("/api/v1.0/tradoc/catalogo/tcsolici", async (req, res, next) => {
+    try {
+      let query;
+
+      query = `select co_pernat as co_solici, pbperson.f_no_person(co_pernat) as no_solici
+            from pbemplea.tbemplea
+            where co_emplea not in (1, 2, 8)
+            order by 2
+        `;
+      bitacora.control(query, req.url);
+      const operac = await BD.storePostgresql(query);
+      console.log("chamex:" + operac[0]);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+
   /// TIPO DE MONEDA
   app.get("/api/v1.0/tradoc/catalogo/tcmoneda", async (req, res, next) => {
     try {
