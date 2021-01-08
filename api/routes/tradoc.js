@@ -334,19 +334,19 @@ module.exports = async app => {
     try {
       let query1;
 
-      var co_tradoc = req.params.co_tradoc;
-      var co_articu = req.params.co_articu;
-      var ca_articu = req.params.ca_articu;
-      var co_moneda = req.params.co_moneda;
-      var im_preuni = req.params.im_preuni;
-      var ti_accion = req.params.ti_accion;
+      var co_tradoc = req.body.co_tradoc;
+      var co_articu = req.body.co_articu;
+      var ca_articu = req.body.ca_articu;
+      var co_moneda = req.body.co_moneda;
+      var im_preuni = req.body.im_preuni;
+      var ti_accion = req.body.ti_accion;
 
       query1 = `select * from retradoc.fb_manten_produc_tradoc(
-                cast (${co_tradoc} as integer),
-                cast (${co_articu} as integer),
-                cast (${ca_articu} as numeric),
-                cast (${co_moneda} as integer),
-                cast (${im_preuni} as numeric),
+                ${co_tradoc},
+                ${co_articu},
+                ${ca_articu},
+                ${co_moneda},
+                ${im_preuni},
                 '${ti_accion}'
             )`;
 

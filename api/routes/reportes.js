@@ -72,9 +72,9 @@ module.exports = async (app) => {
         var cod_alm = req.body.cod_alm;
         var nom_art = req.body.nom_art;
 
-        if (cod_emp == null || cod_emp.trim() == ''){cod_emp = '';}
-        if (cod_alm == null || cod_alm.trim() == ''){cod_alm = '';}
-        if (nom_art == null || nom_art.trim() == ''){nom_art = '';}
+        // if (cod_emp == null || cod_emp.trim() == ''){cod_emp = '';}
+        // if (cod_alm == null || cod_alm.trim() == ''){cod_alm = '';}
+        // if (nom_art == null || nom_art.trim() == ''){nom_art = '';}
 
         const query = `select * from wfalmace.fbmostrar_invent_valoriza(
             '${cod_emp}',
