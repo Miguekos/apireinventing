@@ -28,46 +28,45 @@ module.exports = async app => {
       console.log(pn_solici);
       console.log(il_conigv);
       console.log(co_tippro);
-      
 
-    //   if (pn_regist == null || pn_regist.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Código de persona NO está definido." })
-    //       .status(500);
-    //   } else if (pj_provee == null || pj_provee.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Código de proveedor NO está definido." })
-    //       .status(500);
-    //   } else if (co_moneda == null || co_moneda.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Tipo de moneda NO está definido." })
-    //       .status(500);
-    //   } else if (ti_compra == null || ti_compra.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Tipo de pago NO esta definido." })
-    //       .status(500);
-    //   } else if (de_motcom == null || de_motcom.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Motivo de O/C NO definido." })
-    //       .status(500);
-    //   } else if (fe_ordcom == null || fe_ordcom.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Fecha de Emisión NO está definido." })
-    //       .status(500);
-    //   } else if (pn_solici == null || pn_solici.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Persona Solicitante NO está definido." })
-    //       .status(500);
-    //   } else if (il_conigv == null || il_conigv.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Con/Sin IGV NO esta definido." })
-    //       .status(500);
-    //   } else if (co_tippro == null || co_tippro.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Tipo de Producto NO definido." })
-    //       .status(500);
-    //   } else {
-        query1 = `select * from reordcom.fb_insert_ordcom(
+      //   if (pn_regist == null || pn_regist.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Código de persona NO está definido." })
+      //       .status(500);
+      //   } else if (pj_provee == null || pj_provee.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Código de proveedor NO está definido." })
+      //       .status(500);
+      //   } else if (co_moneda == null || co_moneda.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Tipo de moneda NO está definido." })
+      //       .status(500);
+      //   } else if (ti_compra == null || ti_compra.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Tipo de pago NO esta definido." })
+      //       .status(500);
+      //   } else if (de_motcom == null || de_motcom.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Motivo de O/C NO definido." })
+      //       .status(500);
+      //   } else if (fe_ordcom == null || fe_ordcom.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Fecha de Emisión NO está definido." })
+      //       .status(500);
+      //   } else if (pn_solici == null || pn_solici.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Persona Solicitante NO está definido." })
+      //       .status(500);
+      //   } else if (il_conigv == null || il_conigv.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Con/Sin IGV NO esta definido." })
+      //       .status(500);
+      //   } else if (co_tippro == null || co_tippro.trim() == "") {
+      //     res
+      //       .json({ res: "ko", message: "Tipo de Producto NO definido." })
+      //       .status(500);
+      //   } else {
+      query1 = `select * from reordcom.fb_insert_ordcom(
                     ${pn_regist},
                     ${pj_provee},
                     ${co_moneda},
@@ -78,23 +77,23 @@ module.exports = async app => {
                     '${il_conigv}',
                     '${co_tippro}'
                 )`;
-                console.log(query1);
+      console.log(query1);
 
-        bitacora.control(query1, req.url);
-        const operac = await BD.storePostgresql(query1);
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
         // con esto muestro msj
-        if (operac.codRes != 99) {
-          // con esto muestro msj
-          if (operac[0].co_respue == "-1") {
-            res.json({ res: "ko", message: operac[0].no_respue }).status(500);
-          }
-          res.json({ res: "ok", message: operac[0].no_respue }).status(200);
-        } else {
-          res
-            .json({ res: "ko", message: "Error en la query", operac })
-            .status(500);
+        if (operac[0].co_respue == "-1") {
+          res.json({ res: "ko", message: operac[0].no_respue }).status(500);
         }
-    //   }
+        res.json({ res: "ok", message: operac[0].no_respue }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+      //   }
     } catch (error) {
       res.json({ res: "ko", message: "Error controlado", error }).status(500);
     }
@@ -225,28 +224,29 @@ module.exports = async app => {
     try {
       let query1;
 
-      var nu_ordcom = req.body.nu_ordcom;
+      var co_ordcom = req.body.co_ordcom;
       var co_person = req.body.co_person;
 
-      if (nu_ordcom == null || nu_ordcom.trim() == "") {
-        res
-          .json({ res: "ko", message: "Código de OC NO está definido." })
-          .status(500);
-      }
-      if (co_person == null || co_person.trim() == "") {
-        res
-          .json({ res: "ko", message: "Código de persona NO está definido." })
-          .status(500);
-      }
+      // if (nu_ordcom == null || nu_ordcom.trim() == "") {
+      //   res
+      //     .json({ res: "ko", message: "Código de OC NO está definido." })
+      //     .status(500);
+      // }
+      // if (co_person == null || co_person.trim() == "") {
+      //   res
+      //     .json({ res: "ko", message: "Código de persona NO está definido." })
+      //     .status(500);
+      // }
 
       query1 = `select * from reordcom.fb_delete_ordcom(
-                cast (${nu_ordcom} as integer),
-                cast (${co_person} as integer)
+                ${co_ordcom},
+                ${co_person}
              )`;
 
       bitacora.control(query1, req.url);
       const operac = await BD.storePostgresql(query1);
       // con esto muestro msj
+      console.log(operac);
       if (operac.codRes != 99) {
         // con esto muestro msj
         if (operac[0].co_respue == "-1") {
@@ -607,7 +607,6 @@ module.exports = async app => {
       res.json({ res: "ko", message: "Error controlado", error }).status(500);
     }
   });
-
 
   /// CON IGV
   app.get("/api/v1.0/ordcom/catalogo/tcconigv", async (req, res, next) => {

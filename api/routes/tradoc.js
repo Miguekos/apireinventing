@@ -109,20 +109,20 @@ module.exports = async app => {
       var co_tradoc = req.body.co_tradoc;
       var co_person = req.body.co_person;
 
-      if (co_tradoc == null || co_tradoc.trim() == "") {
-        res
-          .json({ res: "ko", message: "Código de TD NO está definido." })
-          .status(500);
-      }
-      if (co_person == null || co_person.trim() == "") {
-        res
-          .json({ res: "ko", message: "Código de persona NO está definido." })
-          .status(500);
-      }
+      // if (co_tradoc == null || co_tradoc.trim() == "") {
+      //   res
+      //     .json({ res: "ko", message: "Código de TD NO está definido." })
+      //     .status(500);
+      // }
+      // if (co_person == null || co_person.trim() == "") {
+      //   res
+      //     .json({ res: "ko", message: "Código de persona NO está definido." })
+      //     .status(500);
+      // }
 
       query1 = `select * from retradoc.fb_delete_tradoc(
-                cast (${co_tradoc} as integer),
-                cast (${co_person} as integer)
+                ${co_tradoc},
+                ${co_person}
              )`;
 
       bitacora.control(query1, req.url);
