@@ -21,8 +21,8 @@ module.exports = async app => {
       // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
       // else {
         query1 = `select * from wfalmace.fb_listar_produc_ordtra_ingres(
-            ${fe_regdes},
-            ${fe_reghas},
+            '${fe_regdes}',
+            '${fe_reghas}',
             '${no_provee}',
             '${nu_ordtra}',
             '${co_barras}',
@@ -35,9 +35,9 @@ module.exports = async app => {
       if (operac.codRes != 99) {
         // con esto muestro msj
         if (operac[0].co_respue == "-1") {
-          res.json({ res: "ko", message: operac[0].no_respue }).status(500);
+          res.json({ res: "ko", message: operac }).status(500);
         }
-        res.json({ res: "ok", message: operac[0].no_respue }).status(200);
+        res.json({ res: "ok", message: operac }).status(200);
       } else {
         res
           .json({ res: "ko", message: "Error en la query", operac })
