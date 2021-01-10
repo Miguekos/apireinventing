@@ -4,8 +4,8 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 module.exports = async app => {
-  /// LISTAR PRODUCTOS QUE INGRESARÁN DE ORDEN DE COMPRA
-  app.post("/api/v1.0/almace/listar_produc_ordcom_ingres", async (req, res, next) => {
+  /// LISTAR PRODUCTOS QUE INGRESARÁN DE ORDEN DE COMPRA O TRAMITE DOCUMENTARIO
+  app.post("/api/v1.0/almace/listar_produc_ordtra_ingres", async (req, res, next) => {
     try {
       let query1;
       
@@ -13,18 +13,20 @@ module.exports = async app => {
       var fe_regdes = req.body.fe_regdes;
       var fe_reghas = req.body.fe_reghas;
       var no_provee = req.body.no_provee;
-      var nu_ordcom = req.body.nu_ordcom;
+      var nu_ordtra = req.body.nu_ordtra;
       var co_barras = req.body.co_barras;
+      var il_ordtra = req.body.il_ordtra;
 
       // if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
       // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
       // else {
-        query1 = `select * from wfalmace.fb_listar_produc_ordcom_ingres(
+        query1 = `select * from wfalmace.fb_listar_produc_ordtra_ingres(
             ${fe_regdes},
             ${fe_reghas},
             '${no_provee}',
-            '${nu_ordcom}',
-            '${co_barras}'
+            '${nu_ordtra}',
+            '${co_barras}',
+            '${il_ordtra}'
         )`;
 
       bitacora.control(query1, req.url);
