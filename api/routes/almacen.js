@@ -49,42 +49,6 @@ module.exports = async app => {
     }
   });
 
-  /// AGREGA PRODUCTOS A LA TRANSACCIÓN ///
-  app.post("/api/v1.0/almace/agrega_produc_transa", async (req, res, next) => {
-    try {
-      let query1;
-
-      var co_tradoc = req.params.co_tradoc;
-      var co_articu = req.params.co_articu;
-      var ca_articu = req.params.ca_articu;
-      var co_moneda = req.params.co_moneda;
-      var im_preuni = req.params.im_preuni;
-      var ti_accion = req.params.ti_accion;
-
-      query1 = `select * from retradoc.fb_manten_produc_tradoc(
-                cast (${co_tradoc} as integer),
-                cast (${co_articu} as integer),
-                cast (${ca_articu} as numeric),
-                cast (${co_moneda} as integer),
-                cast (${im_preuni} as numeric),
-                '${ti_accion}'
-            )`;
-
-      bitacora.control(query1, req.url);
-      const operac = await BD.storePostgresql(query1);
-      // con esto muestro msj
-      if (operac.codRes != 99) {
-        // con esto muestro msj
-        res.json({ res: "ok", message: "Success", operac }).status(200);
-      } else {
-        res
-          .json({ res: "ko", message: "Error en la query", operac })
-          .status(500);
-      }
-    } catch (error) {
-      res.json({ res: "ko", message: "Error controlado", error }).status(500);
-    }
-  });
-
+  
   
 };
