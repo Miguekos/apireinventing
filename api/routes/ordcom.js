@@ -30,56 +30,19 @@ module.exports = async app => {
       console.log(co_tippro);
       
 
-    //   if (pn_regist == null || pn_regist.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Código de persona NO está definido." })
-    //       .status(500);
-    //   } else if (pj_provee == null || pj_provee.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Código de proveedor NO está definido." })
-    //       .status(500);
-    //   } else if (co_moneda == null || co_moneda.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Tipo de moneda NO está definido." })
-    //       .status(500);
-    //   } else if (ti_compra == null || ti_compra.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Tipo de pago NO esta definido." })
-    //       .status(500);
-    //   } else if (de_motcom == null || de_motcom.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Motivo de O/C NO definido." })
-    //       .status(500);
-    //   } else if (fe_ordcom == null || fe_ordcom.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Fecha de Emisión NO está definido." })
-    //       .status(500);
-    //   } else if (pn_solici == null || pn_solici.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Persona Solicitante NO está definido." })
-    //       .status(500);
-    //   } else if (il_conigv == null || il_conigv.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Con/Sin IGV NO esta definido." })
-    //       .status(500);
-    //   } else if (co_tippro == null || co_tippro.trim() == "") {
-    //     res
-    //       .json({ res: "ko", message: "Tipo de Producto NO definido." })
-    //       .status(500);
-    //   } else {
-        query1 = `select * from reordcom.fb_insert_ordcom(
-                    ${pn_regist},
-                    ${pj_provee},
-                    ${co_moneda},
-                    '${de_motcom}',
-                    ${ti_compra},
-                    '${fe_ordcom}',
-                    ${pn_solici},
-                    '${il_conigv}',
-                    '${co_tippro}'
-                )`;
-                console.log(query1);
-
+    query1 = `select * from reordcom.fb_insert_ordcom(
+        ${pn_regist},
+        ${pj_provee},
+        ${co_moneda},
+        '${de_motcom}',
+        '${ti_compra}',
+        '${fe_ordcom}',
+        ${pn_solici},
+        ${il_conigv},
+        ${co_tippro},
+        )`;
+        console.log(query1);  
+        
         bitacora.control(query1, req.url);
         const operac = await BD.storePostgresql(query1);
         // con esto muestro msj
