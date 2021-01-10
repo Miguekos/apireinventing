@@ -39,7 +39,7 @@ module.exports = async app => {
         '${fe_ordcom}',
         ${pn_solici},
         ${il_conigv},
-        ${co_tippro},
+        ${co_tippro}
         )`;
         console.log(query1);  
         
