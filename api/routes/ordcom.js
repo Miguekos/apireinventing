@@ -72,7 +72,7 @@ module.exports = async app => {
                     ${pj_provee},
                     ${co_moneda},
                     '${de_motcom}',
-                    ${ti_compra}'
+                    '${ti_compra}',
                     '${fe_ordcom}',
                     ${pn_solici},
                     '${il_conigv}',
