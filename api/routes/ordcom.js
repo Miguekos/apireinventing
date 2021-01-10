@@ -29,7 +29,7 @@ module.exports = async app => {
       console.log(il_conigv);
       console.log(co_tippro);
       
-
+    //insert  
     query1 = `select * from reordcom.fb_insert_ordcom(
         ${pn_regist},
         ${pj_provee},
