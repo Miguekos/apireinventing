@@ -225,7 +225,7 @@ module.exports = async app => {
   
 
   /// GRABA EL DOCUMENTO TRANSACCIONAL CON SUS PRODUCTOS AGREGADOS DE INGRESO o SALIDA
-  app.post("/api/v1.0/almace/grabar_produc_ingsal_selecc", async (req, res, next) => {
+  app.post("/api/v1.0/almace/grabar_transa_ingsal", async (req, res, next) => {
     try {
       let query1;
       
@@ -235,21 +235,23 @@ module.exports = async app => {
       var ti_ingsal = req.body.ti_ingsal;
       var co_empres = req.body.co_empres;
       var co_almace = req.body.co_almace;
+      var no_coment = req.body.no_coment;
       var nu_guirem = req.body.nu_guirem;
       var co_arcadj = req.body.co_arcadj;
 
       // if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
       // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
       // else {
-        query1 = `select * from wfalmace.fb_grabar_produc_ingsal_selecc(
-            '${fe_regist}',
-            ${co_person},
-            '${il_unineg}',
-            ${ti_ingsal},
-            ${co_empres},
-            ${co_almace},
-            '${nu_guirem}',
-            ${co_arcadj}
+        query1 = `select * from wfalmace.fb_grabar_transa_ingsal(
+          '${fe_regist}',
+          ${co_person},
+          '${il_unineg}',
+          ${ti_ingsal},
+          ${co_empres},
+          ${co_almace},
+          '${no_coment}',
+          '${nu_guirem}',
+          '${co_arcadj}'
         )`;
 
       bitacora.control(query1, req.url);
