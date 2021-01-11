@@ -97,7 +97,7 @@ module.exports = async app => {
   });
 
   /// QUITAR PRODUCTOS QUE INGRESAN O SALES DE ORDEN DE COMPRA, TRAMITE DOCUMENTARIO y OPERACIONES
-  app.post("/api/v1.0/almace/quitar_produc_ingsal", async (req, res, next) => {
+  app.post("/api/v1.0/almace/quitar_produc_agrega_ingsal", async (req, res, next) => {
     try {
       let query1;
       
@@ -113,7 +113,7 @@ module.exports = async app => {
       // if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
       // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
       // else {
-        query1 = `select * from wfalmace.fb_quitar_produc_ingsal(
+        query1 = `select * from wfalmace.fb_quitar_produc_agrega_ingsal(
             ${co_person},
             '${fe_regist}',
             ${co_prikey},
