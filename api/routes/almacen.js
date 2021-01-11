@@ -96,6 +96,53 @@ module.exports = async app => {
     }
   });
 
+  /// QUITAR PRODUCTOS QUE INGRESAN O SALES DE ORDEN DE COMPRA, TRAMITE DOCUMENTARIO y OPERACIONES
+  app.post("/api/v1.0/almace/quitar_produc_ingsal", async (req, res, next) => {
+    try {
+      let query1;
+      
+      var co_person = req.body.co_person;
+      var fe_regist = req.body.fe_regist;
+      var co_prikey = req.body.co_prikey;
+      var co_articu = req.body.co_articu;
+      var ca_articu = req.body.ca_articu;
+      var il_unineg = req.body.il_unineg;
+      var ti_ingsal = req.body.ti_ingsal;
+
+
+      // if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
+      // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
+      // else {
+        query1 = `select * from wfalmace.fb_quitar_produc_ingsal(
+            ${co_person},
+            '${fe_regist}',
+            ${co_prikey},
+            ${co_articu},
+            ${ca_articu},
+            '${il_unineg}',
+            ${ti_ingsal}
+        )`;
+
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        if (operac[0].co_respue == "-1") {
+          res.json({ res: "ko", message: operac }).status(500);
+        }
+        res.json({ res: "ok", message: operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+      // }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+
   /// LISTAR DOCUMENTOS AGREGADOS PARA EL INGRESO o SALIDA
   app.post("/api/v1.0/almace/listar_docume_agrega_ingsal", async (req, res, next) => {
     try {
@@ -114,6 +161,95 @@ module.exports = async app => {
             ${co_person},
             '${il_unineg}',
             ${ti_ingsal}
+        )`;
+
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        if (operac[0].co_respue == "-1") {
+          res.json({ res: "ko", message: operac }).status(500);
+        }
+        res.json({ res: "ok", message: operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+      // }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+
+  /// LISTAR PRODUCTOS AGREGADOS DEL DOCUMENTO PARA EL INGRESO o SALIDA
+  app.post("/api/v1.0/almace/listar_produc_agrega_ingsal", async (req, res, next) => {
+    try {
+      let query1;
+      
+      var fe_regist = req.body.fe_regist;
+      var co_person = req.body.co_person;
+      var il_unineg = req.body.il_unineg;
+      var ti_ingsal = req.body.ti_ingsal;
+
+      // if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
+      // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
+      // else {
+        query1 = `select * from wfalmace.fb_listar_produc_agrega_ingsal(
+            '${fe_regist}',
+            ${co_person},
+            '${il_unineg}',
+            ${ti_ingsal}
+        )`;
+
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        if (operac[0].co_respue == "-1") {
+          res.json({ res: "ko", message: operac }).status(500);
+        }
+        res.json({ res: "ok", message: operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+      // }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+  
+
+  /// GRABA EL DOCUMENTO TRANSACCIONAL CON SUS PRODUCTOS AGREGADOS DE INGRESO o SALIDA
+  app.post("/api/v1.0/almace/grabar_produc_ingsal_selecc", async (req, res, next) => {
+    try {
+      let query1;
+      
+      var fe_regist = req.body.fe_regist;
+      var co_person = req.body.co_person;
+      var il_unineg = req.body.il_unineg;
+      var ti_ingsal = req.body.ti_ingsal;
+      var co_empres = req.body.co_empres;
+      var co_almace = req.body.co_almace;
+      var nu_guirem = req.body.nu_guirem;
+      var co_arcadj = req.body.co_arcadj;
+
+      // if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
+      // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
+      // else {
+        query1 = `select * from wfalmace.fb_grabar_produc_ingsal_selecc(
+            '${fe_regist}',
+            ${co_person},
+            '${il_unineg}',
+            ${ti_ingsal},
+            ${co_empres},
+            ${co_almace},
+            '${nu_guirem}',
+            ${co_arcadj}
         )`;
 
       bitacora.control(query1, req.url);
