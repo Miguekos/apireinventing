@@ -71,7 +71,7 @@ module.exports = async app => {
             '${fe_regist}',
             ${co_prikey},
             ${co_articu},
-            ${ca_articu}'
+            ${ca_articu}
             '${il_unineg}',
             ${ti_ingsal}
         )`;
