@@ -96,6 +96,44 @@ module.exports = async app => {
     }
   });
 
+  /// LISTAR DOCUMENTOS AGREGADOS PARA EL INGRESO o SALIDA
+  app.post("/api/v1.0/almace/listar_docume_agrega_ingsal", async (req, res, next) => {
+    try {
+      let query1;
+      
+      var fe_regist = req.body.fe_regist;
+      var co_person = req.body.co_person;
+      var il_unineg = req.body.il_unineg;
+      var ti_ingsal = req.body.ti_ingsal;
 
+      // if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
+      // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
+      // else {
+        query1 = `select * from wfalmace.fb_listar_docume_agrega_ingsal(
+            '${fe_regist}',
+            ${co_person},
+            '${il_unineg}',
+            ${ti_ingsal}
+        )`;
+
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        if (operac[0].co_respue == "-1") {
+          res.json({ res: "ko", message: operac }).status(500);
+        }
+        res.json({ res: "ok", message: operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+      // }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
   
 };
