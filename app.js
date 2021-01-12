@@ -37,6 +37,7 @@ require('./api/routes/tradoc')(app)
 require('./api/routes/tipocita')(app)
 require('./api/routes/operacflujo')(app)
 require('./api/routes/reportes')(app)
+require('./api/routes/almacen')(app)
 
 // Registro de puerto y servidor.
 app.disable("x-powered-by");
