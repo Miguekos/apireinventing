@@ -163,4 +163,66 @@ module.exports = async (app) => {
     }
 
     })
+
+    // Para Mostrar  Produccion de Operaciones 
+    app.post("/api/v1.0/reportes/produccion_operaciones", async (req, res, next) => {
+        try {            
+            var cod_ope = req.body.cod_ope;
+            var pla_veh = req.body.pla_veh;            
+            var fec_des = req.body.fec_des;
+            var fec_has = req.body.fec_has;
+            var tip_rep = req.body.tip_rep;            
+            var query;
+            
+            if (cod_ope == null || cod_ope.trim() == ''){cod_ope = '';}
+            if (pla_veh == null || pla_veh.trim() == ''){pla_veh = '';}
+            
+            if (fec_des == null || fec_des.trim() == ''){
+                res.json({ res: 'ko', message: "Por favor defina Fecha inicio."}).status(500)
+            }else if(fec_has == null || fec_has.trim() == ''){
+                res.json({ res: 'ko', message: "Por favor defina Fecha Hasta."}).status(500)
+            }else if(tip_rep == null || tip_rep.trim() == ''){
+                res.json({ res: 'ko', message: "Por favor defina el tipo de reporte (R,D)"}).status(500)
+            }else{
+                if(tip_rep.toUpperCase() == 'D'){ // DETALLADO
+                    query = `select 
+                        fe_inipro, fe_finpro, co_operac, no_operac, no_person,
+                        co_plaveh, no_marveh, no_modveh, nu_anomod, no_colveh, 
+                        nu_serveh, nu_motveh, ti_servic, se_ventas, se_costos,
+                        se_margen, se_rentab, ma_ventas, ma_costos, ma_margen,
+                        ma_rentab, ma_sd, to_ventas, to_costos, to_margen, to_rentab
+                    from reoperacfbmostrar_produccion_operaciones(
+                        '${cod_ope}',
+                        '${pla_veh}',
+                        '${fec_des}',
+                        '${fec_has}',
+                        '${tip_rep}'
+                    );`;
+                }else if(tip_rep.toUpperCase() == 'R'){
+                    query = `select 
+                        no_period, se_ventas, se_costos,
+                        se_margen, se_rentab, ma_ventas, ma_costos, ma_margen,
+                        ma_rentab, ma_sd, to_ventas, to_costos, to_margen, to_rentab
+                    from reoperacfbmostrar_produccion_operaciones(
+                        '${cod_ope}',
+                        '${pla_veh}',
+                        '${fec_des}',
+                        '${fec_has}',
+                        '${tip_rep}'
+                    );`;   
+                }
+                bitacora.control(query, req.url)
+                const resultado = await BD.storePostgresql(query);
+                if (resultado.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Success", resultado}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", resultado }).status(500)
+                }
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado chamo", error }).status(500)
+        }
+    
+    })
 }
