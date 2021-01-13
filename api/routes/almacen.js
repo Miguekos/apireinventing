@@ -49,6 +49,50 @@ module.exports = async app => {
     }
   });
 
+  /// LISTAR PRODUCTOS QUE SERÁN DESPACHADOS DE OPERACIONES
+  app.post("/api/v1.0/almace/listar_produc_operac_salida", async (req, res, next) => {
+    try {
+      let query1;
+      
+
+      var fe_regdes = req.body.fe_regdes;
+      var fe_reghas = req.body.fe_reghas;
+      var co_operac = req.body.co_operac;
+      var co_plaveh = req.body.co_plaveh;
+      var il_despac = req.body.il_despac;
+
+      // if (fe_tradoc == null || fe_tradoc.trim() == ''){res.json({ res: 'ko', message: "Fecha de Trámite NO esta definido."}).status(500)}
+      // else if (de_mottra == null || de_mottra.trim() == ''){res.json({ res: 'ko', message: "Motivo de T/D NO definido."}).status(500)}
+      // else {
+        query1 = `select * from wfalmace.fb_listar_produc_operac_salida(
+            '${fe_regdes}',
+            '${fe_reghas}',
+            '${co_operac}',
+            '${co_plaveh}',
+            '${il_despac}'
+        )`;
+
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        if (operac[0].co_respue == "-1") {
+          res.json({ res: "ko", message: operac }).status(500);
+        }
+        res.json({ res: "ok", message: operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+      // }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+
+
   /// INSERTAR PRODUCTOS QUE INGRESAN O SALES DE ORDEN DE COMPRA, TRAMITE DOCUMENTARIO y OPERACIONES
   app.post("/api/v1.0/almace/insert_produc_ingsal", async (req, res, next) => {
     try {
