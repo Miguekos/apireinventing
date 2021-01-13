@@ -225,4 +225,76 @@ module.exports = async (app) => {
         }
     
     })
+
+    // Filtro tipo de trabajo (Seguimiento Mantenimiento)
+    app.get("/api/v1.0/reportes/tipo_trabajo", async (req, res, next) => {
+        try {            
+            var query;
+            query = `   
+                select 0 ti_servic, '[Todos]' no_tipser union
+                select 99, 'Ninguno' union
+                select ti_servic, no_tipser
+                from reoperac.tctipser
+                where ti_servic in (4,6)
+                order by 1;
+            `;  
+            bitacora.control(query, req.url)
+            const resultado = await BD.storePostgresql(query);
+            if (resultado.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", resultado}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", resultado }).status(500)
+            }            
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado chamo", error }).status(500)
+        }
+    
+    })  
+
+    // Para Mostrar Seguimiento Mantenimiento
+    app.post("/api/v1.0/reportes/seguimiento_mantenimiento", async (req, res, next) => {
+        try {            
+            var cod_ope = req.body.cod_ope;
+            var pla_veh = req.body.pla_veh;            
+            var tip_tra = req.body.tip_tra;
+            var tip_cli = req.body.tip_cli;         
+            var query;
+            
+            if (cod_ope == null || cod_ope.trim() == ''){cod_ope = '';}
+            if (pla_veh == null || pla_veh.trim() == ''){pla_veh = '';}
+            
+            if (tip_tra == null || tip_tra.trim() == ''){
+                res.json({ res: 'ko', message: "Por favor defina Tipo de Trabajo."}).status(500)
+            }else if(tip_cli == null || tip_cli.trim() == ''){
+                res.json({ res: 'ko', message: "Por favor defina Tipo de Cliente."}).status(500)
+            }else{
+                query = `     
+                select or_numbre , no_client , co_plaveh , nu_telefo , no_marcav ,
+                    no_modelo , ti_client , fe_entreg , km_priing , no_tipser ,      
+                    fec_1k , fec_5k , fec_10k , fec_15k , fec_20k ,
+                    fec_25k , fec_30k , fec_35k , fec_40k , fec_45k ,
+                    fec_50k , fec_55k , fec_60k , fec_65k , fec_70k ,
+                    fec_75k , fec_80k , fec_85k , fec_90k , fec_100k 
+                from revenveh.fbmostrar_seguimiento_mantenimiento(
+                    '${cod_ope}',
+                    '${pla_veh}',
+                    '${tip_tra}',
+                    '${tip_cli}'
+                );`;  
+                bitacora.control(query, req.url)
+                const resultado = await BD.storePostgresql(query);
+                if (resultado.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Success", resultado}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", resultado }).status(500)
+                }
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado chamo", error }).status(500)
+        }
+    
+    })
+
 }
