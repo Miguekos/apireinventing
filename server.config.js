@@ -2,8 +2,8 @@ module.exports = {
     apps: [{
         name: "api-reinventing-js",
         script: "./app.js",
-        instances: 1,
-        exec_mode: "fork",
+        instances: 4,
+        exec_mode: "cluster",
         watch: true,
         log_file: "~/.pm2/logs/api-reinventing-js-outerr.log",
         out_file: "NULL", // ~/.pm2/logs/api-reinventing-js-out.log
