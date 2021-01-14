@@ -143,8 +143,8 @@ module.exports = async (app) => {
         var tip_agr = req.body.tip_agr;
         var fec_act = req.body.fec_act;
 
-        if (tip_agr == null || tip_agr.trim() == ''){tip_agr = '';}
-        if (fec_act == null || fec_act.trim() == ''){fec_act = '';}
+        // if (tip_agr == null || tip_agr.trim() == ''){tip_agr = '';}
+        // if (fec_act == null || fec_act.trim() == ''){fec_act = '';}
 
         const query = `select * from wfalmace.fbmostrar_reporte_diario(
             '${tip_agr}',

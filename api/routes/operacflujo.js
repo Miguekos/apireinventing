@@ -1142,31 +1142,31 @@ module.exports = async (app) => {
             var swt_sal = req.body.swt_sal;
             var fec_sal = req.body.fec_sal;
 
-            if (per_reg == null || per_reg.trim() == ''){
-                res.json({ res: 'ko', message: "Definir Persona que regista salida." }).status(500);
-            }else if (cod_veh == null || cod_veh.trim() == ''){
-                res.json({ res: 'ko', message: "Definir código del vehículo." }).status(500);
-            }else if (val_kil == null || val_kil.trim() == ''){
-                res.json({ res: 'ko', message: "Definir el kilometraje del vehículo." }).status(500);
-            }else if (doc_ide == null || doc_ide.trim() == ''){
-                res.json({ res: 'ko', message: "Definir documento de identidad del cliente." }).status(500);
-            }else if (ape_pat == null || ape_pat.trim() == ''){
-                res.json({ res: 'ko', message: "Definir apellido paterno del cliente." }).status(500);
-            }else if (ape_mat == null || ape_mat.trim() == ''){
-                res.json({ res: 'ko', message: "Definir apellido materno del cliente." }).status(500);
-            }else if (nom_cli == null || nom_cli.trim() == ''){
-                res.json({ res: 'ko', message: "Definir nombre del cliente." }).status(500);
-            }else if (cen_ope == null || cen_ope.trim() == ''){
-                res.json({ res: 'ko', message: "Definir centro de operaciones." }).status(500);
-            }else if (direcci == null || direcci.trim() == ''){
-                res.json({ res: 'ko', message: "Definir dirección del cliente." }).status(500);
-            }else if (det_ing == null || det_ing.trim() == ''){
-                res.json({ res: 'ko', message: "Definir detalle de ingreso." }).status(500);
-            }else if (swt_sal == null || swt_sal.trim() == ''){
-                res.json({ res: 'ko', message: "Definir switch de pronto ingreso" }).status(500);
-            }else if (swt_sal == '1' && (fec_sal == null || fec_sal.trim() == '')){
-                res.json({ res: 'ko', message: "Definir fecha-hora de próxima salida." }).status(500);
-            } else {           
+            // if (per_reg == null || per_reg.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir Persona que regista salida." }).status(500);
+            // }else if (cod_veh == null || cod_veh.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir código del vehículo." }).status(500);
+            // }else if (val_kil == null || val_kil.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir el kilometraje del vehículo." }).status(500);
+            // }else if (doc_ide == null || doc_ide.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir documento de identidad del cliente." }).status(500);
+            // }else if (ape_pat == null || ape_pat.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir apellido paterno del cliente." }).status(500);
+            // }else if (ape_mat == null || ape_mat.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir apellido materno del cliente." }).status(500);
+            // }else if (nom_cli == null || nom_cli.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir nombre del cliente." }).status(500);
+            // }else if (cen_ope == null || cen_ope.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir centro de operaciones." }).status(500);
+            // }else if (direcci == null || direcci.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir dirección del cliente." }).status(500);
+            // }else if (det_ing == null || det_ing.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir detalle de ingreso." }).status(500);
+            // }else if (swt_sal == null || swt_sal.trim() == ''){
+            //     res.json({ res: 'ko', message: "Definir switch de pronto ingreso" }).status(500);
+            // }else if (swt_sal == '1' && (fec_sal == null || fec_sal.trim() == '')){
+            //     res.json({ res: 'ko', message: "Definir fecha-hora de próxima salida." }).status(500);
+            // } else {           
                 query1 = `
                     select * from readuana.fb_ingreso_vehicular(
                         cast('${per_reg}' as integer),
@@ -1196,7 +1196,7 @@ module.exports = async (app) => {
                 } else {
                     res.json({ res: 'ko', message: "Error en la query", resulta }).status(500)
                 }    
-            }        
+            // }        
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
