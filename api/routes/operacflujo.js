@@ -50,23 +50,18 @@ module.exports = async (app) => {
     app.get("/api/v1.0/operacflujo/combo_cliente", async (req, res, next) => {
         try {
             let query1 = `
-                select 
-                    pe.co_person, 
-                    (
-                    (
-                    case 
-                        when pe.ti_person = 1 then pn.no_apepat || '  ' || pn.no_apemat || '  ' || pn.no_nombre
-                        when pe.ti_person = 2 then pj.no_razsoc
-                    end
-                    )
-                    || '  -  ' || pe.co_docide
-                    )  as no_person
-                from pbperson.tbperson pe
-                left join pbperson.tbpernat pn on pe.co_person = pn.co_pernat 
-                left join pbperson.tbperjur pj on pe.co_person = pj.co_perjur
-                where pe.co_person not in (4,3)
-                order by 2
-            `;
+            select 
+                pe.co_person, 
+                pe.co_docide,
+                pn.no_apepat,
+                pn.no_apemat,
+                pn.no_nombre,
+                (pn.no_apepat || '  ' || pn.no_apemat || '  ' || pn.no_nombre || '  -  ' || pe.co_docide)  as no_person
+            from pbperson.tbperson pe, pbperson.tbpernat pn 
+            where pe.co_person = pn.co_pernat 
+            and pe.co_person not in (4,3)
+            order by 2
+        `;
             bitacora.control(query1, req.url)
             const client = await BD.storePostgresql(query1);
             // con esto muestro msj
