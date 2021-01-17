@@ -175,6 +175,33 @@ module.exports = async app => {
       res.json({ res: "ko", message: "Error controlado", error }).status(500);
     }
   });
+
+  /// ADJUNTOS DE LA ORDEN ORDEN DE COMPRA SELECCIONADA
+  app.post("/api/v1.0/ordcom/listar_arcadj_ordcom", async (req, res, next) => {
+    try {
+      let query1;
+      var co_ordcom = req.body.co_ordcom;
+
+      query1 = `select * from reordcom.fb_listar_arcadj_ordcom( 
+                cast (${co_ordcom} as integer)
+            )`;
+
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+
   /// ELIMINAR ORDEN DE COMPRA
   app.post("/api/v1.0/ordcom/delete_ordcom", async (req, res, next) => {
     try {

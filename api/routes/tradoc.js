@@ -329,6 +329,32 @@ module.exports = async app => {
     }
   });
 
+  /// ADJUNTOS DEL TRAMITE DOCUMENTARIO SELECCIONADA
+  app.post("/api/v1.0/tradoc/listar_arcadj_tradoc", async (req, res, next) => {
+    try {
+      let query1;
+      var co_tradoc = req.body.co_tradoc;
+
+      query1 = `select * from retradoc.fb_listar_arcadj_tradoc( 
+                cast (${co_tradoc} as integer)
+            )`;
+
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+
   /// MANTENIMIENTO DE PRODUCTOS TRAMITE DOCUMENTARIO ///
   app.post("/api/v1.0/tradoc/manten_produc_tradoc", async (req, res, next) => {
     try {
