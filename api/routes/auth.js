@@ -3,12 +3,17 @@ const BD = require("../database/pg/postgres");
 
 module.exports = async (app) => {
     app.post(`/api/${process.env.VERSION}/login`, async (req, res, next) => {
-
+        
         const username = req.body.username;
         const password = req.body.password;
 
+        console.log(username);
+        console.log(password);
+
         const query = `SELECT * from fwconacc.tbusuari where no_usuari = '${username}'`;
+        console.log(query);
         const getuser = await BD.storePostgresql(query);
+        console.log(getuser);
         const user = getuser[0]
         if (!user) {
             res.json({ res: "ko", message: "El usuario no se ha identificado" }).status(404)
