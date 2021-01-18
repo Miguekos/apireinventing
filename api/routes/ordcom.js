@@ -177,7 +177,7 @@ module.exports = async app => {
   });
 
   /// ADJUNTOS DE LA ORDEN ORDEN DE COMPRA SELECCIONADA
-  app.post("/api/v1.0/ordcom/listar_arcadj_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/listar_arcadj_ordcom`, async (req, res, next) => {
     try {
       let query1;
       var co_ordcom = req.body.co_ordcom;

@@ -330,7 +330,7 @@ module.exports = async app => {
   });
 
   /// ADJUNTOS DEL TRAMITE DOCUMENTARIO SELECCIONADA
-  app.post("/api/v1.0/tradoc/listar_arcadj_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/listar_arcadj_tradoc`, async (req, res, next) => {
     try {
       let query1;
       var co_tradoc = req.body.co_tradoc;
