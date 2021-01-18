@@ -14,7 +14,7 @@ const conex = {
     host: process.env.IP_DATABASE,
     database: process.env.DATABASE,
     password: process.env.PASS_DATABASE,
-    port: 5432,
+    port: process.env.PORT_DATABASE,
     ssl: false,
     max: 120, // set pool max size to 20
     idleTimeoutMillis: 3000, // close idle clients after 1 second

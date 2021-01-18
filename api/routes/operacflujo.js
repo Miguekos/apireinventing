@@ -7,7 +7,7 @@ module.exports = async (app) => {
 
 ///////////////////////////////// MODULO NUEVA OPERACIÓN/////////////////
     //mostrar ingresos de vehiculos
-    app.post("/api/v2.0/operacflujo/mostrar_ingreso", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/mostrar_ingreso`, async (req, res, next) => {
         try {
             let query;
             var fec_ini = req.body.fec_ini;
@@ -47,7 +47,7 @@ module.exports = async (app) => {
     ///// para ingresar nueva operación
 
     //combo cliente
-    app.get("/api/v2.0/operacflujo/combo_cliente", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operacflujo/combo_cliente`, async (req, res, next) => {
         try {
             let query1 = `
             select 
@@ -78,7 +78,7 @@ module.exports = async (app) => {
     })
 
     // listado que muestra vehiculos enlazados al ingreso VEH. 
-    app.get("/api/v2.0/operacflujo/lista_vehiculo_ingreso/:cod_adu", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operacflujo/lista_vehiculo_ingreso/:cod_adu`, async (req, res, next) => {
         try {
             var cod_adu = req.params.cod_adu;
             let query1 = `
@@ -109,7 +109,7 @@ module.exports = async (app) => {
     })
 
     //// nueva operacion
-    app.post("/api/v2.0/operacflujo/nueva_operacion", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/nueva_operacion`, async (req, res, next) => {
         try {
             let query1;
             var cod_adu = req.body.cod_adu;
@@ -153,7 +153,7 @@ module.exports = async (app) => {
     //////////////////// mostrar info de operacion (ABRIR OPERACION)
 
     // listado que muestra vehiculos enlazados al ingreso VEH. 
-    app.get("/api/v2.0/operacflujo/abrir_operacion/:cod_ope", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operacflujo/abrir_operacion/:cod_ope`, async (req, res, next) => {
         try {
             var cod_ope = req.params.cod_ope;
             let q_opera = `select * from reoperac.fbmostrar_datos_operac(
@@ -223,7 +223,7 @@ module.exports = async (app) => {
     })
     
 //////////////////////MODULO: SERVICIOS Y MATERIALES (MOSTRAR)
-    app.post("/api/v2.0/operacflujo/serv_mater_mostrar_buscar", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/serv_mater_mostrar_buscar`, async (req, res, next) => {
         try {
             var cod_ope = req.body.cod_ope;
             var tip_fil = req.body.tip_fil;
@@ -361,7 +361,7 @@ module.exports = async (app) => {
     })
 
     ///////////////////// Agregar servicio a la operación
-    app.post("/api/v2.0/operacflujo/add_servic_opera", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/add_servic_opera`, async (req, res, next) => {
         try {
             let query1;
             var ope_veh = req.body.ope_veh;
@@ -422,7 +422,7 @@ module.exports = async (app) => {
     })
 
     /////////////// agregando materiales a la operacion 
-    app.post("/api/v2.0/operacflujo/add_materi_opera", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/add_materi_opera`, async (req, res, next) => {
         try {
 
             let query0;
@@ -520,7 +520,7 @@ module.exports = async (app) => {
     })
 
 /////////////////// Actualiza servicio enlazado a operacion
-    app.post("/api/v2.0/operacflujo/servic_opera", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/servic_opera`, async (req, res, next) => {
         try {
             let query1;
             var ope_ser = req.body.ope_ser;
@@ -567,7 +567,7 @@ module.exports = async (app) => {
     })
 
 ////////////////////eliminar servicio enlazado a operacion
-    app.delete("/api/v2.0/operacflujo/servic_opera", async (req, res, next) => {
+    app.delete(`/api/${process.env.VERSION}/operacflujo/servic_opera`, async (req, res, next) => {
         try {
             let query1;
             var ope_ser = req.body.ope_ser;
@@ -602,7 +602,7 @@ module.exports = async (app) => {
     })
 
 /////////////////// Actualiza materiales enlazado a operacion
-    app.post("/api/v2.0/operacflujo/materi_opera", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/materi_opera`, async (req, res, next) => {
         try {
             let query1;
             var ope_mat = req.body.ope_mat;
@@ -649,7 +649,7 @@ module.exports = async (app) => {
     })
 
     ////////////////////eliminar material enlazado a operacion
-    app.delete("/api/v2.0/operacflujo/materi_opera", async (req, res, next) => {
+    app.delete(`/api/${process.env.VERSION}/operacflujo/materi_opera`, async (req, res, next) => {
         try {
             let query1;
             var ope_mat = req.body.ope_mat;
@@ -685,7 +685,7 @@ module.exports = async (app) => {
 
 /////////////////////////////////// EVALUAR OPERACION OPCION 3
 // mostrar lista de operaciones para evaluar
-    app.post("/api/v2.0/operacflujo/lista_operaci_evalua", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/lista_operaci_evalua`, async (req, res, next) => {
         try {
             let query1;
             var nom_cli = req.body.nom_cli;
@@ -719,7 +719,7 @@ module.exports = async (app) => {
     })
 
 // mostrar servicio-material de operacion a evaluar
-    app.get("/api/v2.0/operacflujo/lista_sermat_evalua/:cod_ope", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operacflujo/lista_sermat_evalua/:cod_ope`, async (req, res, next) => {
         try {
             var cod_ope = req.params.cod_ope;
             let query1 = `
@@ -744,7 +744,7 @@ module.exports = async (app) => {
     })
 
 // recalcular servicio-material de operación a evaluar
-    app.post("/api/v2.0/operacflujo/recalcula_sermat", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/recalcula_sermat`, async (req, res, next) => {
         try {
             let query1;
             var ser_mat = req.body.ser_mat;
@@ -803,7 +803,7 @@ module.exports = async (app) => {
     })
 
 // evaluar cada item de la operacion (servicios y materiales)
-    app.post("/api/v2.0/operacflujo/evalua_item_sermat", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/evalua_item_sermat`, async (req, res, next) => {
         try {
             let query1;
             var ser_mat = req.body.ser_mat;
@@ -886,7 +886,7 @@ module.exports = async (app) => {
 
 ////////////////////////////////// ASIGNACIÓN DE SERVICIO OPCION 4
 // mostrar lista de operaciones pendientes a asignar tecnico a sus servicios
-    app.post("/api/v2.0/operacflujo/lista_operaci_asignar", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/lista_operaci_asignar`, async (req, res, next) => {
         try {
             let query1;
             var nom_cli = req.body.nom_cli;
@@ -920,7 +920,7 @@ module.exports = async (app) => {
     })
 
 // mostrar servicios para asignar persona que ejecutará
-    app.get("/api/v2.0/operacflujo/lista_sermat_asignar/:cod_ope", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operacflujo/lista_sermat_asignar/:cod_ope`, async (req, res, next) => {
         try {
             var cod_ope = req.params.cod_ope;
             let query1 = `
@@ -945,7 +945,7 @@ module.exports = async (app) => {
     })
 
 // para combo de tecnicos a asignar
-    app.get("/api/v2.0/operacflujo/combo_tecnico", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operacflujo/combo_tecnico`, async (req, res, next) => {
         try {
             let query1 = `
                 select  0 as co_tecaut, '[Ninguno]' no_person union
@@ -972,7 +972,7 @@ module.exports = async (app) => {
     })
 
 // asignar tecnico a cada Item servicio de operacion
-    app.post("/api/v2.0/operacflujo/asigna_tecnico_servicio", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/asigna_tecnico_servicio`, async (req, res, next) => {
         try {
             let query1;
             var cod_ope = req.body.cod_ope;
@@ -1014,7 +1014,7 @@ module.exports = async (app) => {
 
 /////////////////////////////////// INICIAL ITEM (SERVICIO) DE OPERACION OPCION 5
 // mostrar lista de servicio-ordeservicio pendientes para dar inicio y o fin
-    app.post("/api/v2.0/operacflujo/lista_opeser_ini_fin", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/lista_opeser_ini_fin`, async (req, res, next) => {
         try {
             let query1;
             var cod_ope = req.body.cod_ope;
@@ -1052,7 +1052,7 @@ module.exports = async (app) => {
     })
 
 // Dar INICIO al servicio de una orden de servico
-    app.post("/api/v2.0/operacflujo/iniciar_servicio_ordser", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/iniciar_servicio_ordser`, async (req, res, next) => {
         try {
             let query1;
             var ord_ser = req.body.ord_ser;
@@ -1086,7 +1086,7 @@ module.exports = async (app) => {
     })
 
 // Dar INICIO al servicio de una orden de servico
-    app.post("/api/v2.0/operacflujo/finalizar_servicio_ordser", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/finalizar_servicio_ordser`, async (req, res, next) => {
         try {
             let query1;
             var ord_ser = req.body.ord_ser;
@@ -1121,7 +1121,7 @@ module.exports = async (app) => {
 
 
 /////////////////////////////////// INGRESO VEHICULAR
-    app.post("/api/v2.0/operacflujo/ingreso_vehicular", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/ingreso_vehicular`, async (req, res, next) => {
         try {
             let query1;
             var per_reg = req.body.per_reg;
@@ -1198,7 +1198,7 @@ module.exports = async (app) => {
     })
 
 ///// BUSCAR OPERACION para chamexx
-    app.post("/api/v2.0/operacflujo/buscar_operacion", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/buscar_operacion`, async (req, res, next) => {
         try {
             let query1;
             var cod_ope = req.body.cod_ope;

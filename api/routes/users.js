@@ -6,7 +6,7 @@ const saltRounds = 10
 
 module.exports = async (app) => {
     // para traer todos los usuarios
-    app.get("/api/v2.0/users/:docide", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/users/:docide`, async (req, res, next) => {
         try {
             let query;
             const doc_ide = req.params.docide;
@@ -30,7 +30,7 @@ module.exports = async (app) => {
 
     })
 
-    app.get("/api/v2.0/users/id/:cousuari", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/users/id/:cousuari`, async (req, res, next) => {
         try {
             let query;
             const doc_ide = req.params.cousuari;
@@ -50,7 +50,7 @@ module.exports = async (app) => {
 
     })
 
-    app.post("/api/v2.0/usuario/:tipo", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/usuario/:tipo`, async (req, res, next) => {
         try {
             const tipo = req.params
             console.log(tipo);
@@ -74,7 +74,7 @@ module.exports = async (app) => {
     })
 
     // para agregar un usuario
-    app.post("/api/v2.0/users", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/users`, async (req, res, next) => {
         try {
             const hash = await bcrypt.hash(req.body.password, saltRounds);
             console.log(hash);
@@ -116,7 +116,7 @@ module.exports = async (app) => {
     })
 
     // para actualizar usuarios
-    app.put("/api/v2.0/users", async (req, res, next) => {
+    app.put(`/api/${process.env.VERSION}/users`, async (req, res, next) => {
         try {
             const codigo = req.body.codigo;
             const id = req.body.id;
@@ -159,7 +159,7 @@ module.exports = async (app) => {
     })
 
         // para actualizar SOLO CONTRASENA
-    app.post("/api/v2.0/users/cambio_contra", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/users/cambio_contra`, async (req, res, next) => {
         try {
             var cod_usu = req.body.id;
             var con_ant = req.body.password;
@@ -189,7 +189,7 @@ module.exports = async (app) => {
     })
 
     // para actualizar SOLO FOTO DE USUARIO
-    app.post("/api/v2.0/users/cambio_fotper", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/users/cambio_fotper`, async (req, res, next) => {
         try {
             var cod_usu = req.body.id;
             var fot_per = req.body.fot_per;

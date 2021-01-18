@@ -6,7 +6,7 @@ const saltRounds = 10
 module.exports = async (app) => {
     ///////////////////////////////////////////// TCSERVIC ///////////////////////////////////
     // mostrar tcservic
-    app.get("/api/v2.0/operac/tcservic/:nom_ser", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operac/tcservic/:nom_ser`, async (req, res, next) => {
         try {
             let query;
             var nom_ser = req.params.nom_ser;
@@ -32,7 +32,7 @@ module.exports = async (app) => {
     })
 
     // para insertar o modificar tcservic
-    app.post("/api/v2.0/operac/tcservic", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operac/tcservic`, async (req, res, next) => {
         try {
             let query;
             var nom_ser = req.body.nom_ser;
@@ -69,7 +69,7 @@ module.exports = async (app) => {
     })
 
     // ELIMINAR 
-    app.delete("/api/v2.0/operac/tcservic", async (req, res, next) => {
+    app.delete(`/api/${process.env.VERSION}/operac/tcservic`, async (req, res, next) => {
         try {
             let query;
             var cod_ser = req.body.cod_ser;
@@ -93,7 +93,7 @@ module.exports = async (app) => {
 
     /////////////////////////////////////TCTIPSER///////////////////////////////////
     // mostrar 
-    app.get("/api/v2.0/operac/tctipser/:nom_ser", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operac/tctipser/:nom_ser`, async (req, res, next) => {
         try {
             let query;
             var nom_ser = req.params.nom_ser;
@@ -130,7 +130,7 @@ module.exports = async (app) => {
     })
 
     // para insertar o modificar TCTIPSER
-    app.post("/api/v2.0/operac/tctipser", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operac/tctipser`, async (req, res, next) => {
         try {
             let query;
             var nom_ser = req.body.nom_ser;
@@ -167,7 +167,7 @@ module.exports = async (app) => {
     })
 
     // ELIMINAR 
-    app.delete("/api/v2.0/operac/tctipser", async (req, res, next) => {
+    app.delete(`/api/${process.env.VERSION}/operac/tctipser`, async (req, res, next) => {
         try {
             let query;
             var tip_ser = req.body.tip_ser;
@@ -190,7 +190,7 @@ module.exports = async (app) => {
 
     ///////////////////////////////////////////// TCTIPTRA ///////////////////////////////////
     // mostrar 
-    app.get("/api/v2.0/operac/tctiptra/:nom_tra", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/operac/tctiptra/:nom_tra`, async (req, res, next) => {
         try {
             let query;
             var nom_tra = req.params.nom_tra;
@@ -217,7 +217,7 @@ module.exports = async (app) => {
 
 
     // para insertar o modificar 
-    app.post("/api/v2.0/operac/tctiptra", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operac/tctiptra`, async (req, res, next) => {
         try {
             let query;
             var tip_tra = req.body.tip_tra;
@@ -278,7 +278,7 @@ module.exports = async (app) => {
     })
 
     // ELIMINAR 
-    app.delete("/api/v2.0/operac/tctiptra", async (req, res, next) => {
+    app.delete(`/api/${process.env.VERSION}/operac/tctiptra`, async (req, res, next) => {
         try {
             let query;
             var tip_tra = req.body.tip_tra;
