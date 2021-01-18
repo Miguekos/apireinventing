@@ -162,6 +162,7 @@ module.exports = async app => {
   });
 
   // ACTUALIZAR CITAS
+
   app.put(`/api/${process.env.VERSION}/citas`, async (req, res, next) => {
     try {
       const co_citope = req.body.co_citope;
