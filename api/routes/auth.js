@@ -28,21 +28,22 @@ module.exports = async (app) => {
             //     res.json({ res: 'ko', message: "Password Incorrecto" }).status(400)
             // }
             console.log(user.pw_usuari);
-            bcrypt.compare(password, user.pw_usuari, (err, result) => {
-                if (result == true) {
-                    // req.session.userID = user.id
-                    // req.session.username = user.username
-                    // req.session.logged = true
-                    delete user.pw_usuari
-                    res.json({ res: 'ok', message: "Wellcome", user }).status(200)
-                } else {
-                    res.json({ res: 'ko', message: "Password Incorrecto", result, err }).status(400)
-                }
-            })
+            res.json({ res: 'ok', message: "Wellcome", user }).status(200)
+            // bcrypt.compare(password, user.pw_usuari, (err, result) => {
+            //     if (result == true) {
+            //         // req.session.userID = user.id
+            //         // req.session.username = user.username
+            //         // req.session.logged = true
+            //         delete user.pw_usuari
+            //         res.json({ res: 'ok', message: "Wellcome", user }).status(200)
+            //     } else {
+            //         res.json({ res: 'ko', message: "Password Incorrecto", result, err }).status(400)
+            //     }
+            // })
         }
     })
 
-    app.post('/api/v1.0/register', async (req, res) => {
+    app.post(`/api/${process.env.VERSION}/register`, async (req, res) => {
 
     })
 
