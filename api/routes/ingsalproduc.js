@@ -9,7 +9,7 @@ module.exports = async (app) => {
 
 
 /// LISTAR ORDENES DE COMPRA PARA DAR EL INGRESO  ///
-app.post("/api/v1.0/ingsalmat/listar_ordcom_ingres", async (req, res, next) => {
+app.post("/api/v2.0/ingsalmat/listar_ordcom_ingres", async (req, res, next) => {
     try {
         let query1;
         
@@ -47,7 +47,7 @@ app.post("/api/v1.0/ingsalmat/listar_ordcom_ingres", async (req, res, next) => {
 })
 
 ///  LISTAR TRAMITES DOCUMENTARIO PARA DAR EL INGRESO
-app.post("/api/v1.0/ingsalmat/listar_tradoc_ingres", async (req, res, next) => {
+app.post("/api/v2.0/ingsalmat/listar_tradoc_ingres", async (req, res, next) => {
     try {
         let query1;
         
@@ -103,7 +103,7 @@ app.post("/api/v1.0/ingsalmat/listar_tradoc_ingres", async (req, res, next) => {
 
 
 ///// BUSCAR OPERACION
-    app.post("/api/v1.0/operacflujo/buscar_operacion", async (req, res, next) => {
+    app.post("/api/v2.0/operacflujo/buscar_operacion", async (req, res, next) => {
         try {
             let query1;
             var cod_ope = req.body.cod_ope;

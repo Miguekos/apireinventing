@@ -5,7 +5,7 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // LISTA DE MARCAS
-    app.get("/api/v1.0/marcas/:marveh", async (req, res, next) => {
+    app.get("/api/v2.0/marcas/:marveh", async (req, res, next) => {
         try {
             let query;
             const no_marveh = req.params.marveh;
@@ -31,7 +31,7 @@ module.exports = async (app) => {
     })
 
     // AGREGAR MARCA
-    app.post("/api/v1.0/marcas", async (req, res, next) => {
+    app.post("/api/v2.0/marcas", async (req, res, next) => {
         try {
             const no_marveh = req.body.no_marveh;
 
@@ -54,7 +54,7 @@ module.exports = async (app) => {
     })
 
     // ACTUALIZAR MARCA
-    app.put("/api/v1.0/marcas", async (req, res, next) => {
+    app.put("/api/v2.0/marcas", async (req, res, next) => {
         try {
             const co_marveh = req.body.co_marveh;
             const no_marveh = req.body.no_marveh;

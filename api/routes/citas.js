@@ -5,7 +5,7 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // LISTA DE CITAS
-    app.get("/api/v1.0/citas", async (req, res, next) => {
+    app.get("/api/v2.0/citas", async (req, res, next) => {
         try {
             let query;
             query = `select * from recitope.sp_mostrar_citas('', '')`;
@@ -25,7 +25,7 @@ module.exports = async (app) => {
     })
 
 
-    app.get("/api/v1.0/citas/:no_busque/:ti_busque", async (req, res, next) => {
+    app.get("/api/v2.0/citas/:no_busque/:ti_busque", async (req, res, next) => {
         try {
             let query;
             const no_busque = req.params.no_busque;
@@ -51,7 +51,7 @@ module.exports = async (app) => {
     })
 
     // AGREGAR CITA
-    app.post("/api/v1.0/citas", async (req, res, next) => {
+    app.post("/api/v2.0/citas", async (req, res, next) => {
         try {
             var co_usuari = req.body.co_usuari;
             var co_docide = req.body.co_docide;
@@ -90,7 +90,7 @@ module.exports = async (app) => {
     })
 
     // ACTUALIZAR CITAS
-    app.put("/api/v1.0/citas", async (req, res, next) => {
+    app.put("/api/v2.0/citas", async (req, res, next) => {
         try {
             const co_citope = req.body.co_citope;
             var co_usuari = req.body.co_usuari;

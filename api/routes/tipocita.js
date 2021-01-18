@@ -5,7 +5,7 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // LISTA DE TIPO DE OPERACION
-    app.get("/api/v1.0/tipocita", async (req, res, next) => {
+    app.get("/api/v2.0/tipocita", async (req, res, next) => {
         try {
             let query;
             query = `select * from recitope.sp_mostrartipope()`;

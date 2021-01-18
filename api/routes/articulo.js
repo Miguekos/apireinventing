@@ -6,7 +6,7 @@ const saltRounds = 10
 
 module.exports = async (app) => {
     // para traer todos los articulos
-    app.get("/api/v1.0/articulo/:nombre/:barras", async (req, res, next) => {
+    app.get("/api/v2.0/articulo/:nombre/:barras", async (req, res, next) => {
         try {
             let query;
             var nom_art = req.params.nombre;
@@ -36,7 +36,7 @@ module.exports = async (app) => {
     })
 
     // para traer articulo por codigo
-    app.get("/api/v1.0/articulo_codigo/:cod_art", async (req, res, next) => {
+    app.get("/api/v2.0/articulo_codigo/:cod_art", async (req, res, next) => {
         try {
             let query;
             var cod_art = req.params.cod_art;
@@ -61,7 +61,7 @@ module.exports = async (app) => {
     })
 
     // Para Traer MOSTRAR Empresas
-    app.get("/api/v1.0/articulo/empresas", async (req, res, next) => {
+    app.get("/api/v2.0/articulo/empresas", async (req, res, next) => {
         try {
             let query;
 
@@ -83,7 +83,7 @@ module.exports = async (app) => {
     })
 
     // Para Traer TODAS LAS CATEGORIAS (COMBO)
-    app.get("/api/v1.0/articulo_categorias/:cod_emp", async (req, res, next) => {
+    app.get("/api/v2.0/articulo_categorias/:cod_emp", async (req, res, next) => {
         try {
             let query;
             var cod_emp = req.params.cod_emp;
@@ -110,7 +110,7 @@ module.exports = async (app) => {
     })
 
     // Para insertar o modificar ARTICULOS
-    app.post("/api/v1.0/articulo", async (req, res, next) => {
+    app.post("/api/v2.0/articulo", async (req, res, next) => {
         try {
             console.log(req.body);
             let query;
@@ -171,7 +171,7 @@ module.exports = async (app) => {
     // CATEGORIAS -- FAMILIAS  SUBFAMILIAS----------------------------------
 
     // Para Traer MOSTRAR Categorias Padre e Hijos
-    app.post("/api/v1.0/articulo/familia", async (req, res, next) => {
+    app.post("/api/v2.0/articulo/familia", async (req, res, next) => {
         try {
             let query;
             var cod_emp = req.body.cod_emp;
@@ -207,7 +207,7 @@ module.exports = async (app) => {
     })
 
     // Para INSERTAR O ACTUALIZAR Categorias Padre e Hijos
-    app.put("/api/v1.0/articulo/familia", async (req, res, next) => {
+    app.put("/api/v2.0/articulo/familia", async (req, res, next) => {
         try {
             let query;
             var cod_art = req.body.cod_art;
@@ -259,7 +259,7 @@ module.exports = async (app) => {
 
     })
 
-    app.delete("/api/v1.0/articulo/familia", async (req, res, next) => {
+    app.delete("/api/v2.0/articulo/familia", async (req, res, next) => {
         try {
             let query;
             var cod_emp = req.body.cod_emp;
