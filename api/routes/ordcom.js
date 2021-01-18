@@ -5,7 +5,7 @@ const saltRounds = 10;
 
 module.exports = async app => {
   /// INSERTAR ORDEN DE COMPRA
-  app.post("/api/v1.0/ordcom/insert_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/insert_ordcom`, async (req, res, next) => {
     try {
       let query1;
 
@@ -56,7 +56,7 @@ module.exports = async app => {
   });
 
   /// ACTUALIZAR ORDEN DE COMPRA
-  app.post("/api/v1.0/ordcom/update_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/update_ordcom`, async (req, res, next) => {
     try {
       let query1;
 
@@ -129,7 +129,7 @@ module.exports = async app => {
   });
 
   /// ADJUNTAR DOCUMENTO DE ORDEN DE COMPRA
-  app.post("/api/v1.0/ordcom/insert_arcadj", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/insert_arcadj`, async (req, res, next) => {
     try {
       let query1;
 
@@ -177,7 +177,7 @@ module.exports = async app => {
   });
 
   /// ADJUNTOS DE LA ORDEN ORDEN DE COMPRA SELECCIONADA
-  app.post("/api/v1.0/ordcom/listar_arcadj_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/listar_arcadj_ordcom`, async (req, res, next) => {
     try {
       let query1;
       var co_ordcom = req.body.co_ordcom;
@@ -203,7 +203,7 @@ module.exports = async app => {
   });
 
   /// ELIMINAR ORDEN DE COMPRA
-  app.post("/api/v1.0/ordcom/delete_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/delete_ordcom`, async (req, res, next) => {
     try {
       let query1;
 
@@ -247,7 +247,7 @@ module.exports = async app => {
   });
 
   /// LISTA DE ORDENES DE COMPRA ///
-  app.post("/api/v1.0/ordcom/listar_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/listar_ordcom`, async (req, res, next) => {
     try {
       console.log("1");
       let query1;
@@ -291,7 +291,7 @@ module.exports = async app => {
     }
   });
   /// INFORMACIÓN DE ORDEN DE COMPRA SELECCIONADA
-  app.post("/api/v1.0/ordcom/inform_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/inform_ordcom`, async (req, res, next) => {
     try {
       let query1;
       var co_ordcom = req.body.co_ordcom;
@@ -317,7 +317,7 @@ module.exports = async app => {
   });
 
   /// DETALLE DE CADA ORDEN DE COMPRA ///
-  app.post("/api/v1.0/ordcom/listar_detall_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/listar_detall_ordcom`, async (req, res, next) => {
     try {
       let query1;
       var co_ordcom = req.body.co_ordcom;
@@ -343,7 +343,7 @@ module.exports = async app => {
   });
 
   /// LISTAR PENDIENTE DE VISADO ORDEN DE COMPRA ///
-  app.post("/api/v1.0/ordcom/listar_pendie_visado", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/listar_pendie_visado`, async (req, res, next) => {
     try {
       let query1;
       var co_ordcom = req.body.co_ordcom;
@@ -371,7 +371,7 @@ module.exports = async app => {
   });
 
   /// LISTAR PRODUCTOS ENCOTRADOS ORDEN DE COMPRA ///
-  app.post("/api/v1.0/ordcom/listar_produc_encont", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/listar_produc_encont`, async (req, res, next) => {
     try {
       let query1;
       var co_ordcom = req.body.co_ordcom ? parseInt(req.body.co_ordcom) : null;
@@ -408,7 +408,7 @@ module.exports = async app => {
   });
 
   /// MANTENIMIENTO DE PRODUCTOS ORDEN DE COMPRA ///
-  app.post("/api/v1.0/ordcom/manten_produc_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/manten_produc_ordcom`, async (req, res, next) => {
     try {
       let query1;
 
@@ -445,7 +445,7 @@ module.exports = async app => {
   });
 
   /// VISADO O RECHAZO DE ORDEN DE COMPRA ///
-  app.post("/api/v1.0/ordcom/visrec_ordcom", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/ordcom/visrec_ordcom`, async (req, res, next) => {
     try {
       let query1;
 
@@ -480,7 +480,7 @@ module.exports = async app => {
   /******************************************** CATALOGOS ************************************/
 
   /// CATALOGO PROVEEDOR ///
-  app.get("/api/v1.0/ordcom/catalogo/tcprovee", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/ordcom/catalogo/tcprovee`, async (req, res, next) => {
     try {
       let query1;
 
@@ -508,7 +508,7 @@ module.exports = async app => {
   });
 
   /// TIPO DE MONEDA
-  app.get("/api/v1.0/ordcom/catalogo/tcmoneda", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/ordcom/catalogo/tcmoneda`, async (req, res, next) => {
     try {
       let query1;
       //var cod_ord = req.params.cod_ord;
@@ -536,7 +536,7 @@ module.exports = async app => {
   });
 
   /// SOLICITANTE ///
-  app.get("/api/v1.0/ordcom/catalogo/tcsolici", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/ordcom/catalogo/tcsolici`, async (req, res, next) => {
     try {
       let query;
 
@@ -563,7 +563,7 @@ module.exports = async app => {
   });
 
   /// TIPO DE COMPRA ///
-  app.get("/api/v1.0/ordcom/tcservic", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/ordcom/tcservic`, async (req, res, next) => {
     try {
       let query;
 
@@ -592,7 +592,7 @@ module.exports = async app => {
   });
 
   /// CON IGV
-  app.get("/api/v1.0/ordcom/catalogo/tcconigv", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/ordcom/catalogo/tcconigv`, async (req, res, next) => {
     try {
       let query1;
       //var cod_ord = req.params.cod_ord;

@@ -6,7 +6,7 @@ const saltRounds = 10;
 module.exports = async app => {
   /// LISTAR PRODUCTOS QUE INGRESARÁN DE ORDEN DE COMPRA O TRAMITE DOCUMENTARIO
   app.post(
-    "/api/v1.0/almace/listar_produc_ordtra_ingres",
+    `/api/${process.env.VERSION}/almace/listar_produc_ordtra_ingres`,
     async (req, res, next) => {
       try {
         let query1;
@@ -56,7 +56,7 @@ module.exports = async app => {
 
   /// LISTAR PRODUCTOS QUE SERÁN DESPACHADOS DE OPERACIONES
   app.post(
-    "/api/v1.0/almace/listar_produc_operac_salida",
+    `/api/${process.env.VERSION}/almace/listar_produc_operac_salida`,
     async (req, res, next) => {
       try {
         let query1;
@@ -100,7 +100,7 @@ module.exports = async app => {
   );
 
   /// INSERTAR PRODUCTOS QUE INGRESAN O SALES DE ORDEN DE COMPRA, TRAMITE DOCUMENTARIO y OPERACIONES
-  app.post("/api/v1.0/almace/insert_produc_ingsal", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/almace/insert_produc_ingsal`, async (req, res, next) => {
     try {
       let query1;
 
@@ -147,7 +147,7 @@ module.exports = async app => {
 
   /// QUITAR PRODUCTOS QUE INGRESAN O SALES DE ORDEN DE COMPRA, TRAMITE DOCUMENTARIO y OPERACIONES
   app.post(
-    "/api/v1.0/almace/quitar_produc_agrega_ingsal",
+    `/api/${process.env.VERSION}/almace/quitar_produc_agrega_ingsal`,
     async (req, res, next) => {
       try {
         let query1;
@@ -196,7 +196,7 @@ module.exports = async app => {
 
   /// LISTAR DOCUMENTOS AGREGADOS PARA EL INGRESO o SALIDA
   app.post(
-    "/api/v1.0/almace/listar_docume_agrega_ingsal",
+    `/api/${process.env.VERSION}/almace/listar_docume_agrega_ingsal`,
     async (req, res, next) => {
       try {
         let query1;
@@ -239,7 +239,7 @@ module.exports = async app => {
 
   /// LISTAR PRODUCTOS AGREGADOS DEL DOCUMENTO PARA EL INGRESO o SALIDA
   app.post(
-    "/api/v1.0/almace/listar_produc_agrega_ingsal",
+    `/api/${process.env.VERSION}/almace/listar_produc_agrega_ingsal`,
     async (req, res, next) => {
       try {
         let query1;
@@ -281,7 +281,7 @@ module.exports = async app => {
   );
 
   /// GRABA EL DOCUMENTO TRANSACCIONAL CON SUS PRODUCTOS AGREGADOS DE INGRESO o SALIDA
-  app.post("/api/v1.0/almace/grabar_transa_ingsal", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/almace/grabar_transa_ingsal`, async (req, res, next) => {
     try {
       let query1;
 

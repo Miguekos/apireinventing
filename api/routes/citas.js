@@ -3,6 +3,7 @@ const bitacora = require("../../utils/bitacora");
 
 // ``
 
+
 module.exports = async app => {
   // LISTA DE CITAS
   app.get("/api/v1.0/citas", async (req, res, next) => {
@@ -65,6 +66,7 @@ module.exports = async app => {
       var co_tipope = req.body.co_tipope;
 
       const query = `select * from recitope.sp_manten_citope(
+
                 cast (null as integer),
                 '${co_usuari}',
                 '${co_docide}',

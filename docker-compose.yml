@@ -6,12 +6,12 @@ services:
       #     dockerfile: ./buildDocker/local.DockerFile
       context: .
     ports:
-      - 5001:5001
-    hostname: ms-apprein-js
+      - 5002:5002
+    hostname: apireinventingpro
     restart: always
     volumes:
       # -   ./:/usr/local/nodeapps/
-      - /usr/local/volumes/apprein:/root/.pm2/logs
+      - /usr/local/volumes/apireinventingpro:/root/.pm2/logs
 
     # command: pm2-runtime server.config.js --env development
     command: pm2-runtime server.config.js --env production

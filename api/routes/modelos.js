@@ -5,7 +5,7 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // TRAER MODELOS
-    app.get("/api/v1.0/modelos/:modveh", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/modelos/:modveh`, async (req, res, next) => {
         try {
             let query;
             const no_modveh = req.params.modveh;
@@ -31,7 +31,7 @@ module.exports = async (app) => {
     })
     
     //TRAER MODELOS POR MARCA
-    app.get("/api/v1.0/modelos/marcas/:modmar", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/modelos/marcas/:modmar`, async (req, res, next) => {
         try {
             let query;
             const co_marveh = req.params.modmar;
@@ -55,7 +55,7 @@ module.exports = async (app) => {
     })
 
     // AGREGAR MODELOS
-    app.post("/api/v1.0/modelos", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/modelos`, async (req, res, next) => {
         try {
             const co_modveh = req.body.co_modveh;
             var no_modveh = req.body.no_modveh;
@@ -82,7 +82,7 @@ module.exports = async (app) => {
     })
 
     // ACTUALIZAR MODELO
-    app.put("/api/v1.0/modelos", async (req, res, next) => {
+    app.put(`/api/${process.env.VERSION}/modelos`, async (req, res, next) => {
         try {
             const co_modveh = req.body.co_modveh;
             const no_modveh = req.body.no_modveh;
@@ -112,7 +112,7 @@ module.exports = async (app) => {
     })
 
     // para borrar DELETE asdasdasdfasdf
-    //app.delete("/api/modelos", async (req, res, next) => {
+    //app.delete("/api/modelos`, async (req, res, next) => {
     //    try {
        //    } catch (error) {
     //    }

@@ -18,7 +18,8 @@ app.use(cors());
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Webservices Reinventing." });
+  console.log("Webservices Reinventing.");
+  res.json({ message: "Webservices Reinventing Pro." });
 });
 
 

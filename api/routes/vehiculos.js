@@ -5,7 +5,7 @@ const bitacora = require("../../utils/bitacora")
 
 module.exports = async (app) => {
     // TRAER VEHICULOS
-    app.get("/api/v1.0/vehiculos/:plaveh", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/vehiculos/:plaveh`, async (req, res, next) => {
         try {
             let query;
             const co_plaveh = req.params.plaveh;
@@ -31,7 +31,7 @@ module.exports = async (app) => {
     })
 
     // AGREGAR VEHICULOS
-    app.post("/api/v1.0/vehiculos", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/vehiculos`, async (req, res, next) => {
         try {
             const co_plaveh = req.body.co_plaveh;
             var co_modveh = req.body.co_modveh;
@@ -65,7 +65,7 @@ module.exports = async (app) => {
     })
 
     // ACTUALIZAR VEHICULOS
-    app.put("/api/v1.0/vehiculos", async (req, res, next) => {
+    app.put(`/api/${process.env.VERSION}/vehiculos`, async (req, res, next) => {
         try {
             const co_vehicu = req.body.co_vehicu;
             const co_plaveh = req.body.co_plaveh;
@@ -103,7 +103,7 @@ module.exports = async (app) => {
     })
 
     // para borrar DELETE asdasdasdfasdf
-    //app.delete("/api/vehiculos", async (req, res, next) => {
+    //app.delete("/api/vehiculos`, async (req, res, next) => {
     //    try {
        //    } catch (error) {
     //    }

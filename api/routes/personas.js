@@ -7,7 +7,7 @@ const saltRounds = 10
 
 module.exports = async (app) => {
     // para traer todos los usuarios
-    app.get("/api/v1.0/personas/natural/:docide", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/personas/natural/:docide`, async (req, res, next) => {
         try {
             let query;
             const doc_ide = req.params.docide;
@@ -33,7 +33,7 @@ module.exports = async (app) => {
     })
 
     // para traer todos los usuarios
-    app.get("/api/v1.0/personas/juridica/:docide", async (req, res, next) => {
+    app.get(`/api/${process.env.VERSION}/personas/juridica/:docide`, async (req, res, next) => {
         try {
             let query;
             const doc_ide = req.params.docide;
@@ -59,7 +59,7 @@ module.exports = async (app) => {
     })
 
     // Para insertar o modificar personas naturales
-    app.post("/api/v1.0/personas/natural", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/personas/natural`, async (req, res, next) => {
         try {
             var doc_ide = req.body.doc_ide;
             var ape_pat = req.body.ape_pat;
@@ -102,7 +102,7 @@ module.exports = async (app) => {
     })
 
     // Para insertar o modificar personas juridicas
-    app.post("/api/v1.0/personas/juridica", async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/personas/juridica`, async (req, res, next) => {
         try {
             var doc_ide = req.body.doc_ide;
             var raz_soc = req.body.raz_soc;

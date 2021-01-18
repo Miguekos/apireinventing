@@ -5,7 +5,7 @@ const saltRounds = 10;
 
 module.exports = async app => {
   /// INSERTAR TRAMITE DOCUMENTARIO
-  app.post("/api/v1.0/tradoc/insert_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/insert_tradoc`, async (req, res, next) => {
     try {
       let query1;
 
@@ -55,7 +55,7 @@ module.exports = async app => {
   });
 
   /// ACTUALIZAR TRAMITE DOCUMENTARIO
-  app.post("/api/v1.0/tradoc/update_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/update_tradoc`, async (req, res, next) => {
     try {
       let query1;
 
@@ -102,7 +102,7 @@ module.exports = async app => {
   });
 
   /// ELIMINAR TRÁMITE DOCUMENTARIO
-  app.post("/api/v1.0/tradoc/delete_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/delete_tradoc`, async (req, res, next) => {
     try {
       let query1;
 
@@ -145,7 +145,7 @@ module.exports = async app => {
   });
 
   /// LISTA DE TRÁMITE DOCUMENTARIO ///
-  app.post("/api/v1.0/tradoc/listar_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/listar_tradoc`, async (req, res, next) => {
     try {
       let query1;
       var fe_emides = req.body.fe_emides;
@@ -186,7 +186,7 @@ module.exports = async app => {
   });
 
   /// INFORMACIÓN DE TRAMITE DOCUMENTARIO SELECCIONADO
-  app.post("/api/v1.0/tradoc/inform_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/inform_tradoc`, async (req, res, next) => {
     try {
       let query1;
       var co_tradoc = req.body.co_tradoc;
@@ -212,7 +212,7 @@ module.exports = async app => {
   });
 
   /// LISTAR PENDIENTE DE VISADO TRÁMITE DOCUMENTARIO ///
-  app.post("/api/v1.0/tradoc/listar_pendie_visado", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/listar_pendie_visado`, async (req, res, next) => {
     try {
       let query1;
       var co_tradoc = req.body.co_tradoc;
@@ -240,7 +240,7 @@ module.exports = async app => {
   });
 
   /// VISADO O RECHAZO DE TRÁMITE DOCUMENTARIO ///
-  app.post("/api/v1.0/tradoc/visrec_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/visrec_tradoc`, async (req, res, next) => {
     try {
       let query1;
 
@@ -273,7 +273,7 @@ module.exports = async app => {
   });
 
   /// DETALLE DE CADA TRAMITE DOCUMENTARIO ///
-  app.post("/api/v1.0/tradoc/listar_detall_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/listar_detall_tradoc`, async (req, res, next) => {
     try {
       let query1;
       var co_tradoc = req.body.co_tradoc;
@@ -297,7 +297,7 @@ module.exports = async app => {
   });
 
   /// LISTAR PRODUCTOS ENCOTRADOS TRAMITE DOCUMENTARIO ///
-  app.post("/api/v1.0/tradoc/listar_produc_encont", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/listar_produc_encont`, async (req, res, next) => {
     try {
       let query1;
 
@@ -330,7 +330,7 @@ module.exports = async app => {
   });
 
   /// ADJUNTOS DEL TRAMITE DOCUMENTARIO SELECCIONADA
-  app.post("/api/v1.0/tradoc/listar_arcadj_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/listar_arcadj_tradoc`, async (req, res, next) => {
     try {
       let query1;
       var co_tradoc = req.body.co_tradoc;
@@ -356,7 +356,7 @@ module.exports = async app => {
   });
 
   /// MANTENIMIENTO DE PRODUCTOS TRAMITE DOCUMENTARIO ///
-  app.post("/api/v1.0/tradoc/manten_produc_tradoc", async (req, res, next) => {
+  app.post(`/api/${process.env.VERSION}/tradoc/manten_produc_tradoc`, async (req, res, next) => {
     try {
       let query1;
 
@@ -393,7 +393,7 @@ module.exports = async app => {
   });
 
   /// | PROVEEDOR ///
-  app.get("/api/v1.0/tradoc/catalogo/tcprovee", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/tradoc/catalogo/tcprovee`, async (req, res, next) => {
     try {
       let query1;
 
@@ -421,7 +421,7 @@ module.exports = async app => {
   });
 
   /// SOLICITANTE ///
-  app.get("/api/v1.0/tradoc/catalogo/tcsolici", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/tradoc/catalogo/tcsolici`, async (req, res, next) => {
     try {
       let query;
 
@@ -448,7 +448,7 @@ module.exports = async app => {
   });
 
   /// TIPO DE MONEDA
-  app.get("/api/v1.0/tradoc/catalogo/tcmoneda", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/tradoc/catalogo/tcmoneda`, async (req, res, next) => {
     try {
       let query1;
       //var cod_ord = req.params.cod_ord;
@@ -476,7 +476,7 @@ module.exports = async app => {
   });
 
   /// TIPO DOCUMENTO
-  app.get("/api/v1.0/tradoc/catalogo/tctipdoc", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/tradoc/catalogo/tctipdoc`, async (req, res, next) => {
     try {
       let query1;
       //var cod_ord = req.params.cod_ord;
@@ -505,7 +505,7 @@ module.exports = async app => {
   });
 
   /// CON IGV
-  app.get("/api/v1.0/tradoc/catalogo/tcconigv", async (req, res, next) => {
+  app.get(`/api/${process.env.VERSION}/tradoc/catalogo/tcconigv`, async (req, res, next) => {
     try {
       let query1;
       //var cod_ord = req.params.cod_ord;

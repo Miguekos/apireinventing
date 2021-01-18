@@ -12,4 +12,4 @@ RUN pm2 set pm2-logrotate:dateFormat 'YYYY-MM-DD'
 
 COPY [".", "/usr/local/nodeapps/"]
 
-EXPOSE 5001
+EXPOSE 5002
