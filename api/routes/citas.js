@@ -89,6 +89,63 @@ module.exports = async (app) => {
         }
     })
 
+    // INGRESAR VEHICULO
+    app.put("/api/v1.0/citas/ingresar_vehicu", async (req, res, next) => {
+        try {
+            var per_reg = req.body.per_reg;
+            var pla_veh = req.body.pla_veh;
+            var mod_veh = req.body.mod_veh;
+            var ano_veh = req.body.ano_veh;
+            var col_veh = req.body.col_veh;
+            var ser_veh = req.body.ser_veh;
+            var mot_veh = req.body.mot_veh;
+            var val_kil = req.body.val_kil;
+            var doc_ide = req.body.doc_ide;
+            var ape_pat = req.body.ape_pat;
+            var ape_mat = req.body.ape_mat;
+            var nom_cli = req.body.nom_cli;
+            var cen_ope = req.body.cen_ope;
+            var direcci = req.body.direcci;
+            var det_ing = req.body.det_ing;
+            var swt_sal = req.body.swt_sal;
+            var fec_sal = req.body.fec_sal;
+
+            query1 = `
+                select * from readuana.fb_ingreso_vehicular_citas(
+                    cast('${per_reg}' as integer),
+                    '${pla_veh}',
+                    '${mod_veh}',
+                    '${ano_veh}',
+                    '${col_veh}',
+                    '${ser_veh}',
+                    '${mot_veh}',
+                    cast('${val_kil }' as integer),
+                    '${doc_ide}',
+                    '${ape_pat}',
+                    '${ape_mat}',
+                    '${nom_cli}',
+                    cast('${cen_ope}' as integer),
+                    '${direcci}',
+                    '${det_ing}',
+                    '${swt_sal}',
+                    '${fec_sal}'
+                );
+            `;
+
+            bitacora.control(query, req.url)
+            const citas = await BD.storePostgresql(query);
+            if (citas.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", citas }).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", citas }).status(500)
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado", error }).status(500)
+        }
+
+    })
+
     // ACTUALIZAR CITAS
     app.put("/api/v1.0/citas", async (req, res, next) => {
         try {
