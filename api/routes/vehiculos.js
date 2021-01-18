@@ -15,7 +15,7 @@ module.exports = async (app) => {
             } else {
                 query = `select * from wfvehicu.sp_mostrar_vehicu('${co_plaveh}')`;
             }
-            bitacora.control(query, req.    url)
+            bitacora.control(query, req.url)
             const vehiculos = await BD.storePostgresql(query);
             // con esto muestro msj
             if (vehiculos.codRes != 99) {
