@@ -31,7 +31,7 @@ module.exports = async app => {
                     '${fe_tradoc}',
                     ${il_conigv},
                     ${ti_docume},
-                    ${co_arcadj}
+                    '${co_arcadj}'
                 )`;
 
       bitacora.control(query1, req.url);
