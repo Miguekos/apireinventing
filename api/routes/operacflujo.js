@@ -812,21 +812,21 @@ module.exports = async (app) => {
             var tip_opc = req.body.tip_opc;
             var cod_per = req.body.cod_per;
 
-            if (ser_mat == null || ser_mat.trim() == ''){
-                res.json({ res: 'ko', message: "Codigo Servicio-Material NO esta definido."}).status(500)
-            }
-            else if (cod_ope == null || cod_ope.trim() == ''){
-                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
-            }
-            else if (tip_ser == null || tip_ser.trim() == ''){
-                res.json({ res: 'ko', message: "Tipo de servicio NO esta definido."}).status(500)
-            }
-            else if (tip_opc == null || tip_opc.trim() == ''){
-                res.json({ res: 'ko', message: "Tipo de opcion (accion) NO esta definido."}).status(500)
-            }
-            else if (cod_per == null || cod_per.trim() == ''){
-                res.json({ res: 'ko', message: "Codigo del personal NO esta definido."}).status(500)
-            }else {
+            // if (ser_mat == null || ser_mat.trim() == ''){
+            //     res.json({ res: 'ko', message: "Codigo Servicio-Material NO esta definido."}).status(500)
+            // }
+            // else if (cod_ope == null || cod_ope.trim() == ''){
+            //     res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            // }
+            // else if (tip_ser == null || tip_ser.trim() == ''){
+            //     res.json({ res: 'ko', message: "Tipo de servicio NO esta definido."}).status(500)
+            // }
+            // else if (tip_opc == null || tip_opc.trim() == ''){
+            //     res.json({ res: 'ko', message: "Tipo de opcion (accion) NO esta definido."}).status(500)
+            // }
+            // else if (cod_per == null || cod_per.trim() == ''){
+            //     res.json({ res: 'ko', message: "Codigo del personal NO esta definido."}).status(500)
+            // }else {
                 if (tip_ser.toUpperCase() == '0'){ //materiales
                     if (tip_opc.toUpperCase() == 'A'){
                         query1 = `
@@ -878,7 +878,7 @@ module.exports = async (app) => {
                 } else {
                     res.json({ res: 'ko', message: "Error en la query", result }).status(500)
                 }
-            }
+            // }
         } catch (error) {
             res.json({ res: 'ko', message: "Error controlado", error }).status(500)
         }
