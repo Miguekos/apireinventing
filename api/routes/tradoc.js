@@ -31,7 +31,7 @@ module.exports = async app => {
                     '${fe_tradoc}',
                     ${il_conigv},
                     ${ti_docume},
-                    ${co_arcadj}
+                    '${co_arcadj}'
                 )`;
 
       bitacora.control(query1, req.url);
@@ -272,6 +272,37 @@ module.exports = async app => {
     }
   });
 
+  /// INSERTAR EL ARCADJ DE TRAMITE DOCUMENTARIO ///
+  app.post(`/api/${process.env.VERSION}/tradoc/insert_arcadj`, async (req, res, next) => {
+    try {
+      let query1;
+
+      var co_tradoc = req.body.co_tradoc;
+      var co_arcadj = req.body.co_arcadj;
+      var ti_accion = req.body.ti_accion;
+
+      query1 = `select * from retradoc.fb_insert_arcadj(
+                ${co_tradoc},
+                ${co_arcadj},
+                '${ti_accion}'
+            )`;
+
+      bitacora.control(query1, req.url);
+      const operac = await BD.storePostgresql(query1);
+      // con esto muestro msj
+      if (operac.codRes != 99) {
+        // con esto muestro msj
+        res.json({ res: "ok", message: "Success", operac }).status(200);
+      } else {
+        res
+          .json({ res: "ko", message: "Error en la query", operac })
+          .status(500);
+      }
+    } catch (error) {
+      res.json({ res: "ko", message: "Error controlado", error }).status(500);
+    }
+  });
+
   /// DETALLE DE CADA TRAMITE DOCUMENTARIO ///
   app.post(`/api/${process.env.VERSION}/tradoc/listar_detall_tradoc`, async (req, res, next) => {
     try {
@@ -402,7 +433,7 @@ module.exports = async app => {
                 from pbperson.tbperjur pj, reordcom.tbprovee pr
                 where pj.co_perjur = pr.pj_provee
                 and pr.il_activo
-                order by 1 desc
+                order by pj.no_razsoc asc
             `;
       bitacora.control(query1, req.url);
       const operac = await BD.storePostgresql(query1);
