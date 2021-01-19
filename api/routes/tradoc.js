@@ -402,7 +402,7 @@ module.exports = async app => {
                 from pbperson.tbperjur pj, reordcom.tbprovee pr
                 where pj.co_perjur = pr.pj_provee
                 and pr.il_activo
-                order by 1 desc
+                order by pj.no_razsoc asc
             `;
       bitacora.control(query1, req.url);
       const operac = await BD.storePostgresql(query1);
