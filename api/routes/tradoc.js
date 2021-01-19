@@ -283,7 +283,7 @@ module.exports = async app => {
 
       query1 = `select * from retradoc.fb_insert_arcadj(
                 ${co_tradoc},
-                ${co_arcadj},
+                '${co_arcadj}',
                 '${ti_accion}'
             )`;
 
