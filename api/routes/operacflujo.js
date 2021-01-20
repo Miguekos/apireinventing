@@ -567,18 +567,22 @@ module.exports = async (app) => {
     })
 
 ////////////////////eliminar servicio enlazado a operacion
-    app.delete(`/api/${process.env.VERSION}/operacflujo/servic_opera`, async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/del_servic_opera`, async (req, res, next) => {
         try {
+            console.log(req.body);
             let query1;
             var ope_ser = req.body.ope_ser;
             var cod_ope = req.body.cod_ope;
 
-            if (ope_ser == null || ope_ser.trim() == ''){
-                res.json({ res: 'ko', message: "Codigo servicio NO esta definido."}).status(500)
-            }
-            if (cod_ope == null || cod_ope.trim() == ''){
-                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
-            }
+            console.log(ope_ser);
+            console.log(cod_ope);
+
+            // if (ope_ser == null || ope_ser.trim() == ''){
+            //     res.json({ res: 'ko', message: "Codigo servicio NO esta definido."}).status(500)
+            // }
+            // if (cod_ope == null || cod_ope.trim() == ''){
+            //     res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            // }
 
             query1 = `
                 delete from reoperac.tbopeser 
@@ -649,18 +653,18 @@ module.exports = async (app) => {
     })
 
     ////////////////////eliminar material enlazado a operacion
-    app.delete(`/api/${process.env.VERSION}/operacflujo/materi_opera`, async (req, res, next) => {
+    app.post(`/api/${process.env.VERSION}/operacflujo/del_materi_opera`, async (req, res, next) => {
         try {
             let query1;
             var ope_mat = req.body.ope_mat;
             var cod_ope = req.body.cod_ope;
 
-            if (ope_mat == null || ope_mat.trim() == ''){
-                res.json({ res: 'ko', message: "Codigo material NO esta definido."}).status(500)
-            }
-            if (cod_ope == null || cod_ope.trim() == ''){
-                res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
-            }
+            // if (ope_mat == null || ope_mat.trim() == ''){
+            //     res.json({ res: 'ko', message: "Codigo material NO esta definido."}).status(500)
+            // }
+            // if (cod_ope == null || cod_ope.trim() == ''){
+            //     res.json({ res: 'ko', message: "Codigo operacion NO esta definido."}).status(500)
+            // }
 
             query1 = `
                 delete from reoperac.tbopemat
