@@ -303,7 +303,7 @@ module.exports = async (app) => {
                     select
                         ar.co_articu, ar.co_barras,
                         wfarticu.f_no_catart(ar.co_articu) as no_catpad,
-                        ar.no_articu
+                        ar.no_articu, 0 as im_preuni, 0 as va_cantid, 'C' as ti_opcion
                     from wfarticu.tbarticu ar
                     where ar.no_articu ilike '%'|| '${descrip}' ||'%'
                 `;
