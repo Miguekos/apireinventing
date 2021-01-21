@@ -293,8 +293,8 @@ module.exports = async (app) => {
                         no_servic: lisser[i].no_servic,
                         no_unimed: lisser[i].no_unimed,
                         im_preuni: lisser[i].im_preuni,
-                        co_opeveh: vehope[0].co_opeveh,
-                        co_plaveh: vehope[0].co_plaveh
+                        co_opeveh: vehope[i].co_opeveh,
+                        co_plaveh: vehope[i].co_plaveh
                     });
                 }
             }
@@ -319,8 +319,11 @@ module.exports = async (app) => {
                         co_barras: lismat[i].co_barras,
                         no_catpad: lismat[i].no_catpad,
                         no_articu: lismat[i].no_articu,
-                        co_vehicu: vehope[0].co_vehicu,
-                        co_plaveh: vehope[0].co_plaveh
+                        co_vehicu: vehope[i].co_vehicu,
+                        co_plaveh: vehope[i].co_plaveh,
+                        co_plaveh: vehope[i].im_preuni,
+                        co_plaveh: vehope[i].va_cantid,
+                        co_plaveh: vehope[i].ti_opcion
                     });
                 } 
             }
