@@ -303,7 +303,7 @@ module.exports = async (app) => {
                     select
                         ar.co_articu, ar.co_barras,
                         wfarticu.f_no_catart(ar.co_articu) as no_catpad,
-                        ar.no_articu
+                        ar.no_articu, 0 as im_preuni, 0 as va_cantid, 'C' as ti_opcion
                     from wfarticu.tbarticu ar
                     where ar.no_articu ilike '%'|| '${descrip}' ||'%'
                 `;
@@ -320,7 +320,10 @@ module.exports = async (app) => {
                         no_catpad: lismat[i].no_catpad,
                         no_articu: lismat[i].no_articu,
                         co_vehicu: vehope[0].co_vehicu,
-                        co_plaveh: vehope[0].co_plaveh
+                        co_plaveh: vehope[0].co_plaveh,
+                        im_preuni: lismat[i].im_preuni,
+                        va_cantid: lismat[i].va_cantid,
+                        ti_opcion: lismat[i].ti_opcion
                     });
                 } 
             }
