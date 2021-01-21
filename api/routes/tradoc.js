@@ -458,7 +458,7 @@ module.exports = async app => {
 
       query = `select co_pernat as co_solici, pbperson.f_no_person(co_pernat) as no_solici
             from pbemplea.tbemplea
-            where co_emplea not in (12, 129)
+            where co_emplea in (12, 129)
             order by 2
         `;
       bitacora.control(query, req.url);
