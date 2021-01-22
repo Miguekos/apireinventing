@@ -56,9 +56,10 @@ module.exports = async (app) => {
                 pn.no_apepat,
                 pn.no_apemat,
                 pn.no_nombre,
-                (pn.no_apepat || '  ' || pn.no_apemat || '  ' || pn.no_nombre || '  -  ' || pe.co_docide)  as no_person
-            from pbperson.tbperson pe, pbperson.tbpernat pn 
-            where pe.co_person = pn.co_pernat 
+                (pbperson.f_no_person(pe.co_person) || '  -  ' || pe.co_docide)  as no_person
+            from pbperson.tbperson pe
+            left join pbperson.tbpernat pn on pe.co_person = pn.co_pernat 
+            left join pbperson.tbperjur pj on pe.co_person = pj.co_perjur 
             and pe.co_person not in (4,3)
             order by 2
         `;
