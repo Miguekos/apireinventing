@@ -24,9 +24,9 @@ module.exports = async (app) => {
         var ti_liccon = req.body.ti_liccon;
         var co_ubigeo = req.body.co_ubigeo;
         var co_plaveh = req.body.co_plaveh;
-        var co_modveh = req.body.co_modveh;
+        var co_modveh = req.body.co_modveh ? req.body.co_modveh : null;
         var ti_vehper = req.body.ti_vehper;
-        var ti_combus = req.body.ti_combus;
+        var ti_combus = req.body.ti_combus ? req.body.ti_combus : null;
         var co_estciv = req.body.co_estciv;
 
         console.log(ti_landin);
@@ -166,57 +166,35 @@ module.exports = async (app) => {
             }else if(ti_landin == null || ti_landin.trim() == ''){
                 res.json({ res: 'ko', message: "Por favor defina el tipo de landing"}).status(500)
             }else{
-                if(ti_landin.toUpperCase() == '1' || ti_landin.toUpperCase() == '2' || ti_landin.toUpperCase() == '3'){ // Chapa tu Taxi || Moto Chamba || Moto Lineal 
+                if(ti_landin.toUpperCase() == '1' || ti_landin.toUpperCase() == '2'){ // Chapa tu Taxi || Moto Chamba || Moto Lineal 
                     query = `select 
                         co_landin, no_tiplan, fe_regist, co_docide, no_apepat, 
-                        no_apemat, no_nombre, no_tipdoc, no_estciv, fe_nacimi, 
-                        no_tipnac, nu_telefo, no_correo, no_liccon, no_depart, 
-                        no_provin, no_distri, de_experi, no_estado
-                    from recomerc.db_listar_landin(
+                        no_apemat, no_nombre, no_tipdoc, fe_nacimi, no_estciv, 
+                        nu_telefo, no_liccon, no_depart, no_provin, no_distri, 
+                        de_experi, no_estado
+                    from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
                         '${ti_landin}'
                     );`;
+                }else if(ti_landin.toUpperCase() == '3'){
+                    query = `select 
+                        co_landin, no_tiplan, fe_regist, co_docide,
+                        no_apepat, no_apemat, no_nombre, fe_nacimi, 
+                        no_estciv, no_tipdoc, nu_telefo, no_tipnac, 
+                        no_liccon, no_correo, no_estado
+                    from recomerc.fb_listar_landin(
+                        '${fe_regdes}',
+                        '${fe_reghas}',
+                        '${ti_landin}'
+                    );`;   
                 }else if(ti_landin.toUpperCase() == '4'){
                     query = `select 
-                        co_landin, no_tiplan, fe_regist, co_docide,
-                        no_apepat, no_apemat, no_nombre, no_tipdoc,
-                        nu_telefo, co_plaveh, no_marveh, no_modveh,
-                        no_estado
-                    from recomerc.db_listar_landin(
-                        '${fe_regdes}',
-                        '${fe_reghas}',
-                        '${ti_landin}'
-                    );`;   
-                }else if(ti_landin.toUpperCase() == '5'){
-                    query = `select 
-                        co_landin, no_tiplan, fe_regist, co_docide,
-                        no_apepat, no_apemat, no_nombre, no_tipdoc,
-                        nu_telefo, no_tipnac, no_liccon, no_correo,
-                        no_estado
-                    from recomerc.db_listar_landin(
-                        '${fe_regdes}',
-                        '${fe_reghas}',
-                        '${ti_landin}'
-                    );`;   
-                }else if(ti_landin.toUpperCase() == '6' || ti_landin.toUpperCase() == '7'){
-                    query = `select 
-                        co_landin, no_tiplan, fe_regist, co_docide,
-                        no_apepat, no_apemat, no_nombre, no_tipdoc,
-                        no_estciv, fe_nacimi, no_tipnac, nu_telefo,
-                        no_depart, no_provin, no_distri, no_estado
-                    from recomerc.db_listar_landin(
-                        '${fe_regdes}',
-                        '${fe_reghas}',
-                        '${ti_landin}'
-                    );`;   
-                }else if(ti_landin.toUpperCase() == '8'){
-                    query = `select 
                         co_landin, no_tiplan, fe_regist, co_docide, no_apepat,
-                        no_apemat, no_nombre, no_tipdoc, fe_nacimi, nu_telefo,
-                        co_plaveh, no_marveh, no_modveh, no_tipcom, ti_vehper,
-                        no_vehper, no_estado
-                    from recomerc.db_listar_landin(
+                        no_apemat, no_nombre, no_tipdoc, fe_nacimi, no_estciv, 
+                        nu_telefo, co_plaveh, no_marveh, no_modveh, no_tipcom, 
+                        ti_vehper, no_vehper, no_estado
+                    from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
                         '${ti_landin}'
