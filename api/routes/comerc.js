@@ -316,9 +316,9 @@ module.exports = async (app) => {
         try {            
             var query;
             query = `
-                select 0 as ti_valcvr, '' as ti_valcvr union    
-                select 1, 'SI' union
-                select 2, 'NO'
+                select 0 as ti_valcvr, '' as no_valcvr union    
+                select 1 as ti_valcvr, 'SI' as no_valcvr union
+                select 2 as ti_valcvr, 'NO' as no_valcvr
                 order by 1;
             `;  
             bitacora.control(query, req.url)
