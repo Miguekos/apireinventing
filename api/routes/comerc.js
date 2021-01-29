@@ -15,6 +15,8 @@ module.exports = async (app) => {
         var no_apemat = req.body.no_apemat;
         var no_nombre = req.body.no_nombre;
         var co_docide = req.body.co_docide;
+        var ti_docide = req.body.ti_docide;
+        var ti_nacion = req.body.ti_nacion;
         var fe_nacimi = req.body.fe_nacimi;
         var no_correo = req.body.no_correo;
         var nu_telefo = req.body.nu_telefo;
@@ -32,6 +34,8 @@ module.exports = async (app) => {
         console.log(no_apemat);
         console.log(no_nombre);
         console.log(co_docide);
+        console.log(ti_docide);
+        console.log(ti_nacion);
         console.log(fe_nacimi);
         console.log(no_correo);
         console.log(nu_telefo);
@@ -44,7 +48,6 @@ module.exports = async (app) => {
         console.log(ti_combus);
         console.log(co_estciv);
 
-
         //INSERT LANDING
         query1 = `select * from recomerc.fb_insert_landin(
             ${ti_landin},
@@ -52,7 +55,10 @@ module.exports = async (app) => {
             '${no_apemat}',
             '${no_nombre}',
             '${co_docide}',
+            ${ti_docide},
+            '${ti_nacion}',
             '${fe_nacimi}',
+            '${co_estciv}',
             '${no_correo}',
             '${nu_telefo}',
             ${va_experi},
@@ -61,8 +67,7 @@ module.exports = async (app) => {
             '${co_plaveh}',
             ${co_modveh},
             '${ti_vehper}',
-            ${ti_combus},
-            '${co_estciv}'
+            ${ti_combus}
         );`;
 
         console.log(query1);
