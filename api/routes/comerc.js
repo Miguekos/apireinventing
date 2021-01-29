@@ -24,9 +24,9 @@ module.exports = async (app) => {
         var ti_liccon = req.body.ti_liccon;
         var co_ubigeo = req.body.co_ubigeo;
         var co_plaveh = req.body.co_plaveh;
-        var co_modveh = req.body.co_modveh;
+        var co_modveh = req.body.co_modveh ? req.body.co_modveh : null;
         var ti_vehper = req.body.ti_vehper;
-        var ti_combus = req.body.ti_combus;
+        var ti_combus = req.body.ti_combus ? req.body.ti_combus : null;
         var co_estciv = req.body.co_estciv;
 
         console.log(ti_landin);
