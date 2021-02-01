@@ -93,15 +93,15 @@ module.exports = async (app) => {
         var co_landin = req.body.co_landin; // id landing
         var ps_regist = req.body.ps_regist; // persona registra
         var co_estlla = req.body.co_estlla; // estado de la llamada -> tcestlla
-        var co_resges = req.body.co_resges; // resultado de la gestion -> tcresges
+        var co_resges = req.body.co_resges ? req.body.co_resges : null; // resultado de la gestion -> tcresges
         var no_coment = req.body.no_coment; // comentario
-        var co_estdoc = req.body.co_estdoc; // estado del documento -> tcestdoc
-        var ti_expsis = req.body.ti_expsis; // tipo de exé de sistema -> tcexpsis
+        var co_estdoc = req.body.co_estdoc ? req.body.co_estdoc : null; // estado del documento -> tcestdoc
+        var ti_expsis = req.body.ti_expsis ? req.body.ti_expsis : null; // tipo de exé de sistema -> tcexpsis
         var co_expedi = req.body.co_expedi; // codigo de expediente
-        var il_conver = req.body.il_conver; // converus -> tcvalcvr
+        var il_conver = req.body.il_conver ? req.body.il_conver : null; // converus -> tcvalcvr
         var fe_citcvr = req.body.fe_citcvr; // fecha cita -> tipo fecha
-        var co_rescvr = req.body.co_rescvr; // resultado converus -> tcrescvr
-        var co_result = req.body.co_result; // resultado de gestion -> tcresult
+        var co_rescvr = req.body.co_rescvr ? req.body.co_rescvr : null; // resultado converus -> tcrescvr
+        var co_result = req.body.co_result ? req.body.co_result : null; // resultado de gestion -> tcresult
         
         console.log(co_landin);
         console.log(ps_regist);
