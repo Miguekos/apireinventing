@@ -98,7 +98,7 @@ module.exports = async (app) => {
         var co_estdoc = req.body.co_estdoc ? req.body.co_estdoc : null; // estado del documento -> tcestdoc
         var ti_expsis = req.body.ti_expsis ? req.body.ti_expsis : null; // tipo de exé de sistema -> tcexpsis
         var co_expedi = req.body.co_expedi; // codigo de expediente
-        var il_conver = req.body.il_conver ? req.body.il_conver : null; // converus -> tcvalcvr
+        var il_conver = req.body.il_conver ? `${req.body.il_conver}` : null; // converus -> tcvalcvr
         var fe_citcvr = req.body.fe_citcvr ? req.body.fe_citcvr : null; // fecha cita -> tipo fecha
         var co_rescvr = req.body.co_rescvr ? req.body.co_rescvr : null; // resultado converus -> tcrescvr
         var co_result = req.body.co_result ? req.body.co_result : null; // resultado de gestion -> tcresult
@@ -129,7 +129,7 @@ module.exports = async (app) => {
             ${ti_expsis},
             '${co_expedi}',
             ${il_conver},
-            '${fe_citcvr}',
+            ${fe_citcvr},
             ${co_rescvr},
             ${co_result}
         );`;
