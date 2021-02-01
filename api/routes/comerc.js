@@ -99,7 +99,7 @@ module.exports = async (app) => {
         var ti_expsis = req.body.ti_expsis ? req.body.ti_expsis : null; // tipo de exé de sistema -> tcexpsis
         var co_expedi = req.body.co_expedi; // codigo de expediente
         var il_conver = req.body.il_conver ? req.body.il_conver : null; // converus -> tcvalcvr
-        var fe_citcvr = req.body.fe_citcvr; // fecha cita -> tipo fecha
+        var fe_citcvr = req.body.fe_citcvr ? req.body.fe_citcvr : null; // fecha cita -> tipo fecha
         var co_rescvr = req.body.co_rescvr ? req.body.co_rescvr : null; // resultado converus -> tcrescvr
         var co_result = req.body.co_result ? req.body.co_result : null; // resultado de gestion -> tcresult
         
