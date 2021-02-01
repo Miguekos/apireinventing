@@ -215,6 +215,33 @@ module.exports = async (app) => {
         }
     
     })
+    
+    // MUESTRA LA LISTA DE BITÁCORA
+    app.post(`/api/${process.env.VERSION}/comerc/listar_bitaco`, async (req, res, next) => {
+        try {   
+            var co_landin = req.body.co_landin;         
+            var query;
+            query = `   
+                select co_landin, fe_regist, no_person, no_estlla, no_resges,
+                    no_coment, no_estdoc, no_expsis, co_expedi, il_conver, fe_citcvr,
+                    no_rescvr, no_result
+                from recomerc.fb_listar_bitaco(
+                    ${co_landin}
+                );`;
+                
+            bitacora.control(query, req.url)
+            const resultado = await BD.storePostgresql(query);
+            if (resultado.codRes != 99) {
+                // con esto muestro msj
+                res.json({ res: 'ok', message: "Success", resultado}).status(200)
+            } else {
+                res.json({ res: 'ko', message: "Error en la query", resultado }).status(500)
+            }            
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado chamo", error }).status(500)
+        }
+    
+    })
 
     // COMBO DE TIPO DE LANDING
     app.get(`/api/${process.env.VERSION}/comerc/tctiplan`, async (req, res, next) => {
