@@ -131,7 +131,7 @@ module.exports = async (app) => {
             ${il_conver},
             '${fe_citcvr}',
             ${co_rescvr},
-            ${co_result},
+            ${co_result}
         );`;
 
         console.log(query1);
