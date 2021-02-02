@@ -20,7 +20,7 @@ module.exports = async (app) => {
         var fe_nacimi = req.body.fe_nacimi;
         var no_correo = req.body.no_correo;
         var nu_telefo = req.body.nu_telefo;
-        var va_experi = req.body.va_experi;
+        var va_experi = req.body.va_experi ? req.body.va_experi : null;
         var ti_liccon = req.body.ti_liccon;
         var co_ubigeo = req.body.co_ubigeo;
         var co_plaveh = req.body.co_plaveh;
@@ -168,10 +168,9 @@ module.exports = async (app) => {
             }else{
                 if(ti_landin.toUpperCase() == '1' || ti_landin.toUpperCase() == '2'){ // Chapa tu Taxi || Moto Chamba || Moto Lineal 
                     query = `select 
-                        co_landin, no_tiplan, fe_regist, co_docide, no_apepat, 
-                        no_apemat, no_nombre, no_tipdoc, fe_nacimi, no_estciv, 
-                        nu_telefo, no_liccon, no_depart, no_provin, no_distri, 
-                        de_experi, no_estado
+                        co_landin, no_tiplan, fe_regist, no_tipdoc, co_docide, no_apepat, 
+                        no_apemat, no_nombre, fe_nacimi, no_estciv, nu_telefo, no_liccon, 
+                        de_experi, no_depart, no_provin, no_distri, no_estado
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
@@ -179,10 +178,9 @@ module.exports = async (app) => {
                     );`;
                 }else if(ti_landin.toUpperCase() == '3'){
                     query = `select 
-                        co_landin, no_tiplan, fe_regist, co_docide,
-                        no_apepat, no_apemat, no_nombre, fe_nacimi, 
-                        no_estciv, no_tipdoc, nu_telefo, no_tipnac, 
-                        no_liccon, no_correo, no_estado
+                        co_landin, no_tiplan, fe_regist, no_tipnac, no_tipdoc, 
+                        co_docide, no_apepat, no_apemat, no_nombre, fe_nacimi, 
+                        no_estciv, nu_telefo, no_liccon, no_correo, no_estado
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
