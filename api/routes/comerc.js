@@ -190,7 +190,7 @@ module.exports = async (app) => {
                     query = `select 
                         co_landin, no_tiplan, fe_regist, co_docide, no_apepat,
                         no_apemat, no_nombre, no_tipdoc, fe_nacimi, nu_telefo, 
-                        co_plaveh, no_tipcom, no_estado, no_vehper
+                        co_plaveh, no_tipcom, no_vehper, no_estado
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
