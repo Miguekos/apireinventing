@@ -21,7 +21,7 @@ module.exports = async (app) => {
         var no_correo = req.body.no_correo;
         var nu_telefo = req.body.nu_telefo;
         var va_experi = req.body.va_experi ? req.body.va_experi : null;
-        var ti_liccon = req.body.ti_liccon ? req.body.ti_liccon : null;
+        var ti_liccon = req.body.ti_liccon;
         var co_ubigeo = req.body.co_ubigeo;
         var co_plaveh = req.body.co_plaveh;
         var co_modveh = req.body.co_modveh ? req.body.co_modveh : null;
@@ -180,7 +180,7 @@ module.exports = async (app) => {
                     query = `select 
                         co_landin, no_tiplan, fe_regist, no_tipnac, no_tipdoc, 
                         co_docide, no_apepat, no_apemat, no_nombre, fe_nacimi, 
-                        no_estciv, nu_telefo, no_liccon, no_correo, no_estado
+                        nu_telefo, no_liccon, no_correo, no_estado
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
@@ -189,9 +189,8 @@ module.exports = async (app) => {
                 }else if(ti_landin.toUpperCase() == '4'){
                     query = `select 
                         co_landin, no_tiplan, fe_regist, co_docide, no_apepat,
-                        no_apemat, no_nombre, no_tipdoc, fe_nacimi, no_estciv, 
-                        nu_telefo, co_plaveh, no_marveh, no_modveh, no_tipcom, 
-                        ti_vehper, no_vehper, no_estado
+                        no_apemat, no_nombre, no_tipdoc, fe_nacimi, nu_telefo, 
+                        co_plaveh, no_tipcom, no_estado, no_vehper
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
