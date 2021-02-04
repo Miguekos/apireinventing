@@ -21,7 +21,7 @@ module.exports = async (app) => {
         var no_correo = req.body.no_correo;
         var nu_telefo = req.body.nu_telefo;
         var va_experi = req.body.va_experi ? req.body.va_experi : null;
-        var ti_liccon = req.body.ti_liccon;
+        var ti_liccon = req.body.ti_liccon ? req.body.ti_liccon : null;;
         var co_ubigeo = req.body.co_ubigeo;
         var co_plaveh = req.body.co_plaveh;
         var co_modveh = req.body.co_modveh ? req.body.co_modveh : null;
@@ -92,7 +92,7 @@ module.exports = async (app) => {
         
         var co_landin = req.body.co_landin; // id landing
         var ps_regist = req.body.ps_regist; // persona registra
-        var co_estlla = req.body.co_estlla; // estado de la llamada -> tcestlla
+        var co_estlla = req.body.co_estlla ? req.body.co_estlla : null; // estado de la llamada -> tcestlla
         var co_resges = req.body.co_resges ? req.body.co_resges : null; // resultado de la gestion -> tcresges
         var no_coment = req.body.no_coment; // comentario
         var co_estdoc = req.body.co_estdoc ? req.body.co_estdoc : null; // estado del documento -> tcestdoc
