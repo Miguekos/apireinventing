@@ -21,7 +21,7 @@ module.exports = async (app) => {
         var no_correo = req.body.no_correo;
         var nu_telefo = req.body.nu_telefo;
         var va_experi = req.body.va_experi ? req.body.va_experi : null;
-        var ti_liccon = req.body.ti_liccon ? req.body.ti_liccon : null;;
+        var ti_liccon = req.body.ti_liccon ? req.body.ti_liccon : null;
         var co_ubigeo = req.body.co_ubigeo;
         var co_plaveh = req.body.co_plaveh;
         var co_modveh = req.body.co_modveh ? req.body.co_modveh : null;
