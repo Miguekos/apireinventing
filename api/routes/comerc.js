@@ -155,6 +155,7 @@ module.exports = async (app) => {
             var fe_regdes = req.body.fe_regdes;
             var fe_reghas = req.body.fe_reghas;            
             var ti_landin = req.body.ti_landin;
+            var co_person = req.body.co_person;
 
             var query;
             
@@ -174,7 +175,8 @@ module.exports = async (app) => {
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
-                        '${ti_landin}'
+                        '${ti_landin}',
+                        ${co_person}
                     );`;
                 }else if(ti_landin.toUpperCase() == '3'){
                     query = `select 
@@ -184,7 +186,8 @@ module.exports = async (app) => {
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
-                        '${ti_landin}'
+                        '${ti_landin}',
+                        ${co_person}
                     );`;   
                 }else if(ti_landin.toUpperCase() == '4'){
                     query = `select 
@@ -194,7 +197,8 @@ module.exports = async (app) => {
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
-                        '${ti_landin}'
+                        '${ti_landin}',
+                        ${co_person}
                     );`;   
                 }
                 
