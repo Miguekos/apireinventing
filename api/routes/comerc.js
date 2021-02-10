@@ -28,6 +28,8 @@ module.exports = async (app) => {
         var ti_vehper = req.body.ti_vehper;
         var ti_combus = req.body.ti_combus ? req.body.ti_combus : null;
         var co_estciv = req.body.co_estciv;
+        var co_nivedu = req.body.co_nivedu ? req.body.co_nivedu : null;
+        var ti_perfil = req.body.ti_perfil ? req.body.ti_perfil : null;
 
         console.log(ti_landin);
         console.log(no_apepat);
@@ -47,7 +49,9 @@ module.exports = async (app) => {
         console.log(ti_vehper);
         console.log(ti_combus);
         console.log(co_estciv);
-
+        console.log(co_nivedu);
+        console.log(ti_perfil);
+    
         //INSERT LANDING
         query1 = `select * from recomerc.fb_insert_landin(
             ${ti_landin},
@@ -67,7 +71,9 @@ module.exports = async (app) => {
             '${co_plaveh}',
             ${co_modveh},
             '${ti_vehper}',
-            ${ti_combus}
+            ${ti_combus},
+            ${co_nivedu},
+            '${ti_perfil}'
         );`;
 
         console.log(query1);
@@ -170,8 +176,9 @@ module.exports = async (app) => {
                 if(ti_landin.toUpperCase() == '1' || ti_landin.toUpperCase() == '2'){ // Chapa tu Taxi || Moto Chamba || Moto Lineal 
                     query = `select 
                         co_landin, no_tiplan, fe_regist, no_tipdoc, co_docide, no_apepat, 
-                        no_apemat, no_nombre, fe_nacimi, no_estciv, nu_telefo, no_liccon, 
-                        de_experi, no_depart, no_provin, no_distri, no_estado, no_respon
+                        no_apemat, no_nombre, fe_nacimi, no_estciv, nu_telefo, no_correo,
+                        no_nivedu, no_perfil, no_liccon, de_experi, no_depart, no_provin, 
+                        no_distri, no_estado, no_respon
                     from recomerc.fb_listar_landin(
                         '${fe_regdes}',
                         '${fe_reghas}',
