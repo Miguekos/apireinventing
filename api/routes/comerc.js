@@ -251,7 +251,7 @@ module.exports = async (app) => {
                         '${fe_reghas}',
                         '${ti_modrep}'
                     );`;
-                }else if(ti_landin.toUpperCase() == '2'){
+                }else if(ti_modrep.toUpperCase() == '2'){
                     query = `select 
                         ti_landin, no_tiplan, no_zongeo,
                         ca_precal, ca_rechaz, 
@@ -261,7 +261,7 @@ module.exports = async (app) => {
                         '${fe_reghas}',
                         '${ti_modrep}'
                     );`;   
-                }else if(ti_landin.toUpperCase() == '3'){
+                }else if(ti_modrep.toUpperCase() == '3'){
                     query = `select 
                         ti_landin, no_tiplan, no_asesor,
                         no_zongeo, ca_precal, ca_rechaz, 
