@@ -223,6 +223,70 @@ module.exports = async (app) => {
         }
     
     })
+
+    // REPORTE DE GESTIONES
+    app.post(`/api/${process.env.VERSION}/comerc/report_gestio`, async (req, res, next) => {
+        try {            
+            var fe_regdes = req.body.fe_regdes;
+            var fe_reghas = req.body.fe_reghas;            
+            var ti_modrep = req.body.ti_modrep;
+
+            var query;
+            
+            
+            if (fe_regdes == null || fe_regdes.trim() == ''){
+                res.json({ res: 'ko', message: "Por favor defina Fecha inicio."}).status(500)
+            }else if(fe_reghas == null || fe_reghas.trim() == ''){
+                res.json({ res: 'ko', message: "Por favor defina Fecha Hasta."}).status(500)
+            }else if(ti_modrep == null || ti_modrep.trim() == ''){
+                res.json({ res: 'ko', message: "Por favor defina el tipo de Reporte"}).status(500)
+            }else{
+                if(ti_modrep.toUpperCase() == '1'){ // Chapa tu Taxi || Moto Chamba || Moto Lineal 
+                    query = `select 
+                        ti_landin, no_tiplan, 
+                        ca_precal, ca_rechaz, 
+                        ca_singes, ca_totges
+                    from recomerc.fb_report_gestio(
+                        '${fe_regdes}',
+                        '${fe_reghas}',
+                        '${ti_modrep}'
+                    );`;
+                }else if(ti_landin.toUpperCase() == '2'){
+                    query = `select 
+                        ti_landin, no_tiplan, no_zongeo,
+                        ca_precal, ca_rechaz, 
+                        ca_singes, ca_totges
+                    from recomerc.fb_report_gestio(
+                        '${fe_regdes}',
+                        '${fe_reghas}',
+                        '${ti_modrep}'
+                    );`;   
+                }else if(ti_landin.toUpperCase() == '3'){
+                    query = `select 
+                        ti_landin, no_tiplan, no_asesor,
+                        no_zongeo, ca_precal, ca_rechaz, 
+                        ca_singes, ca_totges
+                    from recomerc.fb_report_gestio(
+                        '${fe_regdes}',
+                        '${fe_reghas}',
+                        '${ti_modrep}'
+                    );`;   
+                }
+                
+                bitacora.control(query, req.url)
+                const resultado = await BD.storePostgresql(query);
+                if (resultado.codRes != 99) {
+                    // con esto muestro msj
+                    res.json({ res: 'ok', message: "Success", resultado}).status(200)
+                } else {
+                    res.json({ res: 'ko', message: "Error en la query", resultado }).status(500)
+                }
+            }
+        } catch (error) {
+            res.json({ res: 'ko', message: "Error controlado chamo", error }).status(500)
+        }
+    
+    })
     
     // MUESTRA LA LISTA DE BITÁCORA
     app.post(`/api/${process.env.VERSION}/comerc/listar_bitaco`, async (req, res, next) => {
