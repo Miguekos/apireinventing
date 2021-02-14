@@ -7,7 +7,7 @@ services:
       context: .
     ports:
       - 5001:5001
-    hostname: apireinventingpro
+    hostname: apireinventing_dev
     restart: always
     volumes:
       # -   ./:/usr/local/nodeapps/
