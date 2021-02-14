@@ -11,7 +11,7 @@ services:
     restart: always
     volumes:
       # -   ./:/usr/local/nodeapps/
-      - /usr/local/volumes/apireinventingpro:/root/.pm2/logs
+      - /usr/local/volumes/dev_apireinventingpro:/root/.pm2/logs
 
     command: pm2-runtime server.config.js --env development
     # command: pm2-runtime server.config.js --env production
